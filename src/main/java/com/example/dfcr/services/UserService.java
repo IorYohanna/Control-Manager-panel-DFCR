@@ -2,7 +2,7 @@ package com.example.dfcr.services;
 
 import com.example.dfcr.dto.UtilisateurResponse;
 import com.example.dfcr.models.Utilisateur;
-import com.example.dfcr.repositories.UtilisateurRepository;
+import com.example.dfcr.repositories.UserRepository;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,13 +14,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UtilisateurService implements UserDetailsService {
-    private final UtilisateurRepository utilisateurRepository;
+public class UserService implements UserDetailsService {
+    private final UserRepository utilisateurRepository;
 
-    public UtilisateurService(UtilisateurRepository utilisateurRepository) {
+    public UserService(UserRepository utilisateurRepository) {
         this.utilisateurRepository = utilisateurRepository;
     }
-
 
     @Override
     public UserDetails loadUserByUsername(String matricule) throws UsernameNotFoundException {

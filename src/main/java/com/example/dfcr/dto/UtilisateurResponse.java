@@ -1,6 +1,5 @@
 package com.example.dfcr.dto;
 
-import com.example.dfcr.models.Utilisateur;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
