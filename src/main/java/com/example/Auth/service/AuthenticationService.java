@@ -32,12 +32,15 @@ public class AuthenticationService {
         this.emailService = emailService;
     }
 
-    public User signUp (RegisterUSerDto input) {
-        User user = new User(input.getUsername(),
+    public User signUp(RegisterUSerDto input) {
+        User user = new User(
                 input.getMatricule(),
-                passwordEncoder.encode(input.getPassword())
-                ,input.getEmail()
-        );
+                input.getSurname(),
+                input.getUsername(),
+                passwordEncoder.encode(input.getPassword()),
+                input.getEmail(),
+                input.getFonction(),
+                input.getContact());
         user.setVerificationCode(generateVerificationCode());
         user.setVerificationExpireAt(LocalDateTime.now().plusMinutes(15));
         user.setEnabled(false);
@@ -46,17 +49,16 @@ public class AuthenticationService {
 
     }
 
-    public User authenticate (LoginUserDto input) {
+    public User authenticate(LoginUserDto input) {
         User user = userRepository.findByMatricule(input.getMatricule())
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        
-        if(!user.isEnabled()) {
+
+        if (!user.isEnabled()) {
             throw new RuntimeException("User not verified");
         }
 
         authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(input.getMatricule(), input.getPassword())
-        );
+                new UsernamePasswordAuthenticationToken(input.getMatricule(), input.getPassword()));
         return user;
     }
 
@@ -66,27 +68,27 @@ public class AuthenticationService {
             User user = userOpt.get();
 
             /* if verification code is ealready expired */
-            if(user.getVerificationExpireAt().isBefore(LocalDateTime.now())) {
+            if (user.getVerificationExpireAt().isBefore(LocalDateTime.now())) {
                 throw new RuntimeException("Verification code expired");
             }
 
             /* enter verification code */
-            if(user.getVerificationCode().equals(input.getVerificationCode())) {
+            if (user.getVerificationCode().equals(input.getVerificationCode())) {
                 user.setEnabled(true);
                 user.setVerificationCode(null);
                 user.setVerificationExpireAt(null);
                 userRepository.save(user);
             } else {
                 throw new RuntimeException("Invalid verification code");
-            }   
+            }
 
         } else {
             throw new RuntimeException("User not found");
-            
+
         }
     }
 
-     public void verifyUser(VerifiiedUserDto input) {
+    public void verifyUser(VerifiiedUserDto input) {
         Optional<User> optionalUser = userRepository.findByMatricule(input.getMatricule());
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
@@ -121,8 +123,8 @@ public class AuthenticationService {
             throw new RuntimeException("User not found");
         }
     }
-    
-    private void sendVerificationEmail(User user) { 
+
+    private void sendVerificationEmail(User user) {
         String subject = "Account Verification";
         String verificationCode = "VERIFICATION CODE " + user.getVerificationCode();
         String htmlMessage = "<html>"
@@ -145,6 +147,7 @@ public class AuthenticationService {
             e.printStackTrace();
         }
     }
+
     private String generateVerificationCode() {
         Random random = new Random();
         int code = random.nextInt(900000) + 100000;

@@ -6,10 +6,10 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 
 @EnableConfigurationProperties
 @SpringBootApplication
-public class AuthApplication {
+public class DfcrApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(AuthApplication.class, args);
+		SpringApplication.run(DfcrApplication.class, args);
 	}
 
 }

@@ -18,24 +18,22 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "users")
+@Table(name = "utilisateurs")
 @Getter
 @Setter
 public class User implements UserDetails {
 
     @Id
     private String matricule;
-    @Column(unique = true, nullable = false)
+    @Column(name = "nom_utilisateur", nullable = false)
     private String username;
+    @Column(name = "prenom_utilisateur", nullable = false)
+    private String surname;
     @Column(unique = true, nullable = false)
     private String email;
-    @Column(nullable = false)
+    @Column(name = "password", nullable = false)
     private String password;
-    private boolean enabled;
-    @Column(name = "verification_code")
-    private String verificationCode;
-    @Column(name = "verification_expired")
-    private LocalDateTime verificationExpireAt;
+    @Column(nullable = false)
     private String fonction;
     private Integer contact;
     @Column(name = "id_service")
@@ -43,11 +41,20 @@ public class User implements UserDetails {
     @Column(name = "id_pefa")
     private Integer idPefa;
 
-    public User(String username, String matricule, String password, String email) {
-        this.username = username;
+    private boolean enabled;
+    @Column(name = "verification_code")
+    private String verificationCode;
+    @Column(name = "verification_expired")
+    private LocalDateTime verificationExpireAt;
+
+    public User(String matricule,  String surname, String username, String password, String email,String fonction, String contact) {
         this.matricule = matricule;
         this.password = password;
         this.email = email;
+        this.surname = surname;
+        this.fonction = fonction;
+        this.username = username;
+        this.contact = Integer.valueOf(contact);
     }
 
     public User() {
