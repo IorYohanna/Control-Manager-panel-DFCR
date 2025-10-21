@@ -1,4 +1,4 @@
-package com.example.dfcr.config;
+package com.example.Auth.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,7 +9,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.example.dfcr.repositories.UserRepository;
+import com.example.Auth.repository.UserRepository;
 
 @Configuration
 public class ApplicationConfiguration {

@@ -1,4 +1,4 @@
-package com.example.dfcr.config;
+package com.example.Auth.config;
 
 import java.io.IOException;
 
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
-import com.example.dfcr.services.JwtService;
+import com.example.Auth.service.JwtService;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
