@@ -11,7 +11,7 @@ const DefaultButton = ({ bgColor = "#a63a50", text = "#ffffff", label = " " }) =
         color: text,
         fontFamily: "Open Sans",
         borderRadius: "10px",
-        px: 4,
+        px: 15,
         py: 1.5,
         "&:hover": {
           backgroundColor: bgColor, // garde la même couleur au hover, ou tu peux assombrir

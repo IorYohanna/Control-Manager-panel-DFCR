@@ -51,18 +51,10 @@
     --font-sans: "Open Sans", sans-serif;
   }
 
-  .dark {
-    --color-background: var(--feldgrau);
-    --color-foreground: var(--antique-white);
-    --color-primary: var(--amaranth-purple);
-    --color-primary-foreground: #ffffff;
-  }
 }
 
-
-
 /* === Définition du thème Tailwind inline === */
-/* @theme inline {
+@theme inline {
   --color-primary: var(--amaranth-purple);
   --color-secondary: var(--brown-sugar);
   --color-background: var(--color-background);
@@ -71,11 +63,10 @@
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
-} */
+}
 
 .bg-antique-white-image {
-  /* background-image: url("https://images.unsplash.com/photo-1746483965671-44ed1704e4fd?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=688");*/
   background-image: url("https://images.pexels.com/photos/6823456/pexels-photo-6823456.jpeg");
-  background-color: #f0e7d8; /* fallback couleur antique white */
+  background-color: #f0e7d8;
 }
 
