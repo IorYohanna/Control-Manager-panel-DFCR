@@ -70,6 +70,7 @@ export default defineConfig({
       },
       fontFamily: {
         opensans: ["Open Sans", "sans-serif"],
+        kollektif: ["Kollektif", "sans-serif"],
       },
     },
   },
