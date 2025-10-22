@@ -13,15 +13,14 @@ const Login = () => {
         </div>
 
         {/* Formulaire */}
-        <div className="h-screen w-auto max-auto mx-15 px-4 py-16">
+        <div className="flex flex-col justify-between h-auto w-auto max-auto mx-15 px-4 py-16">
           <div className="text-start ">
             <h1 className="">Bienvenue dans DFCR!</h1>
           </div>
 
-          <div className="h-[13%]"/>
 
           <form className="mx-auto mt-8 max-w-md space-y-4" action="#">
-            
+
             <div className="mb-7">
               <h2>Connectez vous</h2>
             </div>
@@ -46,7 +45,7 @@ const Login = () => {
               </div>
             </div>
 
-            <div className=" ml-10 -mt-7">
+            <div className=" ml-10">
               <p className="text-sm">
                 <Checkbox />
                 Se souvenir de moi

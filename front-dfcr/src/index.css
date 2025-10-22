@@ -50,7 +50,6 @@
     --radius: 0.5rem;
     --font-sans: "Open Sans", sans-serif;
   }
-
 }
 
 /* === Définition du thème Tailwind inline === */
@@ -70,3 +69,8 @@
   background-color: #f0e7d8;
 }
 
+@layer base {
+  body {
+    @apply bg-background;
+  }
+}
