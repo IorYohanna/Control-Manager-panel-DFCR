@@ -35,6 +35,19 @@ const Login = () => {
         label = "Connexion"
       /> 
     </div>
+    
+    <div class="flex items-center justify-between">
+      <p class="text-sm text-gray-600">
+        Pas de compte ?&nbsp;
+        <a href="#" class="underline text-blue-400">
+          Inscrivez vous
+        </a>
+      </p>
+
+      <a href="#" class="text-sm underline text-blue-400">
+        Mot de passe oublié
+      </a>
+    </div>
   </div>;
 };
 

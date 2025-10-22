@@ -20,18 +20,6 @@ function App() {
 
           <form class="mx-auto mb-0 mt-8 max-w-md space-y-4" action="#">
             <Login/>
-            <div class="flex items-center justify-between">
-              <p class="text-sm text-gray-600">
-                Pas de compte ?&nbsp;
-                <a href="#" class="underline text-blue-400">
-                  Inscrivez vous
-                </a>
-              </p>
-
-              <a href="#" class="text-sm underline text-blue-400">
-                Mot de passe oublié
-              </a>
-            </div>
           </form>
         </div>
       </div>
