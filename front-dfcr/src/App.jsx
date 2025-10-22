@@ -1,5 +1,5 @@
 import * as React from "react";
-import Login from "./page/login/login";
+import Login from "./page/Auth/Login";
 
 function App() {
 
@@ -18,9 +18,7 @@ function App() {
             <p class="mt-4 text-gray-600">Ceci est facile à utiliser</p>
           </div>
 
-          <form class="mx-auto mb-0 mt-8 max-w-md space-y-4" action="#">
-            <Login/>
-          </form>
+          <Login></Login>
         </div>
       </div>
     </>

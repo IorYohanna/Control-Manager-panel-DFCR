@@ -57,27 +57,12 @@
     --color-primary: var(--amaranth-purple);
     --color-primary-foreground: #ffffff;
   }
-
-  body {
-    @apply bg-background text-foreground;
-    font-family: var(--font-sans);
-  }
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6,
-  p,
-  a,
-  li,
-  blockquote {
-    font-family:'Times New Roman', Times, serif ';
-  }
 }
 
+
+
 /* === Définition du thème Tailwind inline === */
-@theme inline {
+/* @theme inline {
   --color-primary: var(--amaranth-purple);
   --color-secondary: var(--brown-sugar);
   --color-background: var(--color-background);
@@ -86,7 +71,7 @@
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
-}
+} */
 
 .bg-antique-white-image {
   /* background-image: url("https://images.unsplash.com/photo-1746483965671-44ed1704e4fd?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=688");*/
@@ -94,28 +79,3 @@
   background-color: #f0e7d8; /* fallback couleur antique white */
 }
 
-@layer base {
-  h1 {
-    @apply font-bold text-4xl sm:text-5xl md:text-6xl leading-tight tracking-tight text-primary;
-  }
-
-  h2 {
-    @apply font-semibold text-3xl sm:text-4xl leading-snug text-primary;
-  }
-
-  h3 {
-    @apply font-semibold text-2xl sm:text-3xl leading-snug text-primary;
-  }
-
-  h4 {
-    @apply font-semibold text-xl sm:text-2xl text-primary;
-  }
-
-  p {
-    @apply text-base sm:text-lg leading-relaxed text-gray-700;
-  }
-
-  a {
-    @apply text-primary underline-offset-4 hover:underline hover:text-primary/80 transition-colors;
-  }
-}
