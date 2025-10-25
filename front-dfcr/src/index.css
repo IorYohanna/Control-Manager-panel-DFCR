@@ -38,14 +38,6 @@
     --brown-sugar: #a1674aff;
     --feldgrau: #4c6663ff;
 
-    /* === Optionnel : on les connecte au système Tailwind === */
-    --color-primary: var(--amaranth-purple);
-    --color-primary-foreground: var(--antique-white);
-    --color-secondary: var(--brown-sugar);
-    --color-secondary-foreground: var(--antique-white);
-    --color-background: var(--antique-white);
-    --color-foreground: var(--feldgrau);
-
     /* === Radius et fonts === */
     --radius: 0.5rem;
     --font-sans: "Open Sans", sans-serif;
@@ -53,11 +45,11 @@
 }
 
 /* === Définition du thème Tailwind inline === */
-@theme inline {
+@theme {
   --color-primary: var(--amaranth-purple);
   --color-secondary: var(--brown-sugar);
-  --color-background: var(--color-background);
-  --color-foreground: var(--color-foreground);
+  --color-background: var(--antique-white);
+  --color-foreground: var(--feldgrau);
   --font-sans: var(--font-sans);
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
@@ -71,6 +63,6 @@
 
 @layer base {
   body {
-    @apply bg-background;
+    @apply bg-foreground;
   }
 }

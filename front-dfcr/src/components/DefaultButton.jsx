@@ -1,11 +1,13 @@
 import React from "react";
 import Button from "@mui/material/Button";
 
-const DefaultButton = ({ bgColor = "#a63a50", text = "#ffffff", label = " " }) => {
+const DefaultButton = ({ bgColor = "#a63a50", text = "#ffffff", label = " " , type="submit", disabled}) => {
   return (
     <Button
       variant="contained"
       size="large"
+      type={type}
+      disabled={disabled}
       sx={{
         backgroundColor: bgColor,
         color: text,
