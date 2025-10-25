@@ -6,6 +6,11 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   theme: {
     extend: {
+      fontFamily: {
+        kollektif: ["Kollektif", "sans-serif"],
+        eirene: ["Eirene Sans", "sans-serif"],
+        larken: ["Larken DEMO Black", "serif"],
+      },
       colors: {
         amaranth_purple: {
           DEFAULT: "#a63a50",
@@ -67,9 +72,6 @@ export default defineConfig({
           800: "#b3c7c4",
           900: "#d9e3e2",
         },
-      },
-      fontFamily: {
-        opensans: ["Open Sans", "sans-serif"],
       },
     },
   },

@@ -1,29 +1,62 @@
 @import "tailwindcss";
 
 @font-face {
-  font-family: 'Open Sans';
-  src: url('/src/assets/fonts/OpenSans-Regular.ttf') format('truetype');
-  font-weight: 400;
-  font-style: normal;
+  font-family: "Eirene Sans";
+  src: url("/fonts/eirene/EireneSans-Regular.otf") format("opentype");  
+}
+
+
+
+@font-face {
+  font-family: "Kollektif";
+  src: url("/fonts/kollektif/Kollectif-BoldItalic.ttf") format("TrueType");
 }
 
 @font-face {
-  font-family: 'Open Sans';
-  src: url('/src/assets/fonts/OpenSans-Italic.ttf') format('truetype');
-  font-weight: 400;
-  font-style: italic;
+  font-family: "Larken DEMO Black";
+  src: url("/fonts/larken/Larken-BlackItalic.otf") format("OpenType");
 }
 
-@font-face {
-  font-family: 'Open Sans';
-  src: url('/src/assets/fonts/OpenSans-Medium.ttf') format('truetype');
-  font-weight: 700;
-  font-style: normal;
+
+/* 🎨 Palette perso en variables globales */
+@layer base {
+  :root {
+    /* === Tes couleurs principales === */
+    --amaranth-purple: #a63a50ff;
+    --antique-white: #f0e7d8ff;
+    --cinereous: #ab9b96ff;
+    --brown-sugar: #a1674aff;
+    --feldgrau: #4c6663ff;
+
+    /* === Radius et fonts === */
+    --radius: 0.5rem;
+    --font-eirene: "Eirene Sans", "sans-serif";
+    --font-kollektif: "Kollektif", "sans-serif";
+    --font-larken: "LArken DEMO Black", "serif"
+  }
 }
 
-@font-face {
-  font-family: 'Open Sans';
-  src: url('/src/assets/fonts/OpenSans-BoldItalic.ttf') format('truetype');
-  font-weight: 700;
-  font-style: italic;
+/* === Définition du thème Tailwind inline === */
+@theme inline {
+  --color-primary: var(--amaranth-purple);
+  --color-secondary: var(--brown-sugar);
+  --color-background: var(--antique-white);
+  --color-foreground: var(--color-foreground);
+  --font-eirene: var(--font-eirene);
+  --font-kollektif: var(--font-kollektif);
+  --font-larken: var(--font-larken);
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+}
+
+.bg-antique-white-image {
+  background-image: url("/img/bg-left.png");
+  background-color: #f0e7d8;
+}
+
+@layer base {
+  body {
+    @apply bg-background;
+  }
 }

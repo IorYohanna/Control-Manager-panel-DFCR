@@ -36,8 +36,8 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String fonction;
     private Integer contact;
-    @Column(name = "id_service")
-    private Integer idService;
+    @Column(name = "id_service", nullable = false)
+    private String idService;
     @Column(name = "id_pefa")
     private Integer idPefa;
 
@@ -47,14 +47,16 @@ public class User implements UserDetails {
     @Column(name = "verification_expired")
     private LocalDateTime verificationExpireAt;
 
-    public User(String matricule,  String surname, String username, String password, String email,String fonction, String contact) {
+    public User(String matricule, String surname, String username, String password, String email, String fonction,
+                String contact, String idService) {
         this.matricule = matricule;
-        this.password = password;
-        this.email = email;
-        this.surname = surname;
-        this.fonction = fonction;
         this.username = username;
+        this.surname = surname;
+        this.password = password;
+        this.fonction = fonction;
+        this.email = email;
         this.contact = Integer.valueOf(contact);
+        this.idService = idService;
     }
 
     public User() {
