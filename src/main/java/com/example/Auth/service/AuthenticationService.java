@@ -16,11 +16,9 @@ import com.example.Auth.dto.RegisterUSerDto;
 import com.example.Auth.dto.VerifiiedUserDto;
 import com.example.Auth.model.User;
 import com.example.Auth.repository.UserRepository;
-import com.example.Auth.reposnses.ErrorUserResponse;
+import com.example.Auth.responses.ErrorUserResponse;
 
 import jakarta.mail.MessagingException;
-
-import javax.naming.AuthenticationException;
 
 @Service
 public class AuthenticationService {

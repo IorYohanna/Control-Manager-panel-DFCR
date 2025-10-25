@@ -9,8 +9,8 @@ import com.example.Auth.dto.LoginUserDto;
 import com.example.Auth.dto.RegisterUSerDto;
 import com.example.Auth.dto.VerifiiedUserDto;
 import com.example.Auth.model.User;
-import com.example.Auth.reposnses.ErrorUserResponse;
-import com.example.Auth.reposnses.LoginResponse;
+import com.example.Auth.responses.ErrorUserResponse;
+import com.example.Auth.responses.LoginResponse;
 import com.example.Auth.service.AuthenticationService;
 import com.example.Auth.service.JwtService;
 
