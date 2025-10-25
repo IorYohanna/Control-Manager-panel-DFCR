@@ -17,7 +17,7 @@ const AuthInput = ({
   onChange,
   required = false,
 
-  sx = { width: "50ch", pb: 2, mt: 1  },
+  sx = { width: "300px" }
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [touched, setTouched] = useState(false)
