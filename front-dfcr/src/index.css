@@ -1,19 +1,20 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: "Eirene Sans";
+  src: url("/fonts/eirene/EireneSans-Regular.otf") format("opentype");  
+}
+
+
 
 @font-face {
-  font-family: "eirene-regular";
-  src: url("/fonts/eirene/EireneSans-Regular.otf") format("otf");
+  font-family: "Kollektif";
+  src: url("/fonts/kollektif/Kollectif-BoldItalic.ttf") format("TrueType");
 }
 
 @font-face {
-  font-family: "kollektif";
-  src: url("/fonts/kollektif/Kollectif-BoldItalic.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: "larken-black";
-  src: url("/fonts/larken/Larken-BlackItalic.otf") format("otf");
+  font-family: "Larken DEMO Black";
+  src: url("/fonts/larken/Larken-BlackItalic.otf") format("OpenType");
 }
 
 
@@ -29,7 +30,9 @@
 
     /* === Radius et fonts === */
     --radius: 0.5rem;
-    --font-sans: "", sans-serif;
+    --font-eirene: "Eirene Sans", "sans-serif";
+    --font-kollektif: "Kollektif", "sans-serif";
+    --font-larken: "LArken DEMO Black", "serif"
   }
 }
 
@@ -39,7 +42,9 @@
   --color-secondary: var(--brown-sugar);
   --color-background: var(--antique-white);
   --color-foreground: var(--color-foreground);
-  --font-sans: var(--font-sans);
+  --font-eirene: var(--font-eirene);
+  --font-kollektif: var(--font-kollektif);
+  --font-larken: var(--font-larken);
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
@@ -48,8 +53,6 @@
 .bg-antique-white-image {
   background-image: url("/img/bg-left.png");
   background-color: #f0e7d8;
-  
-  
 }
 
 @layer base {
