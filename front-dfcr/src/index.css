@@ -2,10 +2,8 @@
 
 @font-face {
   font-family: "Eirene Sans";
-  src: url("/fonts/eirene/EireneSans-Regular.otf") format("opentype");  
+  src: url("/fonts/eirene/EireneSans-Regular.otf") format("opentype");
 }
-
-
 
 @font-face {
   font-family: "Kollektif";
@@ -16,7 +14,6 @@
   font-family: "Larken DEMO Black";
   src: url("/fonts/larken/Larken-BlackItalic.otf") format("OpenType");
 }
-
 
 /* 🎨 Palette perso en variables globales */
 @layer base {
@@ -32,19 +29,17 @@
     --radius: 0.5rem;
     --font-eirene: "Eirene Sans", "sans-serif";
     --font-kollektif: "Kollektif", "sans-serif";
-    --font-larken: "LArken DEMO Black", "serif"
+    --font-larken: "LArken DEMO Black", "serif";
   }
 }
 
 /* === Définition du thème Tailwind inline === */
-@theme inline {
+@theme {
   --color-primary: var(--amaranth-purple);
   --color-secondary: var(--brown-sugar);
   --color-background: var(--antique-white);
-  --color-foreground: var(--color-foreground);
-  --font-eirene: var(--font-eirene);
-  --font-kollektif: var(--font-kollektif);
-  --font-larken: var(--font-larken);
+  --color-foreground: var(--feldgrau);
+  --font-sans: var(--font-sans);
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
@@ -57,6 +52,6 @@
 
 @layer base {
   body {
-    @apply bg-background;
+    @apply bg-foreground;
   }
 }

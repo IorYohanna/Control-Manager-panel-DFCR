@@ -1,5 +1,7 @@
 package com.example.Auth.controller;
 
+import com.example.Auth.exception.AuthException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -7,10 +9,12 @@ import com.example.Auth.dto.LoginUserDto;
 import com.example.Auth.dto.RegisterUSerDto;
 import com.example.Auth.dto.VerifiiedUserDto;
 import com.example.Auth.model.User;
+import com.example.Auth.reposnses.ErrorUserResponse;
 import com.example.Auth.reposnses.LoginResponse;
 import com.example.Auth.service.AuthenticationService;
 import com.example.Auth.service.JwtService;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/auth")
 @RestController
 public class AuthenticationController {
@@ -30,11 +34,16 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserDto loginUserDto){
-        User authenticatedUser = authenticationService.authenticate(loginUserDto);
-        String jwtToken = jwtService.generateToken(authenticatedUser);
-        LoginResponse loginResponse = new LoginResponse(jwtToken, jwtService.getExpirationTime());
-        return ResponseEntity.ok(loginResponse);
+    public ResponseEntity<?> authenticate(@RequestBody LoginUserDto loginUserDto) {
+        try {
+            User authenticatedUser = authenticationService.authenticate(loginUserDto);
+            String jwtToken = jwtService.generateToken(authenticatedUser);
+            LoginResponse loginResponse = new LoginResponse(jwtToken, jwtService.getExpirationTime());
+
+            return ResponseEntity.ok(loginResponse);
+        } catch (AuthException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorUserResponse(e.getMessage()));
+        }
     }
 
     @PostMapping("/verify")

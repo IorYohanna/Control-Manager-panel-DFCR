@@ -4,7 +4,9 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Random;
 
+import com.example.Auth.exception.AuthException;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,8 +16,11 @@ import com.example.Auth.dto.RegisterUSerDto;
 import com.example.Auth.dto.VerifiiedUserDto;
 import com.example.Auth.model.User;
 import com.example.Auth.repository.UserRepository;
+import com.example.Auth.reposnses.ErrorUserResponse;
 
 import jakarta.mail.MessagingException;
+
+import javax.naming.AuthenticationException;
 
 @Service
 public class AuthenticationService {
@@ -53,14 +58,18 @@ public class AuthenticationService {
 
     public User authenticate(LoginUserDto input) {
         User user = userRepository.findByMatricule(input.getMatricule())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(AuthException.UserNotFoundException::new);
 
         if (!user.isEnabled()) {
-            throw new RuntimeException("User not verified");
+            ErrorUserResponse errorUserResponse = new ErrorUserResponse("Utilisateur non valide ");
         }
 
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(input.getMatricule(), input.getPassword()));
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(input.getMatricule(), input.getPassword()));
+        } catch (BadCredentialsException e) {
+            throw new AuthException.InvalidPasswordException();
+        }
         return user;
     }
 
