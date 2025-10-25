@@ -40,7 +40,8 @@ public class AuthenticationService {
                 passwordEncoder.encode(input.getPassword()),
                 input.getEmail(),
                 input.getFonction(),
-                input.getContact());
+                input.getContact(),
+                input.getIdService() );
         user.setVerificationCode(generateVerificationCode());
         user.setVerificationExpireAt(LocalDateTime.now().plusMinutes(15));
         user.setEnabled(false);

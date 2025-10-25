@@ -6,14 +6,13 @@ import Checkbox from "@mui/material/Checkbox";
 const Login = () => {
   return (
     <>
-      <div className="grid grid-cols-2 h-screen">
-        {/* Image Display*/}
+      <div className="grid grid-cols-2 h-screen ">
+
         <div className="relative bg-antique-white-image w-full h-auto bg-cover bg-center">
           <div className="absolute inset-0 bg-[var(--color-background)] opacity-100 mix-blend-multiply"></div>
         </div>
 
-        {/* Formulaire */}
-        <div className="flex flex-col justify-between h-auto w-auto max-auto mx-15 px-4 py-16">
+        <div className="flex flex-col justify-between max-auto mx-15 px-4 py-16">
           <div className="text-start ">
             <h1 className="">Bienvenue dans DFCR!</h1>
           </div>

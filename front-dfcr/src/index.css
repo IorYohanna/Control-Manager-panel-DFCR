@@ -1,32 +1,21 @@
 @import "tailwindcss";
 
+
 @font-face {
-  font-family: "Open Sans";
-  src: url("/fonts/opensans/OpenSans-Regular.ttf") format("truetype");
-  font-weight: 400;
-  font-style: normal;
+  font-family: "eirene-regular";
+  src: url("/fonts/eirene/EireneSans-Regular.otf") format("otf");
 }
 
 @font-face {
-  font-family: "Open Sans";
-  src: url("/fonts/opensans/OpenSans-Italic.ttf") format("truetype");
-  font-weight: 400;
-  font-style: italic;
+  font-family: "kollektif";
+  src: url("/fonts/kollektif/Kollectif-BoldItalic.ttf") format("truetype");
 }
 
 @font-face {
-  font-family: "Open Sans";
-  src: url("/fonts/opensans/OpenSans-Medium.ttf") format("truetype");
-  font-weight: 700;
-  font-style: normal;
+  font-family: "larken-black";
+  src: url("/fonts/larken/Larken-BlackItalic.otf") format("otf");
 }
 
-@font-face {
-  font-family: "Open Sans";
-  src: url("/fonts/opensans/OpenSans-BoldItalic.ttf") format("truetype");
-  font-weight: 700;
-  font-style: italic;
-}
 
 /* 🎨 Palette perso en variables globales */
 @layer base {
@@ -38,17 +27,9 @@
     --brown-sugar: #a1674aff;
     --feldgrau: #4c6663ff;
 
-    /* === Optionnel : on les connecte au système Tailwind === */
-    --color-primary: var(--amaranth-purple);
-    --color-primary-foreground: var(--antique-white);
-    --color-secondary: var(--brown-sugar);
-    --color-secondary-foreground: var(--antique-white);
-    --color-background: var(--antique-white);
-    --color-foreground: var(--feldgrau);
-
     /* === Radius et fonts === */
     --radius: 0.5rem;
-    --font-sans: "Open Sans", sans-serif;
+    --font-sans: "", sans-serif;
   }
 }
 
@@ -56,7 +37,7 @@
 @theme inline {
   --color-primary: var(--amaranth-purple);
   --color-secondary: var(--brown-sugar);
-  --color-background: var(--color-background);
+  --color-background: var(--antique-white);
   --color-foreground: var(--color-foreground);
   --font-sans: var(--font-sans);
   --radius-lg: var(--radius);
@@ -65,8 +46,10 @@
 }
 
 .bg-antique-white-image {
-  background-image: url("https://images.pexels.com/photos/6823456/pexels-photo-6823456.jpeg");
+  background-image: url("/img/bg-left.png");
   background-color: #f0e7d8;
+  
+  
 }
 
 @layer base {

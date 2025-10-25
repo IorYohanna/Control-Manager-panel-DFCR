@@ -12,7 +12,7 @@ const AuthInput = ({
   label,
   placeholder,
   type = "text", // text par défaut
-  sx = { width: "50ch", pb: 2, mt: 1  },
+  sx = { width: "300px" }
 }) => {
   const [showPassword, setShowPassword] = useState(false);
 

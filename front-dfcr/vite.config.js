@@ -69,8 +69,9 @@ export default defineConfig({
         },
       },
       fontFamily: {
-        opensans: ["Open Sans", "sans-serif"],
-        kollektif: ["Kollektif", "sans-serif"],
+        kollektif: ["kollektif", "sans-serif"],
+        'eirene-regular' : ["eirene-regular", "sans-serif"],
+        'larken-black' : ["larken-black", "serif"],
       },
     },
   },
