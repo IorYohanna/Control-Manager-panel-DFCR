@@ -2,18 +2,17 @@
 
 @font-face {
   font-family: "Eirene Sans";
-  src: url("../public/fonts/eirene/EireneSans-Regular.otf") format("opentype");
+  src: url("/fonts/eirene/EireneSans-Regular.otf") format("opentype");
 }
 
 @font-face {
   font-family: "Kollektif";
-  src: url("../public/fonts/kollektif/Kollectif-BoldItalic.ttf")
-    format("truetype");
+  src: url("/fonts/kollektif/Kollectif-BoldItalic.ttf") format("typetrue");
 }
 
 @font-face {
   font-family: "Larken DEMO Black";
-  src: url("../public/fonts/larken/Larken-BlackItalic.otf") format("opentype");
+  src: url("/fonts/larken/Larken-BlackItalic.otf") format("opentype");
 }
 
 /* 🎨 Palette perso en variables globales */

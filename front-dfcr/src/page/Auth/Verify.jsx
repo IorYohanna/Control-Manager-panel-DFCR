@@ -26,7 +26,7 @@ const Verify = () => {
                                 id="matricule"
                                 label="Matricule"
                                 placeholder="Entrez votre Matricule"
-                                required
+                                required={true}
                             />
                         </div>
 

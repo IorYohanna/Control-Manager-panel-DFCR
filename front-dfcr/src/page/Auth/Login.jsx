@@ -104,9 +104,9 @@ const Login = () => {
                 /> 
               </div>
               <div className="w-full text-center ml-25 mb-12 ">
-                <a href="#" className="text-sm underline">
-                  Mot de passe oublié
-                </a>
+                <Link to="/verify" className="text-sm underline">
+                    Mot de passe oublié
+                </Link>
               </div>
             </div>
 
@@ -115,10 +115,8 @@ const Login = () => {
           <div className="text-start">
             <p className="text-sm">
               Pas de compte ?&nbsp;
-              <Link to="/">
-                <a href="#" className="underline text-gray-800">
+              <Link to="/"className="underline text-gray-800">
                   Inscrivez vous
-                </a>
               </Link>
             </p>
           </div>

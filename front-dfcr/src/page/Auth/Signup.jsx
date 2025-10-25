@@ -37,7 +37,7 @@ const Signup = () => {
                                 id="username"
                                 label="Nom"
                                 placeholder="Entrez votre nom"
-                                required
+                                required={true}
                             />
                         </div>
 
