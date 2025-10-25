@@ -96,7 +96,7 @@ const Signup = () => {
                     </div>
                     <div className="flex items-center col-span-1 mx-6 mt-12  lg:justify-center lg:col-span-2">
                         <DefaultButton
-                            bgColor="var(--color-primary)"
+                            bgColor="var(--color-accent)"
                             label="Connexion"
                         />
                     </div>
@@ -105,8 +105,7 @@ const Signup = () => {
                 <div className="text-start mt-6">
                     <p className="text-sm">
                         Déjà un compte ?&nbsp;
-                        <Link to="/login"
-                         className="underline text-gray-800">
+                        <Link to="/login" className="underline text-gray-800">
                             Connectez-vous
                         </Link>
                     </p>

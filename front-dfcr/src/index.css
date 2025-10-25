@@ -2,47 +2,49 @@
 
 @font-face {
   font-family: "Eirene Sans";
-  src: url("/fonts/eirene/EireneSans-Regular.otf") format("opentype");
+  src: url("../public/fonts/eirene/EireneSans-Regular.otf") format("opentype");
 }
 
 @font-face {
   font-family: "Kollektif";
-  src: url("/fonts/kollektif/Kollectif-BoldItalic.ttf") format("TrueType");
+  src: url("../public/fonts/kollektif/Kollectif-BoldItalic.ttf")
+    format("truetype");
 }
 
 @font-face {
   font-family: "Larken DEMO Black";
-  src: url("/fonts/larken/Larken-BlackItalic.otf") format("OpenType");
+  src: url("../public/fonts/larken/Larken-BlackItalic.otf") format("opentype");
 }
 
 /* 🎨 Palette perso en variables globales */
 @layer base {
   :root {
     /* === Tes couleurs principales === */
-    --amaranth-purple: #a63a50ff;
-    --antique-white: #f0e7d8ff;
-    --cinereous: #ab9b96ff;
-    --brown-sugar: #a1674aff;
-    --feldgrau: #4c6663ff;
+    --onyx: #32373bff;
+    --outer-space: #4a5859ff;
+    --khaki: #c3b299ff;
+    --carmine: #9a031eff;
+    --chestnut: #994636ff;
 
     /* === Radius et fonts === */
     --radius: 0.5rem;
     --font-eirene: "Eirene Sans", "sans-serif";
     --font-kollektif: "Kollektif", "sans-serif";
-    --font-larken: "LArken DEMO Black", "serif";
+    --font-larken: "Larken DEMO Black", "serif";
   }
 }
 
 /* === Définition du thème Tailwind inline === */
 @theme {
-  --color-primary: var(--amaranth-purple);
-  --color-secondary: var(--brown-sugar);
-  --color-background: var(--antique-white);
-  --color-foreground: var(--feldgrau);
-  --font-sans: var(--font-sans);
-  --radius-lg: var(--radius);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-sm: calc(var(--radius) - 4px);
+  --color-primary: var(--onyx); /* (titres, texte, boutons principaux) */
+  --color-secondary: var(--outer-space); /* (borders, sous-titres, icônes) */
+  --color-accent: var(--carmine); /* (boutons, liens, alerte) */
+  --color-accent-dark: var(--chestnut); /* hover boutons ou effets focus */
+  --color-background: var(--khaki); /* fond générale */
+  --color-foreground: var(--onyx); /* texte sur le fond clair */
+  --font-eirene: var(--font-eirene);
+  --font-kollektif: var(--font-kollektif);
+  --font-larken: var(--font-larken);
 }
 
 .bg-antique-white-image {
@@ -52,6 +54,6 @@
 
 @layer base {
   body {
-    @apply bg-foreground;
+    @apply bg-background;
   }
 }

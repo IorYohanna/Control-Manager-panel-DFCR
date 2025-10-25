@@ -5,6 +5,7 @@ import AuthInput from "../../components/input/AuthInput";
 import DefaultButton from "../../components/DefaultButton";
 import Checkbox from "@mui/material/Checkbox";
 import { validateLogin } from "../../utils/validation";
+import { Link } from "react-router-dom";
 
 const Login = () => {
   const [matricule, setMatricule] = useState("")
@@ -37,39 +38,43 @@ const Login = () => {
   
   return (
     <>
-      <div className="grid grid-cols-2 h-screen">
+      <section className="grid grid-cols-1 lg:grid-cols-2 h-screen mx-auto overflow-auto text-primary">
         {/* Image Display */}
-        <div className="h-screen w-full flex justify-center max-md:hidden">
-          <img src="/bg.webp" className="w-auto h-full" />
+        <div className="hidden lg:block w-full h-full overflow-hidden">
+                <img
+                    src="/img/bg-left.png"
+                    alt="Background"
+                    className="h-full w-full object-contain"
+                />
         </div>
-
         {/* Formulaire */}
-        <div className="flex flex-col justify-between h-auto w-auto mx-auto px-4 py-16">
+        <div className="flex flex-col justify-between w-full mx-auto max-w-[700px] px-16 lg:px-16 py-16">
           <div className="text-start ">
-            <h1 className="">Bienvenue dans DFCR!</h1>
+            <h1 className="font-larken text-xl lg:text-3xl capitalize">Bienvenue dans DFCR!</h1>
           </div>
 
 
-          <form className="mx-auto mt-8 max-w-md space-y-4" action="#" onSubmit={handleLoginSubmit}>
+          <form className="mx-auto max-w-[700px] w-auto relative" action="#" onSubmit={handleLoginSubmit}>
 
             <div className="mb-7">
-              <h2>Connectez vous</h2>
+              <h2 className="font-eirene text-xl">Connectez vous</h2>
             </div>
 
-            <div>
-              <div>
-                <label htmlFor="matricule">Matricule</label>
+            <div className="grid grid-cols-1 gap-4 font-kollektif">
+              <div className="flex flex-col">
+                <label htmlFor="matricule" className="mb-1 text-sm text-gray-700">Matricule</label>
                 <AuthInput
                   id="matricule"
                   label="Matricule"
                   placeholder="Entrez votre matricule"
                   value={matricule}
                   required={true}
+                  sx={{ width: "auto"}}
                   onChange={(e) => setMatricule(e.target.value)}
                 />
               </div>
-              <div>
-                <label htmlFor="motDePasse">Mot de Passe</label>
+              <div className="flex flex-col">
+                <label htmlFor="motDePasse" className="mb-1 text-sm text-gray-700">Mot de Passe</label>
                 <AuthInput
                   id="password"
                   label="Mot de passe"
@@ -77,6 +82,7 @@ const Login = () => {
                   type="password"
                   value={password}
                   required= {true}
+                  sx={{ width: "auto"}}
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
@@ -84,15 +90,14 @@ const Login = () => {
               {error && <p className="text-red-500 text-sm">{error}</p>}
             </div>
 
-            <div className=" ml-10">
+            <div className="mt-5">
               <p className="text-sm">
                 <Checkbox />
                 Se souvenir de moi
               </p> 
-              <div className="flex items-center justify-center">
+              <div className="flex items-center col-span-1 mx-6 mt:12">
                 <DefaultButton
-                  bgColor="var(--color-primary)"
-                  text="var(--color-primary-foreground)"
+                  bgColor="var(--color-accent)"
                   label={loading ? "Connexion..." : "Connexion"}
                   type="submit"
                   disabled={loading}
@@ -110,14 +115,16 @@ const Login = () => {
           <div className="text-start">
             <p className="text-sm">
               Pas de compte ?&nbsp;
-              <a href="#" className="underline">
-                Inscrivez vous
-              </a>
+              <Link to="/">
+                <a href="#" className="underline text-gray-800">
+                  Inscrivez vous
+                </a>
+              </Link>
             </p>
           </div>
 
         </div>
-      </div>
+      </section>
       
     </>
   );

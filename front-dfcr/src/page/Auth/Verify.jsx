@@ -41,7 +41,7 @@ const Verify = () => {
                     </div>
                     <div className="flex items-center col-span-1 mx-6 mt-12  lg:justify-center lg:col-span-2">
                         <DefaultButton
-                            bgColor="var(--color-primary)"
+                            bgColor="var(--color-accent)"
                             label="Vérifier"
                         />
                     </div>
