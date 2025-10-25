@@ -41,7 +41,8 @@ public class AuthenticationService {
                 input.getEmail(),
                 input.getFonction(),
                 input.getContact(),
-                input.getIdService() );
+                input.getIdService()
+            );
         user.setVerificationCode(generateVerificationCode());
         user.setVerificationExpireAt(LocalDateTime.now().plusMinutes(15));
         user.setEnabled(false);

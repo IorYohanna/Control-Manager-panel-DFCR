@@ -9,9 +9,9 @@ public class RegisterUSerDto {
     private String matricule;
     private String username;
     private String surname;
-    private String fonction;
     private String password;
     private String email;
+    private String fonction;
     private String contact;
     private String idService;
 }

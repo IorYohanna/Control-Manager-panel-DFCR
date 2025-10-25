@@ -47,13 +47,14 @@ public class User implements UserDetails {
     @Column(name = "verification_expired")
     private LocalDateTime verificationExpireAt;
 
-    public User(String matricule,  String surname, String username, String password, String email,String fonction, String contact, String idService) {
+    public User(String matricule, String surname, String username, String password, String email, String fonction,
+                String contact, String idService) {
         this.matricule = matricule;
-        this.password = password;
-        this.email = email;
-        this.surname = surname;
-        this.fonction = fonction;
         this.username = username;
+        this.surname = surname;
+        this.password = password;
+        this.fonction = fonction;
+        this.email = email;
         this.contact = Integer.valueOf(contact);
         this.idService = idService;
     }
