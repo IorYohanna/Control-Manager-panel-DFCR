@@ -32,6 +32,16 @@ const Signup = () => {
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 font-kollektif">
                         <div className="flex flex-col">
+                            <label htmlFor="username" className="mb-1 text-sm text-gray-700">Matricule</label>
+                            <AuthInput
+                                id="matricule"
+                                label="Matricule"
+                                placeholder="Entrez votre matricule"
+                                required={true}
+                            />
+                        </div>
+
+                        <div className="flex flex-col">
                             <label htmlFor="username" className="mb-1 text-sm text-gray-700">Nom</label>
                             <AuthInput
                                 id="username"
