@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class VerifiiedUserDto {
+public class VerifiedUserDto {
     private String matricule;
     private String verificationCode;
 }

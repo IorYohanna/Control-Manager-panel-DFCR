@@ -138,7 +138,7 @@ const Signup = () => {
                         </div>
 
                         <div className="flex flex-col">
-                            <label htmlFor="contact" className="mb-1 text-sm text-gray-700">Email</label>
+                            <label htmlFor="contact" className="mb-1 text-sm text-gray-700">Contact</label>
                             <AuthInput
                                 id="contact"
                                 label="contact"

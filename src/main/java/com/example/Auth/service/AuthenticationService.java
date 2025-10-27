@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.Auth.dto.LoginUserDto;
 import com.example.Auth.dto.RegisterUSerDto;
-import com.example.Auth.dto.VerifiiedUserDto;
+import com.example.Auth.dto.VerifiedUserDto;
 import com.example.Auth.model.User;
 import com.example.Auth.repository.UserRepository;
 import com.example.Auth.responses.ErrorUserResponse;
@@ -71,7 +71,7 @@ public class AuthenticationService {
         return user;
     }
 
-    public void generateVerificationCode(VerifiiedUserDto input) {
+    public void generateVerificationCode(VerifiedUserDto input) {
         Optional<User> userOpt = userRepository.findByMatricule(input.getMatricule());
         if (userOpt.isPresent()) {
             User user = userOpt.get();
@@ -97,7 +97,7 @@ public class AuthenticationService {
         }
     }
 
-    public void verifyUser(VerifiiedUserDto input) {
+    public void verifyUser(VerifiedUserDto input) {
         Optional<User> optionalUser = userRepository.findByMatricule(input.getMatricule());
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();

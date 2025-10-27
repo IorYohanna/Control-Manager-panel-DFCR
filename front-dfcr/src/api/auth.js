@@ -52,13 +52,13 @@ export async function signupUser(
   }
   return data;
 }
-export async function VerifyUser(matricule, code) {
+export async function VerifyUser(matricule, verificationCode) {
   const response = await fetch(`${API_URL}/verify`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ matricule, code }),
+    body: JSON.stringify({ matricule, verificationCode }),
   });
 
   const data = await response.json();

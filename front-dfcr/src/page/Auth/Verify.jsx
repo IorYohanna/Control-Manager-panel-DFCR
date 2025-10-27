@@ -1,28 +1,30 @@
 import AuthInput from "../../components/input/AuthInput";
 import DefaultButton from "../../components/DefaultButton";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { VerifyUser } from "../../api/auth";
 
-const validateVerify = ({ matricule, code }) => {
+const validateVerify = ({ matricule, verificationCode }) => {
     const errors = {};
     if (!matricule.trim()) errors.matricule = "Le matricule est requis";
-    if (!code.trim()) errors.code = "Le code est requis";
+    if (!verificationCode.trim()) errors.verificationCode = "Le code est requis";
     return errors;
 };
 
 const Verify = () => {
 
     const [matricule, setMatricule] = useState("");
-    const [code, setCode] = useState("");
+    const [verificationCode, setVerificationCode] = useState("");
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState();
+
+    const Navigate = useNavigate()
 
     const handleVerifySubmit = async (e) => {
         e.preventDefault();
         setError(null);
 
-        const errors = validateVerify({ matricule, code })
+        const errors = validateVerify({ matricule, verificationCode })
         if (Object.keys(errors).length > 0) {
             setError(Object.values(errors).join(" / "))
             return;
@@ -30,8 +32,9 @@ const Verify = () => {
         setLoading(true);
 
         try {
-            const data = await VerifyUser(matricule, code);
+            const data = await VerifyUser(matricule, verificationCode);
             console.log(" Verification Réussie :", data);
+            Navigate("/login")
         } catch (err) {
             console.error("Erreur de verfication : ", err.message)
             setError(err.message);
@@ -48,9 +51,7 @@ const Verify = () => {
                     <h1 className="font-larken text-xl lg:text-3xl capitalize ">S'identifier</h1>
                 </div>
 
-                <form
-                    className="mx-auto w-full relative -top-5 flex flex-col justify-center items-center gap-4 "
-                    onSubmit={handleVerifySubmit}
+                <form className="mx-auto w-full relative -top-5 flex flex-col justify-center items-center gap-4 " onSubmit={handleVerifySubmit}
                 >
                     <div className="mb-7">
                         <h2 className="font-eirene text-xl">Veuillez vous identifer</h2>
@@ -76,8 +77,8 @@ const Verify = () => {
                                 label="Code"
                                 placeholder="Entrez votre code "
                                 required={true}
-                                value={code}
-                                onChange={(e) => setCode(e.target.value)}
+                                value={verificationCode}
+                                onChange={(e) => setVerificationCode(e.target.value)}
                             />
                         </div>
                     </div>

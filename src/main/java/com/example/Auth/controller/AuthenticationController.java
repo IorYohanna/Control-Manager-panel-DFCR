@@ -1,13 +1,16 @@
 package com.example.Auth.controller;
 
 import com.example.Auth.exception.AuthException;
+
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.Auth.dto.LoginUserDto;
 import com.example.Auth.dto.RegisterUSerDto;
-import com.example.Auth.dto.VerifiiedUserDto;
+import com.example.Auth.dto.VerifiedUserDto;
 import com.example.Auth.model.User;
 import com.example.Auth.responses.ErrorUserResponse;
 import com.example.Auth.responses.LoginResponse;
@@ -47,12 +50,12 @@ public class AuthenticationController {
     }
 
     @PostMapping("/verify")
-    public ResponseEntity<?> verifyUser(@RequestBody VerifiiedUserDto verifyUserDto) {
+    public ResponseEntity<Map<String, String>> verifyUser(@RequestBody VerifiedUserDto verifyUserDto) {
         try {
             authenticationService.verifyUser(verifyUserDto);
-            return ResponseEntity.ok("Account verified successfully");
+            return ResponseEntity.ok(Map.of("message", "Account verified successfully"));
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
     }
 
