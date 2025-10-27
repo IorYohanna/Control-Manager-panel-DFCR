@@ -5,11 +5,14 @@ import java.util.Optional;
 import java.util.Random;
 
 import com.example.Auth.exception.AuthException;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.Auth.dto.LoginUserDto;
 import com.example.Auth.dto.RegisterUSerDto;
@@ -36,6 +39,10 @@ public class AuthenticationService {
     }
 
     public User signUp(RegisterUSerDto input) {
+        if (userRepository.findByEmail(input.getEmail()).isPresent()) {
+            throw new RuntimeException ("Cet email est déjà utilisé !");
+        }
+
         User user = new User(
                 input.getMatricule(),
                 input.getSurname(),
@@ -44,8 +51,7 @@ public class AuthenticationService {
                 input.getEmail(),
                 input.getFonction(),
                 input.getContact(),
-                input.getIdService()
-            );
+                input.getIdService());
         user.setVerificationCode(generateVerificationCode());
         user.setVerificationExpireAt(LocalDateTime.now().plusMinutes(15));
         user.setEnabled(false);
@@ -117,8 +123,8 @@ public class AuthenticationService {
         }
     }
 
-    public void resendVerificationCode(String matricule) {
-        Optional<User> optionalUser = userRepository.findByMatricule(matricule);
+    public void resendVerificationCode(String email) {
+        Optional<User> optionalUser = userRepository.findByEmail(email);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             if (user.isEnabled()) {

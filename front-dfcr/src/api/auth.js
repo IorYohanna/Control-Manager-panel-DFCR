@@ -18,40 +18,31 @@ export async function loginUser(matricule, password) {
   return data;
 }
 
-export async function signupUser(
-  matricule,
-  username,
-  surname,
-  password,
-  email,
-  fonction,
-  contact,
-  idService
-) {
+export async function signupUser(matricule, username, surname, password, email, fonction, contact, idService) {
   const response = await fetch(`${API_URL}/signup`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      matricule,
-      username,
-      surname,
-      password,
-      email,
-      fonction,
-      contact,
-      idService,
-    }),
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ matricule, username, surname, password, email, fonction, contact, idService }),
   });
 
-  const data = await response.json();
-  if (!response.ok) {
-    const errorMessage = data.message || "Erreur lors de l'inscription ";
-    throw new Error(errorMessage);
+ if (!response.ok) {
+  let data;
+  try {
+    data = await response.json();
+  } catch {
+    data = null;
   }
-  return data;
+
+  console.log("Réponse backend :", data);
+
+  const errorMessage = data?.message || data?.error || "Erreur d'inscription";
+  throw new Error(errorMessage);
 }
+
+
+  return response.json();
+}
+
 export async function VerifyUser(matricule, verificationCode) {
   const response = await fetch(`${API_URL}/verify`, {
     method: "POST",
@@ -68,4 +59,15 @@ export async function VerifyUser(matricule, verificationCode) {
   }
 
   return data;
+}
+
+export async function resendCode (email) {
+  const response = await fetch (`${API_URL}/resend?email=${email}`, {
+    method: "POST",
+  })
+
+  if(!response.ok) {
+    const message = await response.text()
+    throw new Error(message)
+  }
 }

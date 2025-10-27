@@ -4,7 +4,7 @@ import DefaultButton from "../../components/DefaultButton";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import { Link, Navigate, useNavigate } from "react-router-dom";
-import { signupUser  } from "../../api/auth";
+import { signupUser } from "../../api/auth";
 
 const options = ['SAGA', 'SG', 'SF', 'SFPR', 'SCRI', 'SPSE'];
 
@@ -30,19 +30,21 @@ const Signup = () => {
 
         setLoading(true)
 
-        try{
-            const data = await signupUser(matricule,username,surname,password,email,fonction,contact,idService)
+        try {
+            const data = await signupUser(matricule, username, surname, password, email, fonction, contact, idService)
             console.log("Connexion réussi :", data)
+            localStorage.setItem("email", email)
             Navigate("/verify")
         } catch (err) {
-            console.log("Erreur d'authentification :" , err.message)
+            console.log("Erreur d'inscription :", err.message);
             setError(err.message)
-        } finally {
+        }
+        finally {
             setLoading(false)
         }
 
     }
-    
+
     return (
         <section className="grid grid-cols-1 lg:grid-cols-2 h-screen overflow-x-auto mx-auto">
 
@@ -173,7 +175,11 @@ const Signup = () => {
                         />
                     </div>
 
-                    {error && <p className="text-red-500 text-sm">{error}</p>}
+                    {error &&
+                        <div className="flex items-center justify-center col-span-1 lg:col-end-2 mt-6 mx-16 " >
+                            <p className="text-red-500 text-sm">{error}</p>
+                        </div>}
+
 
                 </form>
 

@@ -2,7 +2,7 @@ import AuthInput from "../../components/input/AuthInput";
 import DefaultButton from "../../components/DefaultButton";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { VerifyUser } from "../../api/auth";
+import { resendCode, VerifyUser } from "../../api/auth";
 
 const validateVerify = ({ matricule, verificationCode }) => {
     const errors = {};
@@ -18,7 +18,30 @@ const Verify = () => {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState();
 
-    const Navigate = useNavigate()
+    const Navigate = useNavigate();
+
+    const savedEmail = localStorage.getItem("email");
+
+    const handleResendCode = async () => {
+        if (!savedEmail) {
+            setError("Email non trouvé par le code")
+            return
+        }
+
+        setLoading(true)
+        setError(null)
+
+        try {
+            await resendCode(savedEmail);
+            console.log("Email envoyé avec succès !");
+            alert("Le code de vérification a été renvoyé !");
+        } catch (e) {
+            setError(e.message)
+        } finally {
+            setLoading(false)
+        }
+    }
+
 
     const handleVerifySubmit = async (e) => {
         e.preventDefault();
@@ -98,8 +121,11 @@ const Verify = () => {
                 <div className="text-start mt-6">
                     <p className="text-sm">
                         Code non reçus ?&nbsp;
-                        <Link to="/login"
-                            className="underline text-gray-800">
+                        <Link
+                            to="#"
+                            className="underline text-gray-800"
+                            onClick={handleResendCode}
+                        >
                             Renvoyer un code
                         </Link>
                     </p>

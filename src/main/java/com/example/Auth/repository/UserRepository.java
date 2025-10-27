@@ -13,6 +13,7 @@ import org.springframework.data.repository.ListCrudRepository;
 public interface UserRepository extends ListCrudRepository<User, String> {
 
     Optional<User> findByMatricule(String matricule);
+    Optional<User> findByEmail(String email);
     Optional<User> findByVerificationCode(String verificationCode);
 
 }
