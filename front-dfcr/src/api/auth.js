@@ -17,3 +17,38 @@ export async function loginUser(matricule, password) {
 
   return data;
 }
+
+export async function signupUser(
+  matricule,
+  username,
+  surname,
+  password,
+  email,
+  fonction,
+  contact,
+  idService
+) {
+  const response = await fetch(`${API_URL}/signup`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      matricule,
+      username,
+      surname,
+      password,
+      email,
+      fonction,
+      contact,
+      idService,
+    }),
+  });
+
+  const data = await response.json();
+  if (!response.ok) {
+    const errorMessage = data.message || "Erreur lors de l'inscription ";
+    throw new Error(errorMessage);
+  }
+  return data;
+}

@@ -1,13 +1,48 @@
+import { useState } from "react";
 import AuthInput from "../../components/input/AuthInput";
 import DefaultButton from "../../components/DefaultButton";
-import Checkbox from "@mui/material/Checkbox";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import { signupUser  } from "../../api/auth";
 
-const options = ['SAGA', 'SG', 'SF', 'SFPR', 'SCRI'];
+const options = ['SAGA', 'SG', 'SF', 'SFPR', 'SCRI', 'SPSE'];
 
 const Signup = () => {
+    const [username, setUsername] = useState("")
+    const [surname, setSurname] = useState("")
+    const [email, setEmail] = useState("")
+    const [fonction, setFonction] = useState("")
+    const [password, setPassword] = useState("")
+    const [idService, setIdService] = useState("")
+    const [matricule, setMatricule] = useState("")
+    const [contact, setContact] = useState("")
+
+    const [error, setError] = useState("")
+    const [loading, setLoading] = useState(false)
+
+    const Navigate = useNavigate()
+
+    const handleSignupSubmit = async (e) => {
+        e.preventDefault()
+        setError(null)
+
+
+        setLoading(true)
+
+        try{
+            const data = await signupUser(matricule,username,surname,password,email,fonction,contact,idService)
+            console.log("Connexion réussi :", data)
+            Navigate("/verify")
+        } catch (err) {
+            console.log("Erreur d'authentification :" , err.message)
+            setError(err.message)
+        } finally {
+            setLoading(false)
+        }
+
+    }
+    
     return (
         <section className="grid grid-cols-1 lg:grid-cols-2 h-screen overflow-x-auto mx-auto">
 
@@ -25,7 +60,7 @@ const Signup = () => {
                     <h1 className="font-larken text-xl lg:text-3xl capitalize ">Inscrivez-vous des maintenant</h1>
                 </div>
 
-                <form className="mx-auto w-full relative -top-5">
+                <form className="mx-auto w-full relative -top-5" action="#" onSubmit={handleSignupSubmit}>
                     <div className="mb-7">
                         <h2 className="font-eirene text-xl">Veuillez vous inscrire</h2>
                     </div>
@@ -37,7 +72,9 @@ const Signup = () => {
                                 id="matricule"
                                 label="Matricule"
                                 placeholder="Entrez votre matricule"
+                                value={matricule}
                                 required={true}
+                                onChange={(e) => setMatricule(e.target.value)}
                             />
                         </div>
 
@@ -47,7 +84,9 @@ const Signup = () => {
                                 id="username"
                                 label="Nom"
                                 placeholder="Entrez votre nom"
+                                value={username}
                                 required={true}
+                                onChange={(e) => setUsername(e.target.value)}
                             />
                         </div>
 
@@ -57,24 +96,8 @@ const Signup = () => {
                                 id="surname"
                                 label="Prénom"
                                 placeholder="Entrez votre prénom"
-                            />
-                        </div>
-
-                        <div className="flex flex-col">
-                            <label htmlFor="email" className="mb-1 text-sm text-gray-700">Email</label>
-                            <AuthInput
-                                id="email"
-                                label="Email"
-                                placeholder="Entrez votre email"
-                            />
-                        </div>
-
-                        <div className="flex flex-col">
-                            <label htmlFor="fonction" className="mb-1 text-sm text-gray-700">Fonction</label>
-                            <AuthInput
-                                id="fonction"
-                                label="Fonction"
-                                placeholder="Entrez votre fonction"
+                                value={surname}
+                                onChange={(e) => setSurname(e.target.value)}
                             />
                         </div>
 
@@ -85,6 +108,43 @@ const Signup = () => {
                                 label="Mot de passe"
                                 placeholder="Entrez votre mot de passe"
                                 type="password"
+                                value={password}
+                                required={true}
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
+                        </div>
+
+                        <div className="flex flex-col">
+                            <label htmlFor="email" className="mb-1 text-sm text-gray-700">Email</label>
+                            <AuthInput
+                                id="email"
+                                label="Email"
+                                placeholder="Entrez votre email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                            />
+                        </div>
+
+                        <div className="flex flex-col">
+                            <label htmlFor="fonction" className="mb-1 text-sm text-gray-700">Fonction</label>
+                            <AuthInput
+                                id="fonction"
+                                label="Fonction"
+                                placeholder="Entrez votre fonction"
+                                value={fonction}
+                                required={true}
+                                onChange={(e) => setFonction(e.target.value)}
+                            />
+                        </div>
+
+                        <div className="flex flex-col">
+                            <label htmlFor="contact" className="mb-1 text-sm text-gray-700">Email</label>
+                            <AuthInput
+                                id="contact"
+                                label="contact"
+                                placeholder="Entrez votre contact"
+                                value={contact}
+                                onChange={(e) => setContact(e.target.value)}
                             />
                         </div>
 
@@ -98,18 +158,23 @@ const Signup = () => {
                                 }
                                 disablePortal
                                 options={options}
-                                renderInput={(params) => (
-                                    <TextField {...params} placeholder="Service" />
-                                )}
+                                renderInput={(params) => <TextField {...params} placeholder="Service" />}
+                                value={idService}
+                                onChange={(event, newValue) => setIdService(newValue)}
                             />
                         </div>
                     </div>
                     <div className="flex items-center col-span-1 mx-6 mt-12  lg:justify-center lg:col-span-2">
                         <DefaultButton
                             bgColor="var(--color-accent)"
-                            label="Connexion"
+                            label={loading ? "S'inscrire..." : "S'inscrire"}
+                            type="submit"
+                            disabled={loading}
                         />
                     </div>
+
+                    {error && <p className="text-red-500 text-sm">{error}</p>}
+
                 </form>
 
                 <div className="text-start mt-6">
