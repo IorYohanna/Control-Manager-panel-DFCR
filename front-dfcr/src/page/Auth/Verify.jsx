@@ -1,11 +1,45 @@
 import AuthInput from "../../components/input/AuthInput";
 import DefaultButton from "../../components/DefaultButton";
-import Checkbox from "@mui/material/Checkbox";
-import Autocomplete from "@mui/material/Autocomplete";
-import TextField from "@mui/material/TextField";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import { VerifyUser } from "../../api/auth";
+
+const validateVerify = ({ matricule, code }) => {
+    const errors = {};
+    if (!matricule.trim()) errors.matricule = "Le matricule est requis";
+    if (!code.trim()) errors.code = "Le code est requis";
+    return errors;
+};
 
 const Verify = () => {
+
+    const [matricule, setMatricule] = useState("");
+    const [code, setCode] = useState("");
+    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState();
+
+    const handleVerifySubmit = async (e) => {
+        e.preventDefault();
+        setError(null);
+
+        const errors = validateVerify({ matricule, code })
+        if (Object.keys(errors).length > 0) {
+            setError(Object.values(errors).join(" / "))
+            return;
+        }
+        setLoading(true);
+
+        try {
+            const data = await VerifyUser(matricule, code);
+            console.log(" Verification Réussie :", data);
+        } catch (err) {
+            console.error("Erreur de verfication : ", err.message)
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    }
+
     return (
         <section className="grid grid-cols-1 lg:grid-cols-2 h-screen overflow-x-auto mx-auto">
             <div className="flex flex-col justify-between w-full max-w-[700px] mx-auto px-16 lg:px-6 py-16 ">
@@ -14,7 +48,10 @@ const Verify = () => {
                     <h1 className="font-larken text-xl lg:text-3xl capitalize ">S'identifier</h1>
                 </div>
 
-                <form className="mx-auto w-full relative -top-5 flex flex-col justify-center items-center gap-4 ">
+                <form
+                    className="mx-auto w-full relative -top-5 flex flex-col justify-center items-center gap-4 "
+                    onSubmit={handleVerifySubmit}
+                >
                     <div className="mb-7">
                         <h2 className="font-eirene text-xl">Veuillez vous identifer</h2>
                     </div>
@@ -27,6 +64,8 @@ const Verify = () => {
                                 label="Matricule"
                                 placeholder="Entrez votre Matricule"
                                 required={true}
+                                value={matricule}
+                                onChange={(e) => setMatricule(e.target.value)}
                             />
                         </div>
 
@@ -36,28 +75,36 @@ const Verify = () => {
                                 id="verificationCode"
                                 label="Code"
                                 placeholder="Entrez votre code "
+                                required={true}
+                                value={code}
+                                onChange={(e) => setCode(e.target.value)}
                             />
                         </div>
                     </div>
                     <div className="flex items-center col-span-1 mx-6 mt-12  lg:justify-center lg:col-span-2">
                         <DefaultButton
                             bgColor="var(--color-accent)"
-                            label="Vérifier"
+                            label={loading ? "Verification..." : "Verifier"}
+                            type="submit"
+                            disabled={loading}
                         />
                     </div>
+
+                    {error && <p className="text-red-500 text-sm">{error}</p>}
+
                 </form>
 
                 <div className="text-start mt-6">
                     <p className="text-sm">
                         Code non reçus ?&nbsp;
                         <Link to="/login"
-                         className="underline text-gray-800">
+                            className="underline text-gray-800">
                             Renvoyer un code
                         </Link>
                     </p>
                 </div>
             </div>
-            
+
             <div className="hidden lg:block w-full h-full overflow-hidden">
                 <img
                     src="/img/Verify_bg.png"
