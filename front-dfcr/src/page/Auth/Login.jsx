@@ -4,8 +4,14 @@ import { loginUser  } from "../../api/auth";
 import AuthInput from "../../components/input/AuthInput";
 import DefaultButton from "../../components/DefaultButton";
 import Checkbox from "@mui/material/Checkbox";
-import { validateLogin } from "../../utils/validation";
 import { Link } from "react-router-dom";
+
+const validateLogin = ({ matricule, password }) => {
+  const errors = {};
+  if (!matricule.trim()) errors.matricule = "Le matricule est requis";
+  if (!password.trim()) errors.password = "Le mot de passe est requis";
+  return errors;
+};
 
 const Login = () => {
   const [matricule, setMatricule] = useState("")
