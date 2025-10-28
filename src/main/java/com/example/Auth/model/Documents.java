@@ -17,27 +17,22 @@ import lombok.Setter;
 public class Documents {
     @Id
     private String reference;
-    @Column(name = "libelle", nullable = true)
-    private String libelle;
-    @Column(name = "objet")
     private String objet;
-    @Column(name = "corps")
     private String corps;
-    @Column(name = "type", nullable = true)
+    @Column(nullable = false)
     private String type;
-    @Column(name = "status", nullable = true)
+    @Column
     private String status;
 
-    @Column(name = "date_creation", nullable = true)
+    @Column(name = "date_creation", nullable = false )
     private LocalDate dateCreation;
     @Column(name = "piece_jointe")
     @Lob
     private byte[] pieceJointe;
 
-    public Documents(String reference, String libelle, String objet, String corps,
+    public Documents(String reference, String objet, String corps,
             String type, String status, LocalDate dateCreation, byte[] pieceJointe) {
         this.reference = reference;
-        this.libelle = libelle;
         this.objet = objet;
         this.corps = corps;
         this.type = type;
