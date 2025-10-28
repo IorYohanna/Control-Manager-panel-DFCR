@@ -27,7 +27,7 @@ public class User implements UserDetails {
     private String matricule;
     @Column(name = "nom_utilisateur", nullable = false)
     private String username;
-    @Column(name = "prenom_utilisateur", nullable = false)
+    @Column(name = "prenom_utilisateur", nullable = true)
     private String surname;
     @Column(unique = true, nullable = false)
     private String email;
@@ -48,7 +48,7 @@ public class User implements UserDetails {
     private LocalDateTime verificationExpireAt;
 
     public User(String matricule, String surname, String username, String password, String email, String fonction,
-                String contact, String idService) {
+            String contact, String idService) {
         this.matricule = matricule;
         this.username = username;
         this.surname = surname;

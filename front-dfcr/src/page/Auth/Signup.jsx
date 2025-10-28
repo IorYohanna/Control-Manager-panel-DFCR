@@ -143,7 +143,7 @@ const Signup = () => {
                             <label htmlFor="contact" className="mb-1 text-sm text-gray-700">Contact</label>
                             <AuthInput
                                 id="contact"
-                                label="contact"
+                                label="Contact"
                                 placeholder="Entrez votre contact"
                                 value={contact}
                                 onChange={(e) => setContact(e.target.value)}
