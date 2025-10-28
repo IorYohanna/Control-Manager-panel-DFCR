@@ -21,16 +21,16 @@ public class Document {
     private String corps;
     @Column(nullable = false)
     private String type;
-    @Column
+    @Column(nullable = false)
     private String status;
 
-    @Column(name = "date_creation", nullable = false )
+    @Column(name = "date_creation", nullable = false)
     private LocalDate dateCreation;
-    @Column(name = "piece_jointe",columnDefinition = "bytea")
+    @Column(name = "piece_jointe", columnDefinition = "bytea")
     private byte[] pieceJointe;
 
     public Document(String reference, String objet, String corps,
-                    String type, String status, LocalDate dateCreation, byte[] pieceJointe) {
+            String type, String status, LocalDate dateCreation, byte[] pieceJointe) {
         this.reference = reference;
         this.objet = objet;
         this.corps = corps;
