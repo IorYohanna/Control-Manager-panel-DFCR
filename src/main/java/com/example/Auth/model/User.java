@@ -1,5 +1,6 @@
 package com.example.Auth.model;
 
+import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
@@ -25,7 +26,7 @@ public class User implements UserDetails {
 
     @Id
     private String matricule;
-    @Column(name = "nom_utilisateur", nullable = false)
+    @Column(name = "nom_utilisateur")
     private String username;
     @Column(name = "prenom_utilisateur", nullable = true)
     private String surname;
@@ -41,6 +42,10 @@ public class User implements UserDetails {
     @Column(name = "id_pefa")
     private Integer idPefa;
 
+    private Integer score;
+    private String evaluation;
+    @Column(name = "date_evaluation")
+    private Date dateEvaluation;
     private boolean enabled;
     @Column(name = "verification_code")
     private String verificationCode;
