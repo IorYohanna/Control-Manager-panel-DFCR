@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,10 +31,11 @@ public class Documents {
     @Column(name = "date_creation", nullable = true)
     private LocalDate dateCreation;
     @Column(name = "piece_jointe")
-    private Byte pieceJointe;
+    @Lob
+    private byte[] pieceJointe;
 
     public Documents(String reference, String libelle, String objet, String corps,
-            String type, String status, LocalDate dateCreation, Byte pieceJointe) {
+            String type, String status, LocalDate dateCreation, byte[] pieceJointe) {
         this.reference = reference;
         this.libelle = libelle;
         this.objet = objet;
@@ -44,6 +46,7 @@ public class Documents {
         this.pieceJointe = pieceJointe;
     }
 
-    public Documents() {}
+    public Documents() {
+    }
 
 }
