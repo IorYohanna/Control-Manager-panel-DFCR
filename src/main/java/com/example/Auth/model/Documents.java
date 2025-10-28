@@ -21,13 +21,12 @@ public class Documents {
     private String corps;
     @Column(nullable = false)
     private String type;
-    @Column
+    @Column(nullable = false)
     private String status;
 
-    @Column(name = "date_creation", nullable = false )
+    @Column(name = "date_creation", nullable = false)
     private LocalDate dateCreation;
-    @Column(name = "piece_jointe")
-    @Lob
+    @Column(name = "piece_jointe", columnDefinition = "bytea")
     private byte[] pieceJointe;
 
     public Documents(String reference, String objet, String corps,
