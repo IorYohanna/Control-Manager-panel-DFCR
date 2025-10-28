@@ -14,7 +14,7 @@ import lombok.Setter;
 @Table(name = "documents")
 @Getter
 @Setter
-public class Documents {
+public class Document {
     @Id
     private String reference;
     private String objet;
@@ -26,12 +26,11 @@ public class Documents {
 
     @Column(name = "date_creation", nullable = false )
     private LocalDate dateCreation;
-    @Column(name = "piece_jointe")
-    @Lob
+    @Column(name = "piece_jointe",columnDefinition = "bytea")
     private byte[] pieceJointe;
 
-    public Documents(String reference, String objet, String corps,
-            String type, String status, LocalDate dateCreation, byte[] pieceJointe) {
+    public Document(String reference, String objet, String corps,
+                    String type, String status, LocalDate dateCreation, byte[] pieceJointe) {
         this.reference = reference;
         this.objet = objet;
         this.corps = corps;
@@ -41,7 +40,7 @@ public class Documents {
         this.pieceJointe = pieceJointe;
     }
 
-    public Documents() {
+    public Document() {
     }
 
 }
