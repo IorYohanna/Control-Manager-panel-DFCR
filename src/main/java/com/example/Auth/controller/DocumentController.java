@@ -30,10 +30,24 @@ public class DocumentController {
         return ResponseEntity.ok(document);
     }
 
-    @PostMapping
-    public ResponseEntity<Document> create(@RequestBody DocumentDto documentDto) {
-        Document document = documentService.createDocument(documentDto);
-        return ResponseEntity.ok(document);
+    @PostMapping(value = "/create", consumes = "multipart/form-data")
+    public ResponseEntity<Document> createDocument(
+            @RequestParam("reference") String reference,
+            @RequestParam("objet") String objet,
+            @RequestParam("corps") String corps,
+            @RequestParam("type") String type,
+            @RequestParam("status") String status,
+            @RequestParam("dateCreation") String dateCreation,
+            @RequestParam("pieceJointe") MultipartFile pieceJointe
+    ) {
+        try {
+            Document doc = documentService.createDocument(
+                    reference, objet, corps, type, status, dateCreation, pieceJointe);
+            return ResponseEntity.ok(doc);
+
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
     @GetMapping("/{reference}")
@@ -47,25 +61,6 @@ public class DocumentController {
     public ResponseEntity<Document> updateDocument(@PathVariable String reference, @RequestBody DocumentDto documentDto) {
         Document updatedDocument = documentService.updateDocument(reference, documentDto);
         return updatedDocument != null ? ResponseEntity.ok(updatedDocument) : ResponseEntity.notFound().build();
-    }
-
-    @PostMapping(value = "/upload", consumes = "multipart/form-data")
-    public ResponseEntity<Document> uploadDocument(
-            @RequestParam("reference") String reference,
-            @RequestParam("objet") String objet,
-            @RequestParam("corps") String corps,
-            @RequestParam("type") String type,
-            @RequestParam("status") String status,
-            @RequestParam("pieceJointe") MultipartFile pieceJointe
-    ) {
-        try {
-            Document doc = documentService.uploadDocument(
-                reference, objet, corps, type, status, pieceJointe);
-            return ResponseEntity.ok(doc);
-
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
-        }
     }
 
     @GetMapping("/type/{type}")

@@ -8,7 +8,7 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import FormHelperText from "@mui/material/FormHelperText";
 
-const AuthInput = ({
+const Input = ({
   id,
   label,
   placeholder,
@@ -65,4 +65,4 @@ const AuthInput = ({
   );
 };
 
-export default AuthInput
+export default Input

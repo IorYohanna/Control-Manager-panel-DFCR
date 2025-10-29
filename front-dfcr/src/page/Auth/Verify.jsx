@@ -1,4 +1,4 @@
-import AuthInput from "../../components/input/AuthInput";
+import Input from "../../components/input/Input";
 import DefaultButton from "../../components/DefaultButton";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -83,7 +83,7 @@ const Verify = () => {
                     <div className="font-kollektif flex flex-col gap-4">
                         <div className="flex flex-col">
                             <label htmlFor="matricule" className="mb-1 text-sm text-gray-700">Matricule</label>
-                            <AuthInput
+                            <Input
                                 id="matricule"
                                 label="Matricule"
                                 placeholder="Entrez votre Matricule"
@@ -95,7 +95,7 @@ const Verify = () => {
 
                         <div className="flex flex-col">
                             <label htmlFor="verificationCode" className="mb-1 text-sm text-gray-700">Code de Vérification</label>
-                            <AuthInput
+                            <Input
                                 id="verificationCode"
                                 label="Code"
                                 placeholder="Entrez votre code "
