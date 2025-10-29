@@ -24,16 +24,16 @@ import jakarta.servlet.http.HttpServletResponse;
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-    private final HandlerExceptionResolver exceptionResolver;
-    private final JwtService jwtService;
+/*     private final HandlerExceptionResolver exceptionResolver;
+ */    private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
 
     public JwtAuthFilter(
             @Qualifier("handlerExceptionResolver") HandlerExceptionResolver exceptionResolver, // ✅ Correction ici
             JwtService jwtService,
             UserDetailsService userDetailsService) {
-        this.exceptionResolver = exceptionResolver;
-        this.jwtService = jwtService;
+/*         this.exceptionResolver = exceptionResolver;
+ */        this.jwtService = jwtService;
         this.userDetailsService = userDetailsService;
     }
 

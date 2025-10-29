@@ -127,4 +127,8 @@ public class DocumentService {
                 .body(fileData);
     }
 
+    public List<Document> searchByKeyword (String keyword) {
+        return documentRepository.searchByKeyword(keyword);
+    }
+
 }

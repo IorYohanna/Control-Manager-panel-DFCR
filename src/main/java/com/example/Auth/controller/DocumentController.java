@@ -73,7 +73,10 @@ public class DocumentController {
        return documentService.downloadDocument(reference);
     }
 
-
+    @GetMapping("/search")
+    public List<Document> search (String keyword) {
+        return documentService.searchByKeyword(keyword);
+    }
 
     @DeleteMapping("/{reference}")
     public ResponseEntity<?> deleteDocument(@PathVariable String reference) {

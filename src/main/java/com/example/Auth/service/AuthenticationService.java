@@ -61,11 +61,11 @@ public class AuthenticationService {
     public User authenticate(LoginUserDto input) {
         User user = userRepository.findByMatricule(input.getMatricule())
                 .orElseThrow(AuthException.UserNotFoundException::new);
-
+/* 
         if (!user.isEnabled()) {
             ErrorUserResponse errorUserResponse = new ErrorUserResponse("Utilisateur non valide ");
         }
-
+ */
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(input.getMatricule(), input.getPassword()));
