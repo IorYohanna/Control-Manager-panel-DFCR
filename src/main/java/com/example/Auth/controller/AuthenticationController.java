@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.example.Auth.dto.LoginUserDto;
 import com.example.Auth.dto.RegisterUSerDto;
+import com.example.Auth.dto.UserResponseDto;
 import com.example.Auth.dto.VerifiedUserDto;
 import com.example.Auth.model.User;
 import com.example.Auth.responses.ErrorUserResponse;
@@ -33,7 +34,8 @@ public class AuthenticationController {
     @PostMapping("/signup")
     public ResponseEntity<?> register(@RequestBody RegisterUSerDto registerUserDto) {
         try {
-            User registeredUser = authenticationService.signUp(registerUserDto);
+            UserResponseDto registeredUser = authenticationService.signUp(registerUserDto);
+            
             return ResponseEntity.ok(registeredUser);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));

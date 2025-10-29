@@ -14,8 +14,11 @@ import org.springframework.stereotype.Service;
 
 import com.example.Auth.dto.LoginUserDto;
 import com.example.Auth.dto.RegisterUSerDto;
+import com.example.Auth.dto.UserResponseDto;
 import com.example.Auth.dto.VerifiedUserDto;
+import com.example.Auth.model.ServiceDfcr;
 import com.example.Auth.model.User;
+import com.example.Auth.repository.ServiceRepository;
 import com.example.Auth.repository.UserRepository;
 /* import com.example.Auth.responses.ErrorUserResponse; */
 
@@ -27,45 +30,66 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final EmailService emailService;
+    private final ServiceRepository serviceRepository;
 
     public AuthenticationService(UserRepository userRepository, PasswordEncoder passwordEncoder,
-            AuthenticationManager authenticationManager, EmailService emailService) {
+            AuthenticationManager authenticationManager, EmailService emailService,
+            ServiceRepository serviceRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.emailService = emailService;
+        this.serviceRepository = serviceRepository;
     }
 
-    public User signUp(RegisterUSerDto input) {
-        if (userRepository.findByEmail(input.getEmail()).isPresent()) {
-            throw new RuntimeException ("Cet email est déjà utilisé !");
-        }
-
-        User user = new User(
-                input.getMatricule(),
-                input.getSurname(),
-                input.getUsername(),
-                passwordEncoder.encode(input.getPassword()),
-                input.getEmail(),
-                input.getFonction(),
-                input.getContact(),
-                input.getIdService());
-        user.setVerificationCode(generateVerificationCode());
-        user.setVerificationExpireAt(LocalDateTime.now().plusMinutes(15));
-        user.setEnabled(false);
-        sendVerificationEmail(user);
-        return userRepository.save(user);
-
+    public UserResponseDto signUp(RegisterUSerDto input) {
+    if (userRepository.findByEmail(input.getEmail()).isPresent()) {
+        throw new RuntimeException("Cet email est déjà utilisé !");
     }
+
+    ServiceDfcr service = serviceRepository.findById(input.getIdService())
+            .orElseThrow(() -> new RuntimeException("Service introuvable : " + input.getIdService()));
+
+    User user = new User(
+            input.getMatricule(),
+            input.getSurname(),
+            input.getUsername(),
+            passwordEncoder.encode(input.getPassword()),
+            input.getEmail(),
+            input.getFonction(),
+            input.getContact(),
+            service
+    );
+
+    user.setVerificationCode(generateVerificationCode());
+    user.setVerificationExpireAt(LocalDateTime.now().plusMinutes(15));
+    user.setEnabled(false);
+
+    sendVerificationEmail(user);
+    userRepository.save(user);
+
+    return new UserResponseDto(
+            user.getMatricule(),
+            user.getUsername(),
+            user.getSurname(),
+            user.getEmail(),
+            user.getFonction(),
+            user.getContact().toString(),
+            user.getService().getServiceName(),
+            user.isEnabled()
+    );
+}
+
 
     public User authenticate(LoginUserDto input) {
         User user = userRepository.findByMatricule(input.getMatricule())
                 .orElseThrow(AuthException.UserNotFoundException::new);
-/* 
-        if (!user.isEnabled()) {
-            ErrorUserResponse errorUserResponse = new ErrorUserResponse("Utilisateur non valide ");
-        }
- */
+        /*
+         * if (!user.isEnabled()) {
+         * ErrorUserResponse errorUserResponse = new
+         * ErrorUserResponse("Utilisateur non valide ");
+         * }
+         */
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(input.getMatricule(), input.getPassword()));

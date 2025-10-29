@@ -46,9 +46,9 @@ public class User implements UserDetails {
     private String fonction;
     private Integer contact;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "id_service", nullable = false)
-    private String idService;
+    private ServiceDfcr service;
 
     private Integer score;
     private String evaluation;
@@ -70,7 +70,7 @@ public class User implements UserDetails {
     private LocalDateTime updatedAt;
 
     public User(String matricule, String surname, String username, String password, String email, String fonction,
-            String contact, String idService) {
+            String contact, ServiceDfcr service) {
         this.matricule = matricule;
         this.username = username;
         this.surname = surname;
@@ -78,7 +78,7 @@ public class User implements UserDetails {
         this.fonction = fonction;
         this.email = email;
         this.contact = Integer.valueOf(contact);
-        this.idService = idService;
+        this.service = service;
     }
 
     public User() {

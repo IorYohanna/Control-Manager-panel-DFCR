@@ -54,7 +54,6 @@ public class DocumentService {
         dto.setCorps(corps);
         dto.setType(type);
         dto.setStatus(status);
-        dto.setDateCreation(LocalDate.parse(dateCreation));
         dto.setPieceJointe(pieceJointe.getBytes());
 
         Document doc = new Document();
@@ -63,7 +62,6 @@ public class DocumentService {
         doc.setCorps(dto.getCorps());
         doc.setType(dto.getType());
         doc.setStatus(dto.getStatus());
-        doc.setDateCreation(dto.getDateCreation());
         doc.setPieceJointe(fileUtilsService.convertToBytes(pieceJointe));
 
         Document savedDoc = documentRepository.save(doc);
