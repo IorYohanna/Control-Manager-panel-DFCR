@@ -37,12 +37,10 @@ public class DocumentController {
             @RequestParam("corps") String corps,
             @RequestParam("type") String type,
             @RequestParam("status") String status,
-            @RequestParam("dateCreation") String dateCreation,
-            @RequestParam("pieceJointe") MultipartFile pieceJointe
-    ) {
+            @RequestParam("pieceJointe") MultipartFile pieceJointe) {
         try {
             Document doc = documentService.createDocument(
-                    reference, objet, corps, type, status, dateCreation, pieceJointe);
+                    reference, objet, corps, type, status, pieceJointe);
             return ResponseEntity.ok(doc);
 
         } catch (Exception e) {
@@ -58,31 +56,33 @@ public class DocumentController {
     }
 
     @PutMapping("/{reference}")
-    public ResponseEntity<Document> updateDocument(@PathVariable String reference, @RequestBody DocumentDto documentDto) {
+    public ResponseEntity<Document> updateDocument(@PathVariable String reference,
+            @RequestBody DocumentDto documentDto) {
         Document updatedDocument = documentService.updateDocument(reference, documentDto);
         return updatedDocument != null ? ResponseEntity.ok(updatedDocument) : ResponseEntity.notFound().build();
     }
 
     @GetMapping("/type/{type}")
     public List<Document> getMethodName(@PathVariable String type) {
-        return documentService.findByType(type);    
+        return documentService.findByType(type);
     }
 
     @GetMapping("/download/{reference}")
     @PermitAll
     public ResponseEntity<byte[]> download(@PathVariable String reference) {
-       return documentService.downloadDocument(reference);
+        return documentService.downloadDocument(reference);
     }
 
     @GetMapping("/search")
-    public List<Document> search (String keyword) {
+    public List<Document> search(String keyword) {
         return documentService.searchByKeyword(keyword);
     }
 
     @DeleteMapping("/{reference}")
     public ResponseEntity<?> deleteDocument(@PathVariable String reference) {
         boolean deleted = documentService.deleteDocument(reference);
-        return deleted ? ResponseEntity.ok(Map.of("delete", "Document Supprimer avec succes  ")) : ResponseEntity.notFound().build();
+        return deleted ? ResponseEntity.ok(Map.of("delete", "Document Supprimer avec succes  "))
+                : ResponseEntity.notFound().build();
     }
 
 }

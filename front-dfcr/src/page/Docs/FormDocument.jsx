@@ -11,7 +11,6 @@ const FormDocument = () => {
   const [corps, setCorps] = useState("")
   const [type, setType] = useState("")
   const [status, setStatus] = useState("")
-  const [dateCreation, setDateCreation] = useState("")
   const [pieceJointe, setPieceJointe] = useState(null)
 
   const [loading, setLoading] = useState(false)
@@ -27,7 +26,6 @@ const FormDocument = () => {
     data.append("corps", corps)
     data.append("type", type)
     data.append("status", status)
-    data.append("dateCreation", dateCreation)
     data.append("pieceJointe", pieceJointe)
 
     try {
@@ -100,22 +98,6 @@ const FormDocument = () => {
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
             />
-        </div>
-
-        <div className="flex flex-col">
-            <TextField
-              fullWidth
-              label="Date de création"
-              type="date"
-              name="dateCreation"
-              value={dateCreation}
-              onChange={(e) => setDateCreation(e.target.value)}
-              required
-              sx = {{ width: "300px" }}
-              slotProps={{
-                inputLabel: { shrink: true },
-              }}// pour garder le label visible
-            />  
         </div>
 
         <div className="flex flex-col">

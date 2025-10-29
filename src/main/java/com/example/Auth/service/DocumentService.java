@@ -45,7 +45,6 @@ public class DocumentService {
             String corps,
             String type,
             String status,
-            String dateCreation,
             MultipartFile pieceJointe) throws IOException {
 
         DocumentDto dto = new DocumentDto();
@@ -126,7 +125,7 @@ public class DocumentService {
         return documentRepository.searchByKeyword(keyword);
     }
 
-    public List<Document> findByType (String type) {
+    public List<Document> findByType(String type) {
         return documentRepository.findByType(type);
     }
 
