@@ -1,5 +1,5 @@
 import { useState } from "react";
-import <Input></Input> from "../../components/input/Input";
+import Input from "../../components/input/Input";
 import DefaultButton from "../../components/DefaultButton";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
@@ -70,7 +70,7 @@ const Signup = () => {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 font-kollektif">
                         <div className="flex flex-col">
                             <label htmlFor="username" className="mb-1 text-sm text-gray-700">Matricule</label>
-                            <<Input></Input>
+                            <Input
                                 id="matricule"
                                 label="Matricule"
                                 placeholder="Entrez votre matricule"
@@ -82,7 +82,7 @@ const Signup = () => {
 
                         <div className="flex flex-col">
                             <label htmlFor="username" className="mb-1 text-sm text-gray-700">Nom</label>
-                            <<Input></Input>
+                            <Input
                                 id="username"
                                 label="Nom"
                                 placeholder="Entrez votre nom"
@@ -94,7 +94,7 @@ const Signup = () => {
 
                         <div className="flex flex-col">
                             <label htmlFor="surname" className="mb-1 text-sm text-gray-700">Prénom</label>
-                            <<Input></Input>
+                            <Input
                                 id="surname"
                                 label="Prénom"
                                 placeholder="Entrez votre prénom"
@@ -105,7 +105,7 @@ const Signup = () => {
 
                         <div className="flex flex-col">
                             <label htmlFor="password" className="mb-1 text-sm text-gray-700">Mot de passe</label>
-                            <<Input></Input>
+                            <Input
                                 id="password"
                                 label="Mot de passe"
                                 placeholder="Entrez votre mot de passe"
@@ -118,7 +118,7 @@ const Signup = () => {
 
                         <div className="flex flex-col">
                             <label htmlFor="email" className="mb-1 text-sm text-gray-700">Email</label>
-                            <<Input></Input>
+                            <Input
                                 id="email"
                                 label="Email"
                                 placeholder="Entrez votre email"
@@ -129,7 +129,7 @@ const Signup = () => {
 
                         <div className="flex flex-col">
                             <label htmlFor="fonction" className="mb-1 text-sm text-gray-700">Fonction</label>
-                            <<Input></Input>
+                            <Input
                                 id="fonction"
                                 label="Fonction"
                                 placeholder="Entrez votre fonction"
@@ -141,7 +141,7 @@ const Signup = () => {
 
                         <div className="flex flex-col">
                             <label htmlFor="contact" className="mb-1 text-sm text-gray-700">Contact</label>
-                            <<Input></Input>
+                            <Input
                                 id="contact"
                                 label="Contact"
                                 placeholder="Entrez votre contact"
