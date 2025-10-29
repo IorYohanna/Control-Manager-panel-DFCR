@@ -14,7 +14,6 @@ import com.example.Auth.utils.FileUtilsService;
 import com.example.Auth.utils.LoggerService;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -66,7 +65,6 @@ public class DocumentService {
             existingDocument.setCorps(input.getCorps());
             existingDocument.setType(input.getType());
             existingDocument.setStatus(input.getStatus());
-            existingDocument.setDateCreation(input.getDateCreation());
             existingDocument.setPieceJointe(input.getPieceJointe());
 
             log.success("Mise à jour réussi!!");
@@ -92,7 +90,6 @@ public class DocumentService {
             String corps,
             String type,
             String status,
-            String dateCreation,
             MultipartFile pieceJointe) throws IOException {
 
         DocumentDto dto = new DocumentDto();
@@ -101,7 +98,6 @@ public class DocumentService {
         dto.setCorps(corps);
         dto.setType(type);
         dto.setStatus(status);
-        dto.setDateCreation(LocalDate.parse(dateCreation));
         dto.setPieceJointe(pieceJointe.getBytes());
 
         Document doc = new Document();
@@ -110,7 +106,6 @@ public class DocumentService {
         doc.setCorps(dto.getCorps());
         doc.setType(dto.getType());
         doc.setStatus(dto.getStatus());
-        doc.setDateCreation(dto.getDateCreation());
         doc.setPieceJointe(fileUtilsService.convertToBytes(pieceJointe));
 
         Document savedDoc = documentRepository.save(doc);

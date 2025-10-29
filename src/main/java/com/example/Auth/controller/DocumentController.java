@@ -14,7 +14,7 @@ import java.util.Map;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
+@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/documents")
 @RestController
 public class DocumentController {
@@ -56,12 +56,11 @@ public class DocumentController {
             @RequestParam("corps") String corps,
             @RequestParam("type") String type,
             @RequestParam("status") String status,
-            @RequestParam("dateCreation") String dateCreation,
             @RequestParam("pieceJointe") MultipartFile pieceJointe
     ) {
         try {
             Document doc = documentService.uploadDocument(
-                reference, objet, corps, type, status, dateCreation, pieceJointe);
+                reference, objet, corps, type, status, pieceJointe);
             return ResponseEntity.ok(doc);
 
         } catch (Exception e) {
