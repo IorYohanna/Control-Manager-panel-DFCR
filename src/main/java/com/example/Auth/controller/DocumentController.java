@@ -14,7 +14,7 @@ import java.util.Map;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
+@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/documents")
 @RestController
 public class DocumentController {
