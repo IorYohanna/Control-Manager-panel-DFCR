@@ -17,7 +17,7 @@ import com.example.Auth.dto.RegisterUSerDto;
 import com.example.Auth.dto.VerifiedUserDto;
 import com.example.Auth.model.User;
 import com.example.Auth.repository.UserRepository;
-import com.example.Auth.responses.ErrorUserResponse;
+/* import com.example.Auth.responses.ErrorUserResponse; */
 
 import jakarta.mail.MessagingException;
 

@@ -11,6 +11,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RequestMapping("/documents")
 @RestController
@@ -66,6 +69,10 @@ public class DocumentController {
         }
     }
 
+    @GetMapping("/type/{type}")
+    public List<Document> getMethodName(@PathVariable String type) {
+        return documentService.findByType(type);    
+    }
 
     @GetMapping("/download/{reference}")
     @PermitAll

@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.Auth.repository.DocumentRepository;
+import com.example.Auth.utils.FileUtilsService;
+import com.example.Auth.utils.LoggerService;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -20,9 +22,14 @@ import java.util.Optional;
 @Service
 public class DocumentService {
     private final DocumentRepository documentRepository;
+    private final FileUtilsService fileUtilsService;
+    private final LoggerService log;
 
-    public DocumentService(DocumentRepository documentRepository) {
+    public DocumentService(DocumentRepository documentRepository, FileUtilsService fileUtilsService,
+            LoggerService log) {
         this.documentRepository = documentRepository;
+        this.fileUtilsService = fileUtilsService;
+        this.log = log;
     }
 
     public List<Document> getAllDocuments() {
@@ -34,6 +41,7 @@ public class DocumentService {
     }
 
     public Document createDocument(DocumentDto input) {
+
         Document document = new Document(
                 input.getReference(),
                 input.getObjet(),
@@ -50,6 +58,8 @@ public class DocumentService {
 
         Optional<Document> existingDocumentOpt = documentRepository.findById(reference);
 
+        log.info("Mise à jour du documents");
+
         if (existingDocumentOpt.isPresent()) {
             Document existingDocument = existingDocumentOpt.get();
             existingDocument.setObjet(input.getObjet());
@@ -59,8 +69,10 @@ public class DocumentService {
             existingDocument.setDateCreation(input.getDateCreation());
             existingDocument.setPieceJointe(input.getPieceJointe());
 
+            log.success("Mise à jour réussi!!");
             return documentRepository.save(existingDocument);
         }
+        log.error("Mise à jour échoué", null);
         return null;
     }
 
@@ -68,6 +80,7 @@ public class DocumentService {
         Optional<Document> document = documentRepository.findById(reference);
         if (document.isPresent()) {
             documentRepository.deleteById(reference);
+            log.success("Suppression réussi");
             return true;
         }
         return false;
@@ -98,7 +111,7 @@ public class DocumentService {
         doc.setType(dto.getType());
         doc.setStatus(dto.getStatus());
         doc.setDateCreation(dto.getDateCreation());
-        doc.setPieceJointe(dto.getPieceJointe());
+        doc.setPieceJointe(fileUtilsService.convertToBytes(pieceJointe));
 
         Document savedDoc = documentRepository.save(doc);
 
@@ -127,8 +140,12 @@ public class DocumentService {
                 .body(fileData);
     }
 
-    public List<Document> searchByKeyword (String keyword) {
+    public List<Document> searchByKeyword(String keyword) {
         return documentRepository.searchByKeyword(keyword);
+    }
+
+    public List<Document> findByType (String type) {
+        return documentRepository.findByType(type);
     }
 
 }
