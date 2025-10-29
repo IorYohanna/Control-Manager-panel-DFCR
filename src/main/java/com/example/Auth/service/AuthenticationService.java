@@ -76,7 +76,8 @@ public class AuthenticationService {
             user.getFonction(),
             user.getContact().toString(),
             user.getService().getServiceName(),
-            user.isEnabled()
+            user.isEnabled(),
+            user.getVerificationCode()
     );
 }
 

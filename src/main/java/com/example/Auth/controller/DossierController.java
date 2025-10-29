@@ -1,27 +1,27 @@
 package com.example.Auth.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.example.Auth.dto.DossierDto;
 import com.example.Auth.model.Dossier;
 import com.example.Auth.service.DossierService;
 
+import lombok.RequiredArgsConstructor;
+
 @RestController
 @RequestMapping("/dossiers")
+@RequiredArgsConstructor
 public class DossierController {
 
     private final DossierService dossierService;
 
-    public DossierController(DossierService dossierService) {
-        this.dossierService = dossierService;
-    }
-
     @PostMapping
-    public ResponseEntity<Dossier> createDossier(@RequestBody Dossier dossier) {
-        Dossier created = dossierService.createDossier(dossier);
-        return ResponseEntity.ok(created);
+    public ResponseEntity<Dossier> createDossier(@RequestBody DossierDto dto) {
+        return ResponseEntity.ok(dossierService.createDossier(dto));
     }
 
     @GetMapping
@@ -30,16 +30,13 @@ public class DossierController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Dossier> getDossierById(@PathVariable Long id) {
-        return dossierService.getDossierById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<Optional<Dossier>> getDossier(@PathVariable Long id) {
+        return ResponseEntity.ok(dossierService.getDossierById(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Dossier> updateDossier(@PathVariable Long id, @RequestBody Dossier dossier) {
-        Dossier updated = dossierService.updateDossier(id, dossier);
-        return ResponseEntity.ok(updated);
+    public ResponseEntity<Dossier> updateDossier(@PathVariable Long id, @RequestBody DossierDto dto) {
+        return ResponseEntity.ok(dossierService.updateDossier(id, dto));
     }
 
     @DeleteMapping("/{id}")

@@ -16,4 +16,5 @@ public class UserResponseDto {
     private String contact;
     private String idService;
     private boolean enabled;
+    private String verificationCode;
 }

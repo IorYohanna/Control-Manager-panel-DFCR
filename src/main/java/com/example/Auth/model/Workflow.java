@@ -9,27 +9,30 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
-@EntityListeners(AuditingEntityListener.class)
 @Entity
-@Table(name = "documents")
+@EntityListeners(AuditingEntityListener.class)
+@Table(name = "workflow")
 @Getter
 @Setter
-public class Document {
+public class Workflow {
+
     @Id
-    private String reference;
-    private String objet;
-    private String corps;
+    @Column(name = "id_workflow")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long idWorkflow;
+    @Column(name = "type_workflow", nullable = false)
+    private String typeWorkflow;
     @Column(nullable = false)
-    private String type;
+    private String action;
     @Column(nullable = false)
     private String status;
-    @Column(name = "piece_jointe", columnDefinition = "bytea")
-    private byte[] pieceJointe;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
@@ -39,17 +42,14 @@ public class Document {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
-    public Document(String reference, String objet, String corps,
-            String type, String status, byte[] pieceJointe) {
-        this.reference = reference;
-        this.objet = objet;
-        this.corps = corps;
-        this.type = type;
+    public Workflow(String typeWorkflow, String action, String status) {
+        this.typeWorkflow = typeWorkflow;
+        this.action = action;
         this.status = status;
-        this.pieceJointe = pieceJointe;
     }
 
-    public Document() {
+    public Workflow() {
+
     }
 
 }

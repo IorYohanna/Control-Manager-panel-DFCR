@@ -6,21 +6,21 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.Auth.dto.DossierDto;
 import com.example.Auth.model.Dossier;
 import com.example.Auth.repository.DossierRepository;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
-//permet de rollbacker en cas de probleme
+@RequiredArgsConstructor
 @Transactional
 public class DossierService {
 
     private final DossierRepository dossierRepository;
 
-    public DossierService(DossierRepository dossierRepository) {
-        this.dossierRepository = dossierRepository;
-    }
-
-    public Dossier createDossier(Dossier dossier) {
+    public Dossier createDossier(DossierDto input) {
+        Dossier dossier = new Dossier(input.getTitle());
         return dossierRepository.save(dossier);
     }
 
@@ -29,17 +29,24 @@ public class DossierService {
     }
 
     public Optional<Dossier> getDossierById(Long id) {
-        return dossierRepository.findById(id);
+       return dossierRepository.findById(id);
     }
 
-    public Dossier updateDossier(Long id, Dossier updatedDossier) {
-        return dossierRepository.findById(id).map(d -> {
-            d.setTitle(updatedDossier.getTitle());
-            return dossierRepository.save(d);
-        }).orElseThrow(() -> new RuntimeException("Dossier non trouvé avec l'id " + id));
+    public Dossier updateDossier(Long id, DossierDto input) {
+        Optional<Dossier> dossierOpt = dossierRepository.findById(id);
+        if(dossierOpt.isEmpty()) {
+            throw new RuntimeException("dossier non trouver avec id" + id);
+        }
+
+        Dossier dossier = dossierOpt.get();
+        dossier.setTitle(input.getTitle());
+        return dossierRepository.save(dossier);
+
     }
 
     public void deleteDossier(Long id) {
-        dossierRepository.deleteById(id);
+        Dossier dossier = dossierRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Dossier introuvable avec l'id : " + id));
+        dossierRepository.delete(dossier);
     }
 }

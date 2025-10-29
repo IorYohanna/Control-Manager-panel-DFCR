@@ -35,6 +35,8 @@ public class SecurityConfiguration {
                         authorize -> authorize
                                 .requestMatchers("/auth/**").permitAll()
                                 .requestMatchers("/documents/**").permitAll()
+                                .requestMatchers("/services/**").permitAll()
+                                .requestMatchers("/dossiers/**").permitAll()
                                 .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
