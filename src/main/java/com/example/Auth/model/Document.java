@@ -41,7 +41,7 @@ public class Document {
     private LocalDateTime updatedAt;
 
     public Document(String reference, String objet, String corps,
-            String type, String status, LocalDate dateCreation, byte[] pieceJointe) {
+            String type, String status, byte[] pieceJointe) {
         this.reference = reference;
         this.objet = objet;
         this.corps = corps;

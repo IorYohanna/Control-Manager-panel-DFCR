@@ -13,6 +13,5 @@ public class DocumentDto {
     private String corps;
     private String type;
     private String status;
-    private LocalDate dateCreation;
     private byte[] pieceJointe;
 }
