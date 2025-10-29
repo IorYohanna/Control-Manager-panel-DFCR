@@ -40,18 +40,36 @@ public class DocumentService {
         return documentRepository.findById(reference);
     }
 
-    public Document createDocument(DocumentDto input) {
+    public Document createDocument(
+            String reference,
+            String objet,
+            String corps,
+            String type,
+            String status,
+            String dateCreation,
+            MultipartFile pieceJointe) throws IOException {
 
-        Document document = new Document(
-                input.getReference(),
-                input.getObjet(),
-                input.getCorps(),
-                input.getType(),
-                input.getStatus(),
-                input.getDateCreation(),
-                input.getPieceJointe());
+        DocumentDto dto = new DocumentDto();
+        dto.setReference(reference);
+        dto.setObjet(objet);
+        dto.setCorps(corps);
+        dto.setType(type);
+        dto.setStatus(status);
+        dto.setDateCreation(LocalDate.parse(dateCreation));
+        dto.setPieceJointe(pieceJointe.getBytes());
 
-        return documentRepository.save(document);
+        Document doc = new Document();
+        doc.setReference(dto.getReference());
+        doc.setObjet(dto.getObjet());
+        doc.setCorps(dto.getCorps());
+        doc.setType(dto.getType());
+        doc.setStatus(dto.getStatus());
+        doc.setDateCreation(dto.getDateCreation());
+        doc.setPieceJointe(fileUtilsService.convertToBytes(pieceJointe));
+
+        Document savedDoc = documentRepository.save(doc);
+
+        return savedDoc;
     }
 
     public Document updateDocument(String reference, DocumentDto input) {
@@ -84,38 +102,6 @@ public class DocumentService {
             return true;
         }
         return false;
-    }
-
-    public Document uploadDocument(
-            String reference,
-            String objet,
-            String corps,
-            String type,
-            String status,
-            String dateCreation,
-            MultipartFile pieceJointe) throws IOException {
-
-        DocumentDto dto = new DocumentDto();
-        dto.setReference(reference);
-        dto.setObjet(objet);
-        dto.setCorps(corps);
-        dto.setType(type);
-        dto.setStatus(status);
-        dto.setDateCreation(LocalDate.parse(dateCreation));
-        dto.setPieceJointe(pieceJointe.getBytes());
-
-        Document doc = new Document();
-        doc.setReference(dto.getReference());
-        doc.setObjet(dto.getObjet());
-        doc.setCorps(dto.getCorps());
-        doc.setType(dto.getType());
-        doc.setStatus(dto.getStatus());
-        doc.setDateCreation(dto.getDateCreation());
-        doc.setPieceJointe(fileUtilsService.convertToBytes(pieceJointe));
-
-        Document savedDoc = documentRepository.save(doc);
-
-        return savedDoc;
     }
 
     public ResponseEntity<byte[]> downloadDocument(String reference) {

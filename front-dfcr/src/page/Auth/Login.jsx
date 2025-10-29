@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { loginUser  } from "../../api/auth";
-import AuthInput from "../../components/input/AuthInput";
+import Input from "../../components/input/Input";
 import DefaultButton from "../../components/DefaultButton";
 import Checkbox from "@mui/material/Checkbox";
 import { Link } from "react-router-dom";
@@ -69,7 +69,7 @@ const Login = () => {
             <div className="grid grid-cols-1 gap-4 font-kollektif">
               <div className="flex flex-col">
                 <label htmlFor="matricule" className="mb-1 text-sm text-gray-700">Matricule</label>
-                <AuthInput
+                <Input
                   id="matricule"
                   label="Matricule"
                   placeholder="Entrez votre matricule"
@@ -81,7 +81,7 @@ const Login = () => {
               </div>
               <div className="flex flex-col">
                 <label htmlFor="motDePasse" className="mb-1 text-sm text-gray-700">Mot de Passe</label>
-                <AuthInput
+                <Input
                   id="password"
                   label="Mot de passe"
                   placeholder="Entrez votre mot de passe"
