@@ -3,16 +3,14 @@ package com.example.Auth.controller;
 import com.example.Auth.dto.DocumentDto;
 import com.example.Auth.model.Document;
 import jakarta.annotation.security.PermitAll;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.Auth.service.DocumentService;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 @RequestMapping("/documents")
 @RestController
@@ -56,20 +54,12 @@ public class DocumentController {
             @RequestParam("type") String type,
             @RequestParam("status") String status,
             @RequestParam("dateCreation") String dateCreation,
-            @RequestParam("file") MultipartFile pieceJointe
+            @RequestParam("pieceJointe") MultipartFile pieceJointe
     ) {
         try {
-            DocumentDto dto = new DocumentDto();
-            dto.setReference(reference);
-            dto.setObjet(objet);
-            dto.setCorps(corps);
-            dto.setType(type);
-            dto.setStatus(status);
-            dto.setDateCreation(LocalDate.parse(dateCreation));
-            dto.setPieceJointe(pieceJointe.getBytes());
-
-            Document document = documentService.createDocument(dto);
-            return ResponseEntity.ok(document);
+            Document doc = documentService.uploadDocument(
+                reference, objet, corps, type, status, dateCreation, pieceJointe);
+            return ResponseEntity.ok(doc);
 
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
@@ -80,19 +70,7 @@ public class DocumentController {
     @GetMapping("/download/{reference}")
     @PermitAll
     public ResponseEntity<byte[]> download(@PathVariable String reference) {
-        Optional<Document> docOpt = documentService.getDocumentByReference(reference);
-        if (docOpt.isPresent()) {
-            Document doc = docOpt.get();
-            byte[] fileData = doc.getPieceJointe();
-            if (fileData == null) {
-                return ResponseEntity.noContent().build();
-            }
-            return ResponseEntity.ok()
-                    .header("Content-Disposition", "attachment; filename=\"" + doc.getReference() + "." + doc.getType() + "\"")
-                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                    .body(fileData);
-        }
-        return ResponseEntity.notFound().build();
+       return documentService.downloadDocument(reference);
     }
 
 
@@ -100,9 +78,7 @@ public class DocumentController {
     @DeleteMapping("/{reference}")
     public ResponseEntity<?> deleteDocument(@PathVariable String reference) {
         boolean deleted = documentService.deleteDocument(reference);
-        return deleted ? ResponseEntity.ok("Supprimé avec succès") : ResponseEntity.notFound().build();
+        return deleted ? ResponseEntity.ok(Map.of("delete", "Document Supprimer avec succes  ")) : ResponseEntity.notFound().build();
     }
-
-
 
 }

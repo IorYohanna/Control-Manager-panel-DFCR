@@ -24,7 +24,7 @@ import lombok.Setter;
 @Setter
 public class User implements UserDetails {
 
-    @Id
+   @Id
     private String matricule;
     @Column(name = "nom_utilisateur")
     private String username;
@@ -46,6 +46,7 @@ public class User implements UserDetails {
     private String evaluation;
     @Column(name = "date_evaluation")
     private Date dateEvaluation;
+
     private boolean enabled;
     @Column(name = "verification_code")
     private String verificationCode;

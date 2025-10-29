@@ -2,10 +2,17 @@ package com.example.Auth.service;
 
 import com.example.Auth.dto.DocumentDto;
 import com.example.Auth.model.Document;
+
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.Auth.repository.DocumentRepository;
 
+import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -34,14 +41,15 @@ public class DocumentService {
                 input.getType(),
                 input.getStatus(),
                 input.getDateCreation(),
-                input.getPieceJointe()
-        );
+                input.getPieceJointe());
 
         return documentRepository.save(document);
     }
 
     public Document updateDocument(String reference, DocumentDto input) {
+
         Optional<Document> existingDocumentOpt = documentRepository.findById(reference);
+
         if (existingDocumentOpt.isPresent()) {
             Document existingDocument = existingDocumentOpt.get();
             existingDocument.setObjet(input.getObjet());
@@ -64,4 +72,59 @@ public class DocumentService {
         }
         return false;
     }
+
+    public Document uploadDocument(
+            String reference,
+            String objet,
+            String corps,
+            String type,
+            String status,
+            String dateCreation,
+            MultipartFile pieceJointe) throws IOException {
+
+        DocumentDto dto = new DocumentDto();
+        dto.setReference(reference);
+        dto.setObjet(objet);
+        dto.setCorps(corps);
+        dto.setType(type);
+        dto.setStatus(status);
+        dto.setDateCreation(LocalDate.parse(dateCreation));
+        dto.setPieceJointe(pieceJointe.getBytes());
+
+        Document doc = new Document();
+        doc.setReference(dto.getReference());
+        doc.setObjet(dto.getObjet());
+        doc.setCorps(dto.getCorps());
+        doc.setType(dto.getType());
+        doc.setStatus(dto.getStatus());
+        doc.setDateCreation(dto.getDateCreation());
+        doc.setPieceJointe(dto.getPieceJointe());
+
+        Document savedDoc = documentRepository.save(doc);
+
+        return savedDoc;
+    }
+
+    public ResponseEntity<byte[]> downloadDocument(String reference) {
+        Optional<Document> docOpt = documentRepository.findById(reference);
+
+        if (docOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Document doc = docOpt.get();
+        byte[] fileData = doc.getPieceJointe();
+
+        if (fileData == null || fileData.length == 0) {
+            return ResponseEntity.noContent().build();
+        }
+
+        String filename = doc.getReference() + "." + doc.getType();
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(fileData);
+    }
+
 }
