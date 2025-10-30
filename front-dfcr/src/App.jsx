@@ -5,6 +5,7 @@ import Signup from "./page/Auth/Signup";
 import Login from "./page/Auth/Login";
 import Verify from "./page/Auth/Verify";
 import FormDocument from "./page/Docs/FormDocument";
+import Calendar from "./page/Event/Calendar";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/verify" element={<Verify />} />
         <Route path="/document" element={<FormDocument />} />
+        <Route path="/calendar" element={<Calendar />} />
 
         <Route>
           <Route/>

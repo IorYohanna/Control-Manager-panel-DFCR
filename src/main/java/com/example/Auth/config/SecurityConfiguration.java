@@ -30,7 +30,9 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable())
+        http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(
                         authorize -> authorize
                                 .requestMatchers("/auth/**").permitAll()
@@ -38,6 +40,7 @@ public class SecurityConfiguration {
                                 .requestMatchers("/services/**").permitAll()
                                 .requestMatchers("/dossiers/**").permitAll()
                                 .requestMatchers("/workflow/**").permitAll()
+                                .requestMatchers("/events/**").authenticated()
                                 .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
@@ -55,6 +58,7 @@ public class SecurityConfiguration {
                 "http://localhost:5173"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
         config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+        config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);

@@ -33,6 +33,8 @@ const Login = () => {
     try {
       const data = await loginUser(matricule, password);
       console.log("Connexion réussie :", data);
+      localStorage.setItem("token", data.token)
+      localStorage.setItem("token_expiration", data.expiresIn)
     } catch (err) {
       console.error("Erreur d'authentification: ", err.message)
       // console.log(err)
