@@ -56,7 +56,6 @@ public class CommentaireService {
         log.info("Document trouvé : " + document.getReference());
 
         Commentaire commentaire = new Commentaire();
-        commentaire.setIdCommentaire(UUID.randomUUID().toString());
         commentaire.setContenuCommentaire(input.getContenuCommentaire());
         commentaire.setUser(currentUser);
         commentaire.setDocument(document);

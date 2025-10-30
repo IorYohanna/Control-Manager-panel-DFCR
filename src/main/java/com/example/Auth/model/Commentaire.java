@@ -17,7 +17,8 @@ import java.time.LocalDateTime;
 public class Commentaire {
     @Id
     @Column(name = "id_commentaire")
-    private String idCommentaire;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long idCommentaire;
     @Column(name = "contenu_commentaire", nullable = false)
     private String contenuCommentaire;
 
@@ -40,8 +41,7 @@ public class Commentaire {
     public Commentaire() {
     }
 
-    public Commentaire(String idCommentaire, String contenuCommentaire, User user, Document document) {
-        this.idCommentaire = idCommentaire;
+    public Commentaire(String contenuCommentaire, User user, Document document) {
         this.contenuCommentaire = contenuCommentaire;
         this.user = user;
         this.document = document;
