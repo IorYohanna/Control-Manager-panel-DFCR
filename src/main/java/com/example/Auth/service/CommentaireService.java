@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -47,6 +48,10 @@ public class CommentaireService {
         return documentRepository.findById(reference)
                 .orElseThrow(
                         () -> new RuntimeException("Document non trouvé avec id : " + reference));
+    }
+
+    public List<Commentaire> getAllCommentaires() {
+        return commentaireRepository.findAll();
     }
 
     public Commentaire createCommentaire(CommentaireDto input) {

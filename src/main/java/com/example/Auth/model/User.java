@@ -70,6 +70,9 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Commentaire> commentaires;
 
+    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL)
+    private List<Event> events;
+
     public User(String matricule, String surname, String username, String password, String email, String fonction,
             String contact, ServiceDfcr service) {
         this.matricule = matricule;

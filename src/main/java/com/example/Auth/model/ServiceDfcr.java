@@ -43,6 +43,9 @@ public class ServiceDfcr {
     @OneToMany(mappedBy = "service", cascade = CascadeType.ALL)
     private List<User> users;
 
+    @OneToMany(mappedBy = "service", cascade = CascadeType.ALL)
+    private List<Event> events;
+
     public ServiceDfcr(String idService, String serviceName, String attribution, String serviceEmail) {
         this.idService = idService;
         this.serviceName = serviceName;

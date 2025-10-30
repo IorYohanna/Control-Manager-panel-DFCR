@@ -4,10 +4,7 @@ import com.example.Auth.dto.CommentaireDto;
 import com.example.Auth.model.Commentaire;
 import com.example.Auth.service.CommentaireService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/commentaires")
@@ -16,6 +13,11 @@ public class CommentaireController {
 
     public CommentaireController(CommentaireService commentaireService) {
         this.commentaireService = commentaireService;
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getAllCommentaires() {
+        return ResponseEntity.ok(commentaireService.getAllCommentaires());
     }
 
     @PostMapping
