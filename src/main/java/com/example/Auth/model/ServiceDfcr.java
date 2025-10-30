@@ -40,7 +40,6 @@ public class ServiceDfcr {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
-    // liste des utilisateurs dans un service
     @OneToMany(mappedBy = "service", cascade = CascadeType.ALL)
     private List<User> users;
 

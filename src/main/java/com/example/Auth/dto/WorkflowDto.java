@@ -6,7 +6,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class WorkflowDto {
-    private String typeWorflow;
-    private String acion;
+    private String typeWorkflow;
+    private String action;
     private String status;
+    private String reference;
 }
