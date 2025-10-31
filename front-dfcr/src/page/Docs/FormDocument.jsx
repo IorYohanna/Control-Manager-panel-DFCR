@@ -43,7 +43,7 @@ const FormDocument = () => {
         <h2 className="font-eirene text-xl">Veuillez vous inscrire</h2>
       </div>
   
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 font-kollektif">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 font-dropline">
         <div className="flex flex-col">
             <label htmlFor="reference" className="mb-1 text-sm text-gray-700">Reference</label>
             <Input

@@ -61,7 +61,7 @@ const Login = () => {
         {/* Formulaire */}
         <div className="flex flex-col justify-between w-full mx-auto max-w-[700px] px-16 lg:px-16 py-16">
           <div className="text-start ">
-            <h1 className="font-larken text-xl lg:text-3xl capitalize">Bienvenue dans DFCR!</h1>
+            <h1 className="font-rushford text-xl lg:text-3xl capitalize">Bienvenue dans DFCR!</h1>
           </div>
 
 
@@ -71,7 +71,7 @@ const Login = () => {
               <h2 className="font-eirene text-xl">Connectez vous</h2>
             </div>
 
-            <div className="grid grid-cols-1 gap-4 font-kollektif">
+            <div className="grid grid-cols-1 gap-4 font-dropline">
               <div className="flex flex-col">
                 <label htmlFor="matricule" className="mb-1 text-sm text-gray-700">Matricule</label>
                 <Input

@@ -71,7 +71,7 @@ const Verify = () => {
             <div className="flex flex-col justify-between w-full max-w-[700px] mx-auto px-16 lg:px-6 py-16 ">
 
                 <div className="text-start mb-8 ">
-                    <h1 className="font-larken text-xl lg:text-3xl capitalize ">S'identifier</h1>
+                    <h1 className="font-rushford text-xl lg:text-3xl capitalize ">S'identifier</h1>
                 </div>
 
                 <form className="mx-auto w-full relative -top-5 flex flex-col justify-center items-center gap-4 " onSubmit={handleVerifySubmit}
@@ -80,7 +80,7 @@ const Verify = () => {
                         <h2 className="font-eirene text-xl">Veuillez vous identifer</h2>
                     </div>
 
-                    <div className="font-kollektif flex flex-col gap-4">
+                    <div className="font-dropline flex flex-col gap-4">
                         <div className="flex flex-col">
                             <label htmlFor="matricule" className="mb-1 text-sm text-gray-700">Matricule</label>
                             <Input
