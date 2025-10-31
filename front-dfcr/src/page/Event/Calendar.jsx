@@ -97,22 +97,23 @@ export default function Calendar() {
         }}
       /> */}
 
-      <EventCalendar
-        events={events.map(e => ({
-          idEvent: e.idEvent,
-          title: e.title,
-          start: e.startTime,
-          end: e.endTime,
-          allDay: e.allDay,
-          backgroundColor: e.color,
-          borderColor: e.color,
-          extendedProps: {
-            description: e.description
-          }
-        }))}
-        handleDateSelect={handleDateSelect}
-        handleEventClick={handleEventClick}
-      />
+      <div className="">
+        <EventCalendar
+          events={events.map(e => ({
+            idEvent: e.idEvent,
+            title: e.title,
+            start: e.startTime,
+            end: e.endTime,
+            allDay: e.allDay,
+            extendedProps: {
+              description: e.description
+            }
+          }))}
+          handleDateSelect={handleDateSelect}
+          handleEventClick={handleEventClick}
+        />
+      </div>
+      
 
       <EventModal
         open={modalOpen}
