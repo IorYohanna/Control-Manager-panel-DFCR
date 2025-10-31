@@ -25,6 +25,11 @@
     --carmine: #9a031eff;
     --chestnut: #994636ff;
 
+    --espresso: #603018;
+    --capeHoney : #fdeaa3;
+    --sisal: #d3d0bc;
+    --limedSpruce: #304c4a;
+
     /* === Radius et fonts === */
     --radius: 0.5rem;
     --font-eirene: "Eirene Sans", "sans-serif";
@@ -35,12 +40,12 @@
 
 /* === Définition du thème Tailwind inline === */
 @theme {
-  --color-primary: var(--onyx); /* (titres, texte, boutons principaux) */
-  --color-secondary: var(--outer-space); /* (borders, sous-titres, icônes) */
-  --color-accent: var(--carmine); /* (boutons, liens, alerte) */
-  --color-accent-dark: var(--chestnut); /* hover boutons ou effets focus */
-  --color-background: var(--khaki); /* fond générale */
-  --color-foreground: var(--onyx); /* texte sur le fond clair */
+  --color-primary: var(--limedSpruce); /* (titres, texte, boutons principaux) */
+  --color-secondary: var(--limedSpruce); /* (borders, sous-titres, icônes) */
+  --color-accent: var(--limedSpruce); /* (boutons, liens, alerte) */
+  --color-accent-dark: var(--limedSpruce); /* hover boutons ou effets focus */
+  --color-background: var(--sisal); /* fond générale */
+  --color-foreground: var(--espresso); /* texte sur le fond clair */
   --font-eirene: var(--font-eirene);
   --font-kollektif: var(--font-kollektif);
   --font-larken: var(--font-larken);

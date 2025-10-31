@@ -7,7 +7,7 @@ import Verify from "./page/Auth/Verify";
 import FormDocument from "./page/Docs/FormDocument";
 import Workflow from "./page/workflow/Workflow";
 import SideBar from "./layout/SideBar";
-import MainLayout from "./layout/mainLayout";
+import MainLayout from "./layout/MainLayout";
 
 function App() {
   return (
