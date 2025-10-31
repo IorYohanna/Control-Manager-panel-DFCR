@@ -117,7 +117,7 @@ export default function Calendar() {
 
     try {
       await deleteEvent(eventId, token);
-      setEvents((prev) => prev.filter((e) => e.id !== eventId));
+      setEvents((prev) => prev.filter((e) => e.idEvent !== eventId));
     } catch (err) {
       console.error(err);
     }
@@ -246,7 +246,7 @@ function Sidebar({ weekendsVisible, toggleWeekends, events, onDelete }) {
                   borderRadius: "4px",
                   cursor: "pointer",
                 }}
-                onClick={() => onDelete(e.id)}
+                onClick={() => onDelete(e.idEvent)}
               >
                 Supprimer
               </button>

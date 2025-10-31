@@ -6,6 +6,8 @@ import lombok.Setter;
 
 import java.time.OffsetDateTime;
 
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import com.example.Auth.model.User.User;
 import com.example.Auth.model.User.ServiceDfcr;
 

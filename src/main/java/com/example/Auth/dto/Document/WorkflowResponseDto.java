@@ -1,4 +1,4 @@
-package com.example.Auth.dto;
+package com.example.Auth.dto.Document;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
