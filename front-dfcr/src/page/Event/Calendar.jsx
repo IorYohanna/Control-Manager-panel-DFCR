@@ -4,7 +4,7 @@ import { EventCalendar } from "../../components/Calendar/EventCalendar";
 import { Sidebar } from "../../components/Calendar/EventUtils";
 import { useEvents } from "../../hooks/useEvents";
 
-export default function Calendar() {
+const Calendar = () => {
   const token = localStorage.getItem("token");
 
   // ✅ hook pour la data
@@ -83,7 +83,7 @@ export default function Calendar() {
   };
 
   return (
-    <div>
+    <div className="h-fit">
 
       {/* <Sidebar
         events={events}
@@ -97,7 +97,7 @@ export default function Calendar() {
         }}
       /> */}
 
-      <div className="">
+      <div className="h-fits">
         <EventCalendar
           events={events.map(e => ({
             idEvent: e.idEvent,
@@ -128,3 +128,5 @@ export default function Calendar() {
     </div>
   );
 }
+
+export default Calendar;

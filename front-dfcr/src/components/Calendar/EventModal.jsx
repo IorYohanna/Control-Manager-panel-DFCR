@@ -52,11 +52,9 @@ export const EventModal = ({
         onClose={close}
         maxWidth="sm"
         fullWidth
-        PaperProps={{
-          sx: {
-            borderRadius: 3,
-            boxShadow: '0 20px 60px rgba(0,0,0,0.15)',
-          }
+        sx ={{
+        borderRadius: 3,
+        boxShadow: '0 20px 60px rgba(0,0,0,0.15)',
         }}
       >
         <DialogTitle sx={{ 
@@ -99,20 +97,7 @@ export const EventModal = ({
               </Box>
             )}
 
-            <Box sx={{ display: 'flex', gap: 2, alignItems: 'flex-start' }}>
-              <CalendarIcon sx={{ color: '#6b7280', mt: 0.5 }} />
-              <Box>
-                <p style={{ margin: 0, fontSize: '0.875rem', color: '#6b7280', marginBottom: '4px' }}>
-                  Date et heure
-                </p>
-                <p style={{ margin: 0, color: '#1f2937', marginBottom: '4px' }}>
-                  <strong>Début :</strong> {new Date(formData.startTime).toLocaleString('fr-FR')}
-                </p>
-                <p style={{ margin: 0, color: '#1f2937' }}>
-                  <strong>Fin :</strong> {new Date(formData.endTime).toLocaleString('fr-FR')}
-                </p>
-              </Box>
-            </Box>
+            
 
             {formData.allDay && (
               <Chip 
@@ -302,24 +287,6 @@ export const EventModal = ({
           </Box>
         </Box>
 
-        {/* Description */}
-        <TextField
-          label="Description"
-          value={formData.description}
-          onChange={(e) =>
-            setFormData({ ...formData, description: e.target.value })
-          }
-          fullWidth
-          multiline
-          rows={3}
-          sx={{
-            mb: 3,
-            '& .MuiOutlinedInput-root': {
-              borderRadius: 2,
-            }
-          }}
-        />
-
         {/* Dates en horizontal */}
         <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
           <TextField
@@ -354,6 +321,24 @@ export const EventModal = ({
             }}
           />
         </Box>
+
+        {/* Description */}
+        <TextField
+          label="Description"
+          value={formData.description}
+          onChange={(e) =>
+            setFormData({ ...formData, description: e.target.value })
+          }
+          fullWidth
+          multiline
+          rows={3}
+          sx={{
+            mb: 3,
+            '& .MuiOutlinedInput-root': {
+              borderRadius: 2,
+            }
+          }}
+        />
 
         {/* Checkbox toute la journée */}
         <FormControlLabel
