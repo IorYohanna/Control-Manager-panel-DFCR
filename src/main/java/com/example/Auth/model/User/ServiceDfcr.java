@@ -7,6 +7,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.example.Auth.model.Document.Event;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -42,6 +44,9 @@ public class ServiceDfcr {
 
     @OneToMany(mappedBy = "service", cascade = CascadeType.ALL)
     private List<User> users;
+
+    @OneToMany(mappedBy = "service", cascade = CascadeType.ALL)
+    private List<Event> events;
 
     public ServiceDfcr(String idService, String serviceName, String attribution, String serviceEmail) {
         this.idService = idService;

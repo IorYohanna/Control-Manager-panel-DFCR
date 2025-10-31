@@ -5,6 +5,8 @@ import java.util.Optional;
 import java.util.Random;
 
 import com.example.Auth.exception.AuthException;
+import com.example.Auth.model.User.ServiceDfcr;
+import com.example.Auth.model.User.User;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -16,8 +18,6 @@ import com.example.Auth.dto.Security.LoginUserDto;
 import com.example.Auth.dto.Security.RegisterUSerDto;
 import com.example.Auth.dto.Security.VerifiedUserDto;
 import com.example.Auth.dto.User.UserResponseDto;
-import com.example.Auth.model.User.ServiceDfcr;
-import com.example.Auth.model.User.User;
 import com.example.Auth.repository.User.ServiceRepository;
 import com.example.Auth.repository.User.UserRepository;
 

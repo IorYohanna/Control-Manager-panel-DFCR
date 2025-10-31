@@ -14,6 +14,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.example.Auth.model.Document.Commentaire;
+import com.example.Auth.model.Document.Event;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -31,7 +32,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class User implements UserDetails {
-    //properties
+
     @Id
     private String matricule;
     @Column(name = "nom_utilisateur")
@@ -46,20 +47,21 @@ public class User implements UserDetails {
     private String fonction;
     private Integer contact;
 
-    //pefa
+    @ManyToOne
+    @JoinColumn(name = "id_service", nullable = false)
+    private ServiceDfcr service;
+
     private Integer score;
     private String evaluation;
     @Column(name = "date_evaluation")
     private Date dateEvaluation;
 
-    //verificationCode
     private boolean enabled;
     @Column(name = "verification_code")
     private String verificationCode;
     @Column(name = "verification_expired")
     private LocalDateTime verificationExpireAt;
 
-    //entity listener
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -68,13 +70,11 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
-    //foreign key
-    @ManyToOne
-    @JoinColumn(name = "id_service", nullable = false)
-    private ServiceDfcr service;
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Commentaire> commentaires;
+
+    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL)
+    private List<Event> events;
 
     public User(String matricule, String surname, String username, String password, String email, String fonction,
             String contact, ServiceDfcr service) {

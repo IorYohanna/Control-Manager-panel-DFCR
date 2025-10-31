@@ -1,12 +1,12 @@
-package com.example.Auth.service;
+package com.example.Auth.service.Document;
 
 import com.example.Auth.dto.EventDto;
-import com.example.Auth.model.Event;
-import com.example.Auth.model.ServiceDfcr;
-import com.example.Auth.model.User;
-import com.example.Auth.repository.EventRepository;
-import com.example.Auth.repository.ServiceRepository;
-import com.example.Auth.repository.UserRepository;
+import com.example.Auth.model.Document.Event;
+import com.example.Auth.model.User.User;
+import com.example.Auth.model.User.ServiceDfcr;
+import com.example.Auth.repository.Document.EventRepository;
+import com.example.Auth.repository.User.ServiceRepository;
+import com.example.Auth.repository.User.UserRepository;
 import com.example.Auth.utils.LoggerService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

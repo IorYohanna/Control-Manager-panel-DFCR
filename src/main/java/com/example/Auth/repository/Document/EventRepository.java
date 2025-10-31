@@ -1,8 +1,9 @@
-package com.example.Auth.repository;
+package com.example.Auth.repository.Document;
 
-import com.example.Auth.model.Event;
-import com.example.Auth.model.ServiceDfcr;
-import com.example.Auth.model.User;
+import com.example.Auth.model.Document.Event;
+import com.example.Auth.model.User.User;
+import com.example.Auth.model.User.ServiceDfcr;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
