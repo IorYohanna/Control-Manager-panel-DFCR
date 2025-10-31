@@ -8,6 +8,7 @@ import FormDocument from "./page/Docs/FormDocument";
 import Workflow from "./page/workflow/Workflow";
 import SideBar from "./layout/SideBar";
 import MainLayout from "./layout/mainLayout";
+import Calendar from "./page/Event/Calendar";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/workflow" element={<Workflow />} />
         <Route path="/mainlayout" element={<MainLayout />} />
 
+        <Route path="/calendar" element={<Calendar />} />
 
         <Route>
           <Route />

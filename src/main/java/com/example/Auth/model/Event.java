@@ -6,14 +6,18 @@ import lombok.Setter;
 
 import java.time.OffsetDateTime;
 
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
 @Table(name = "events")
 public class Event {
     @Id
+    @Column(name = "id_event")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long idEvent;
     @Column(nullable = false)
     private String title;
     private String description;
@@ -32,21 +36,17 @@ public class Event {
     private String userName;
 
     @ManyToOne
-    @JoinColumn(name = "service",referencedColumnName = "id_service", nullable = false)
+    @JoinColumn(name = "service", referencedColumnName = "id_service", nullable = false)
     private ServiceDfcr service;
 
-    public Event(String title, String description, OffsetDateTime startTime, OffsetDateTime endTime, boolean allDay,String color,
-                 String email, String userName,User createdBy, ServiceDfcr service) {
+    public Event(String title, String description, OffsetDateTime startTime, OffsetDateTime endTime, boolean allDay,
+            String color) {
         this.title = title;
         this.description = description;
         this.startTime = startTime;
         this.endTime = endTime;
         this.allDay = allDay;
         this.color = color;
-        this.email = email;
-        this.userName = userName;
-        this.createdBy = createdBy;
-        this.service = service;
     }
 
     public Event() {

@@ -21,7 +21,8 @@ public class EventService {
     private final ServiceRepository serviceRepository;
     private final LoggerService log;
 
-    public EventService(EventRepository eventRepository, UserRepository userRepository, ServiceRepository serviceRepository, LoggerService log) {
+    public EventService(EventRepository eventRepository, UserRepository userRepository,
+            ServiceRepository serviceRepository, LoggerService log) {
         this.eventRepository = eventRepository;
         this.userRepository = userRepository;
         this.serviceRepository = serviceRepository;

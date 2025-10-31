@@ -4,7 +4,7 @@ import { loginUser  } from "../../api/Auth/auth";
 import Input from "../../components/input/Input";
 import DefaultButton from "../../components/Button/DefaultButton";
 import Checkbox from "@mui/material/Checkbox";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const validateLogin = ({ matricule, password }) => {
   const errors = {};
@@ -18,6 +18,8 @@ const Login = () => {
   const [password, setPassword] = useState("")
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
+
+  const Naviguate = useNavigate()
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
@@ -33,6 +35,9 @@ const Login = () => {
     try {
       const data = await loginUser(matricule, password);
       console.log("Connexion réussie :", data);
+      localStorage.setItem("token", data.token)
+      localStorage.setItem("token_expiration", data.expiresIn)
+      Naviguate("/calendar")
     } catch (err) {
       console.error("Erreur d'authentification: ", err.message)
       // console.log(err)

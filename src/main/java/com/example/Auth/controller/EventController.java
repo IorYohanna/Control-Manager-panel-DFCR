@@ -1,19 +1,17 @@
 package com.example.Auth.controller;
 
-import com.example.Auth.dto.CommentaireDto;
 import com.example.Auth.dto.EventDto;
-import com.example.Auth.model.Commentaire;
+import com.example.Auth.dto.EventResponseDto;
 import com.example.Auth.model.Event;
 import com.example.Auth.service.EventService;
-import jakarta.annotation.security.PermitAll;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/events")
-@PermitAll
 public class EventController {
     private final EventService eventService;
 
@@ -22,9 +20,22 @@ public class EventController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Event>> getAllEvents() {
-        List<Event> events = eventService.getAllEvents();
-        return ResponseEntity.ok(events);
+    public ResponseEntity<List<EventResponseDto>> getAllEvents() {
+        List<EventResponseDto> eventDtos = eventService.getAllEvents()
+                .stream()
+                .map(event -> new EventResponseDto(
+                        event.getIdEvent(),
+                        event.getTitle(),
+                        event.getDescription(),
+                        event.getStartTime(),
+                        event.getEndTime(),
+                        event.isAllDay(),
+                        event.getColor(),
+                        event.getEmail(),
+                        event.getUserName()))
+                .toList();
+
+        return ResponseEntity.ok(eventDtos);
     }
 
     @PostMapping
@@ -34,16 +45,16 @@ public class EventController {
         }
 
         Event created = eventService.createEvent(input);
-        EventDto responseDto = new EventDto(
-                created.getTitle(),
-                created.getDescription(),
-                created.getStartTime(),
-                created.getEndTime(),
-                created.isAllDay(),
-                created.getColor(),
-                created.getEmail(),
-                created.getUserName()
-        );
-        return ResponseEntity.status(201).body(responseDto);
+        return ResponseEntity.status(201).body(created);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteEvent(@PathVariable String id) {
+        try {
+            eventService.deleteEvent(Long.valueOf(id));
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
