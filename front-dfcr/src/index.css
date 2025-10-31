@@ -6,13 +6,13 @@
 }
 
 @font-face {
-  font-family: "Kollektif";
-  src: url("/fonts/kollektif/Kollectif-BoldItalic.ttf") format("typetrue");
+  font-family: "Rushford";
+  src: url("/fonts/rushford/Rushford.otf") format("opentype");
 }
 
 @font-face {
-  font-family: "Larken DEMO Black";
-  src: url("/fonts/larken/Larken-BlackItalic.otf") format("opentype");
+  font-family: "Dropline Regular";
+  src: url("/fonts/dropline/DroplineRegular.otf") format("opentype");
 }
 
 /* 🎨 Palette perso en variables globales */
@@ -33,22 +33,22 @@
     /* === Radius et fonts === */
     --radius: 0.5rem;
     --font-eirene: "Eirene Sans", "sans-serif";
-    --font-kollektif: "Kollektif", "sans-serif";
-    --font-larken: "Larken DEMO Black", "serif";
+    --font-rushford: "Rushford", "sans-serif";
+    --font-dropline: "Dropline Regular", "serif";
   }
 }
 
 /* === Définition du thème Tailwind inline === */
 @theme {
   --color-primary: var(--limedSpruce); /* (titres, texte, boutons principaux) */
-  --color-secondary: var(--limedSpruce); /* (borders, sous-titres, icônes) */
+  --color-secondary: var(--capeHoney); /* (borders, sous-titres, icônes) */
   --color-accent: var(--limedSpruce); /* (boutons, liens, alerte) */
   --color-accent-dark: var(--limedSpruce); /* hover boutons ou effets focus */
   --color-background: var(--sisal); /* fond générale */
   --color-foreground: var(--espresso); /* texte sur le fond clair */
   --font-eirene: var(--font-eirene);
-  --font-kollektif: var(--font-kollektif);
-  --font-larken: var(--font-larken);
+  --font-rushford: var(--font-rushford);
+  --font-dropline: var(--font-dropline);
 }
 
 .bg-antique-white-image {

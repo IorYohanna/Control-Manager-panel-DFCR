@@ -59,7 +59,7 @@ const Signup = () => {
             <div className="flex flex-col justify-between w-full max-w-[700px] mx-auto px-16 lg:px-6 py-16 ">
 
                 <div className="text-start mb-8 ">
-                    <h1 className="font-larken text-xl lg:text-3xl capitalize ">Inscrivez-vous des maintenant</h1>
+                    <h1 className="font-rushford text-xl lg:text-3xl capitalize ">Inscrivez-vous des maintenant</h1>
                 </div>
 
                 <form className="mx-auto w-full relative -top-5" action="#" onSubmit={handleSignupSubmit}>
@@ -67,7 +67,7 @@ const Signup = () => {
                         <h2 className="font-eirene text-xl">Veuillez vous inscrire</h2>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 font-kollektif">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 font-dropline">
                         <div className="flex flex-col">
                             <label htmlFor="username" className="mb-1 text-sm text-gray-700">Matricule</label>
                             <Input

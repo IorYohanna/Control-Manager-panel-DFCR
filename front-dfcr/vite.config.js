@@ -7,9 +7,9 @@ export default defineConfig({
   theme: {
     extend: {
       fontFamily: {
-        kollektif: ["Kollektif", "sans-serif"],
+        rushford: ["Rushford", "sans-serif"],
         eirene: ["Eirene Sans", "sans-serif"],
-        larken: ["Larken DEMO Black", "serif"],
+        dropline: ["Dropline Regular", "serif"],
       },
       colors: {},
     },
