@@ -9,7 +9,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.example.Auth.repository.UserRepository;
+import com.example.Auth.repository.User.UserRepository;
 
 @Configuration
 public class ApplicationConfiguration {

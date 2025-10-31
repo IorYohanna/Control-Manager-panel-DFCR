@@ -1,10 +1,10 @@
 import { useState } from "react";
 import Input from "../../components/input/Input";
-import DefaultButton from "../../components/DefaultButton";
+import DefaultButton from "../../components/Button/DefaultButton";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import { Link, Navigate, useNavigate } from "react-router-dom";
-import { signupUser } from "../../api/auth";
+import { signupUser } from "../../api/Auth/auth";
 
 const options = ['SAGA', 'SG', 'SF', 'SFPR', 'SCRI', 'SPSE'];
 

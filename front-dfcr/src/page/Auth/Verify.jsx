@@ -1,8 +1,8 @@
 import Input from "../../components/input/Input";
-import DefaultButton from "../../components/DefaultButton";
+import DefaultButton from "../../components/Button/DefaultButton";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { resendCode, VerifyUser } from "../../api/auth";
+import { resendCode, VerifyUser } from "../../api/Auth/auth";
 
 const validateVerify = ({ matricule, verificationCode }) => {
     const errors = {};

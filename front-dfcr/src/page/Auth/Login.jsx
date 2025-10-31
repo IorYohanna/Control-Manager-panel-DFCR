@@ -1,8 +1,8 @@
 import React from "react";
 import { useState } from "react";
-import { loginUser  } from "../../api/auth";
+import { loginUser  } from "../../api/Auth/auth";
 import Input from "../../components/input/Input";
-import DefaultButton from "../../components/DefaultButton";
+import DefaultButton from "../../components/Button/DefaultButton";
 import Checkbox from "@mui/material/Checkbox";
 import { Link } from "react-router-dom";
 

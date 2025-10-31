@@ -1,9 +1,9 @@
 import React from 'react'
 import { useState } from 'react';
-import { createDocument } from '../../api/document';
+import { createDocument } from '../../api/Document/document';
 import Input from '../../components/input/Input';
 import TextField from '@mui/material/TextField';
-import DefaultButton from '../../components/DefaultButton';
+import DefaultButton from '../../components/Button/DefaultButton';
 
 const FormDocument = () => {
   const [reference, setReference] = useState("")

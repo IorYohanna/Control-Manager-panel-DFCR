@@ -37,7 +37,7 @@ public class SecurityConfiguration {
                                 .requestMatchers("/documents/**").permitAll()
                                 .requestMatchers("/services/**").permitAll()
                                 .requestMatchers("/dossiers/**").permitAll()
-                                .requestMatchers("/workflow/**").permitAll()
+                                .requestMatchers("/workflows/**").permitAll()
                                 .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
