@@ -1,10 +1,9 @@
-package com.example.Auth.controller;
+package com.example.Auth.controller.Document;
 
-import com.example.Auth.dto.CommentaireDto;
 import com.example.Auth.dto.EventDto;
-import com.example.Auth.model.Commentaire;
-import com.example.Auth.model.Event;
-import com.example.Auth.service.EventService;
+import com.example.Auth.model.Document.Event;
+import com.example.Auth.service.Document.EventService;
+
 import jakarta.annotation.security.PermitAll;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

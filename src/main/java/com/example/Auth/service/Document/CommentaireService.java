@@ -1,8 +1,9 @@
 package com.example.Auth.service.Document;
 
-import com.example.Auth.model.Document.Document;
+
 import com.example.Auth.dto.Document.CommentaireDto;
 import com.example.Auth.model.Document.Commentaire;
+import com.example.Auth.model.Document.Document;
 import com.example.Auth.model.User.User;
 import com.example.Auth.repository.Document.CommentaireRepository;
 import com.example.Auth.repository.Document.DocumentRepository;
@@ -11,6 +12,8 @@ import com.example.Auth.utils.LoggerService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class CommentaireService {
@@ -44,6 +47,10 @@ public class CommentaireService {
         return documentRepository.findById(reference)
                 .orElseThrow(
                         () -> new RuntimeException("Document non trouvé avec id : " + reference));
+    }
+
+    public List<Commentaire> getAllCommentaires() {
+        return commentaireRepository.findAll();
     }
 
     public Commentaire createCommentaire(CommentaireDto input) {
