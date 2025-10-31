@@ -5,6 +5,6 @@ import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CommentaireRepository extends ListCrudRepository<Commentaire, String> {
+public interface CommentaireRepository extends ListCrudRepository<Commentaire, Long> {
 
 }

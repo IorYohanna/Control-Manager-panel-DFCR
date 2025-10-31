@@ -19,17 +19,21 @@ import {
 export default function Calendar() {
   const [weekendsVisible, setWeekendsVisible] = useState(true);
   const [events, setEvents] = useState([]);
+  console.log("voici les events", events)
   const [modalOpen, setModalOpen] = useState(false);
   const [selected, setSelectedDate] = useState({ start: null, end: null, allDay: false });
 
   // Formulaire modal
   const [formData, setFormData] = useState({
+    idEvent: "",
     title: "",
     description: "",
     startTime: "",
     endTime: "",
     allDay: false,
     color: "#007BFF",
+    email: "",
+    userName: ""
   });
 
   const token = localStorage.getItem("token");
@@ -40,13 +44,15 @@ export default function Calendar() {
       try {
         const data = await getEvents(token);
         const formatted = data.map((e) => ({
-          id: e.i,
+          idEvent: e.idEvent,
           title: e.title,
           description: e.description,
           start: e.startTime,
           end: e.endTime,
           allDay: e.allDay,
           color: e.color,
+          email: e.email,
+          userName: e.userName
         }));
         setEvents(formatted);
       } catch (err) {
@@ -225,7 +231,7 @@ function Sidebar({ weekendsVisible, toggleWeekends, events, onDelete }) {
         <h2>Événements ({events.length})</h2>
         <ul>
           {events.map((e) => (
-            <li key={e.id} style={{ marginBottom: "8px" }}>
+            <li key={e.idEvent} style={{ marginBottom: "8px" }}>
               <b>
                 {formatDate(e.start, { year: "numeric", month: "short", day: "numeric" })}
               </b>{" "}

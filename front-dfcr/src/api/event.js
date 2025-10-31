@@ -20,6 +20,7 @@ export async function getEvents(token) {
 
   // parse le JSON seulement si la réponse est OK
   const data = await response.json();
+  console.log(data);
   return data;
 }
 

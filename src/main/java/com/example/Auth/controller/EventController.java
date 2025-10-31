@@ -1,12 +1,10 @@
 package com.example.Auth.controller;
 
 import com.example.Auth.dto.EventDto;
+import com.example.Auth.dto.EventResponseDto;
 import com.example.Auth.model.Event;
-import com.example.Auth.model.User;
 import com.example.Auth.service.EventService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,10 +20,11 @@ public class EventController {
     }
 
     @GetMapping
-    public ResponseEntity<List<EventDto>> getAllEvents() {
-        List<EventDto> eventDtos = eventService.getAllEvents()
+    public ResponseEntity<List<EventResponseDto>> getAllEvents() {
+        List<EventResponseDto> eventDtos = eventService.getAllEvents()
                 .stream()
-                .map(event -> new EventDto(
+                .map(event -> new EventResponseDto(
+                        event.getIdEvent(),
                         event.getTitle(),
                         event.getDescription(),
                         event.getStartTime(),
@@ -33,8 +32,7 @@ public class EventController {
                         event.isAllDay(),
                         event.getColor(),
                         event.getEmail(),
-                        event.getUserName()
-                ))
+                        event.getUserName()))
                 .toList();
 
         return ResponseEntity.ok(eventDtos);
@@ -42,31 +40,18 @@ public class EventController {
 
     @PostMapping
     public ResponseEntity<?> createEvent(@RequestBody EventDto input) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User currentUser = (User) authentication.getPrincipal();
-
         if (input.getTitle() == null || input.getTitle().isBlank()) {
             return ResponseEntity.badRequest().body("Le contenu du Event est vide");
         }
 
         Event created = eventService.createEvent(input);
-        EventDto responseDto = new EventDto(
-                created.getTitle(),
-                created.getDescription(),
-                created.getStartTime(),
-                created.getEndTime(),
-                created.isAllDay(),
-                created.getColor(),
-                currentUser.getEmail(),
-                currentUser.getUsername()
-        );
-        return ResponseEntity.status(201).body(responseDto);
+        return ResponseEntity.status(201).body(created);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteEvent(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteEvent(@PathVariable String id) {
         try {
-            eventService.deleteEvent(id);
+            eventService.deleteEvent(Long.valueOf(id));
             return ResponseEntity.noContent().build();
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();

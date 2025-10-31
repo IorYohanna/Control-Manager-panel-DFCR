@@ -10,5 +10,6 @@ import java.util.Optional;
 
 public interface EventRepository extends JpaRepository<Event, Long> {
     Optional<List<Event>> findByService(ServiceDfcr service);
+
     Optional<List<Event>> findByCreatedBy(User user);
 }
