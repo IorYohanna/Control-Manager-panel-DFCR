@@ -61,14 +61,14 @@ const Login = () => {
         {/* Formulaire */}
         <div className="flex flex-col justify-between w-full mx-auto max-w-[700px] px-16 lg:px-16 py-16">
           <div className="text-start ">
-            <h1 className="font-rushford text-xl lg:text-3xl capitalize">Bienvenue dans DFCR!</h1>
+            <h1 className="font-rushford text-xl lg:text-5xl capitalize">Bienvenue dans DFCR!</h1>
           </div>
 
 
           <form className="mx-auto max-w-[700px] w-auto relative" action="#" onSubmit={handleLoginSubmit}>
 
             <div className="mb-7">
-              <h2 className="font-eirene text-xl">Connectez vous</h2>
+              <h2 className="font-eirene text-2xl">Connectez vous</h2>
             </div>
 
             <div className="grid grid-cols-1 gap-4 font-dropline">
@@ -101,20 +101,20 @@ const Login = () => {
               {error && <p className="text-red-500 text-sm">{error}</p>}
             </div>
 
-            <div className="mt-5">
+            <div className="mt-10">
               <p className="text-sm">
                 <Checkbox />
                 Se souvenir de moi
               </p> 
-              <div className="flex items-center col-span-1 mx-6 mt:12">
+              <div className="flex items-center col-span-1 mx-6 mt-5">
                 <DefaultButton
-                  bgColor="var(--color-accent)"
+                  bgColor="white"
                   label={loading ? "Connexion..." : "Connexion"}
                   type="submit"
                   disabled={loading}
                 /> 
               </div>
-              <div className="w-full text-center ml-25 mb-12 ">
+              <div className="w-full text-center ml-25 mb-12 mt-3">
                 <Link to="/verify" className="text-sm underline">
                     Mot de passe oublié
                 </Link>

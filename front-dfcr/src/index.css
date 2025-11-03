@@ -15,6 +15,15 @@
   src: url("/fonts/dropline/DroplineRegular.otf") format("opentype");
 }
 
+@font-face {
+  font-family: "Stardom";
+  src: url("/fonts/stardom/Stardom-Regular.otf") format("opentype");
+}
+@font-face {
+  font-family: "Neco";
+  src: url("/fonts/neco/Neco-Black.otf") format("opentype");
+}
+
 /* 🎨 Palette perso en variables globales */
 @layer base {
   :root {
@@ -25,30 +34,35 @@
     --carmine: #9a031eff;
     --chestnut: #994636ff;
 
-    --espresso: #603018;
-    --capeHoney : #fdeaa3;
+    --blueZodiac: #123b5f;
     --sisal: #d3d0bc;
     --limedSpruce: #304c4a;
+    --jasper: #9297C4;
+    --carmine: #6DAEDB;
 
     /* === Radius et fonts === */
     --radius: 0.5rem;
     --font-eirene: "Eirene Sans", "sans-serif";
     --font-rushford: "Rushford", "sans-serif";
     --font-dropline: "Dropline Regular", "serif";
+    --font-stardom: "Stardom", "sans-serif";
+    --font-neco: "Neco", "serif";
   }
 }
 
 /* === Définition du thème Tailwind inline === */
 @theme {
   --color-primary: var(--limedSpruce); /* (titres, texte, boutons principaux) */
-  --color-secondary: var(--capeHoney); /* (borders, sous-titres, icônes) */
-  --color-accent: var(--limedSpruce); /* (boutons, liens, alerte) */
-  --color-accent-dark: var(--limedSpruce); /* hover boutons ou effets focus */
+  --color-secondary: var(--sisal); /* (borders, sous-titres, icônes) */
+  --color-accent: var(--carmine); /* (boutons, liens, alerte) */
+  --color-accent-dark: var(--jasper); /* hover boutons ou effets focus */
   --color-background: var(--sisal); /* fond générale */
-  --color-foreground: var(--espresso); /* texte sur le fond clair */
+  --color-foreground: var(--blueZodiac); /* texte sur le fond clair */
   --font-eirene: var(--font-eirene);
   --font-rushford: var(--font-rushford);
   --font-dropline: var(--font-dropline);
+  --font-stardom: var(--font-stardom);
+  --font-neco: var(--font-neco);
 }
 
 .bg-antique-white-image {
@@ -56,8 +70,3 @@
   background-color: #f0e7d8;
 }
 
-@layer base {
-  body {
-    @apply bg-background;
-  }
-}

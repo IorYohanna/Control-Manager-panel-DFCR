@@ -10,6 +10,8 @@ export default defineConfig({
         rushford: ["Rushford", "sans-serif"],
         eirene: ["Eirene Sans", "sans-serif"],
         dropline: ["Dropline Regular", "serif"],
+        stardom: ["Stardom", "sans-serif"],
+        neco: ["Neco","serif"]
       },
       colors: {},
     },
