@@ -1,29 +1,30 @@
 import React from 'react'
 import SideBar, { SidebarItem } from './SideBar'
 import { BarChart3, Boxes, LayoutDashboard, LifeBuoy, Package, Receipt, UserCircle } from 'lucide-react'
+import NavBar from './NavBar'
 
 const MainLayout = () => {
   return (
-    <main className='' >
+    <main className='flex' >
       <SideBar>
         <SidebarItem icon={<LayoutDashboard size={20} />}
-          text="login"
+          text="Login"
           to="/login"
           active
           
         />
         <SidebarItem icon={<BarChart3 size={20} />}
-          text="signup"
+          text="Signup"
           to="/signup"
           alert
           
         />
         <SidebarItem icon={<UserCircle size={20} />}
-          text="verify"
+          text="Verify"
           
         />
         <SidebarItem icon={<Boxes size={20} />}
-          text="workflow"
+          text="Workflow"
           
         />
         <SidebarItem icon={<Package size={20} />}
@@ -40,8 +41,8 @@ const MainLayout = () => {
           text="Dashboard"
           
         />
-
       </SideBar>
+      <NavBar/>
 
     </main>
   )

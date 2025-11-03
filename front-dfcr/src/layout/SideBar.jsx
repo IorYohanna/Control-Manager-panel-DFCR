@@ -8,20 +8,17 @@ export default function Sidebar({ children }) {
   const [expanded, setExpanded] = useState(true)
 
   return (
-    <aside className="h-screen">
-      <nav className="h-full w-fit flex flex-col bg-white border-r shadow-sm">
+    <aside className="h-screen p-4">
+      <nav className="h-full w-fit flex flex-col bg-[#F5ECE3] rounded-3xl shadow-[4px_0_15px_rgba(0,0,0,0.08)]">
         <div className="p-4 pb-2 flex justify-between items-center">
-          <img
-            src="https://img.logoipsum.com/243.svg"
-            className={`overflow-hidden transition-all ${expanded ? "w-32" : "w-0"
-              }`}
-            alt=""
-          />
+          <span className={`uppercase font-neco text-2xl text-[#2D466E] overflow-hidden transition-all ${expanded ? "w-auto" : "w-0"}`}>
+            dfcr
+          </span>
           <button
             onClick={() => setExpanded((curr) => !curr)}
-            className="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100"
+            className="p-1.5 rounded-lg bg-[#24344D] "
           >
-            {expanded ? <ChevronFirst /> : <ChevronLast />}
+            {expanded ? <ChevronFirst color="white" /> : <ChevronLast color="white" />}
           </button>
         </div>
 
@@ -29,7 +26,7 @@ export default function Sidebar({ children }) {
           <ul className="flex-1 px-3">{children}</ul>
         </SidebarContext.Provider>
 
-        <div className="border-t flex p-3">
+        <div className="border-t border-[#73839E] flex p-3">
           <img
             src="https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true"
             alt=""
@@ -42,10 +39,12 @@ export default function Sidebar({ children }) {
           `}
           >
             <div className="leading-4">
-              <h4 className="font-semibold">John Doe</h4>
-              <span className="text-xs text-gray-600">johndoe@gmail.com</span>
+              <h4 className="font-stardom font-bold test-[#2D466E] ">John Doe</h4>
+              <span className="text-xs text-[#2f486d] font-eirene ">johndoe@gmail.com</span>
             </div>
-            <MoreVertical size={20} />
+            <Link to="/login" >
+              <MoreVertical size={20} className="text-[#2D466E]" />
+            </Link>
           </div>
         </div>
       </nav>
@@ -64,14 +63,14 @@ export function SidebarItem({ icon, text, active, alert, to = "#" }) {
           font-medium rounded-md cursor-pointer
           transition-colors group
           ${active
-            ? "bg-linear-to-tr from-indigo-200 to-indigo-100 text-indigo-800"
-            : "hover:bg-indigo-50 text-gray-600"
+            ? "bg-linear-to-r from-[#F5ECE3] to-[#24344D] text-white"
+            : "hover:bg-[#73839E] text-[#2f486d] hover:text-white "
           }
         `}
       >
         {icon}
         <span
-          className={`overflow-hidden transition-all ${expanded ? "w-52 ml-3" : "w-0"
+          className={`overflow-hidden font-dropline transition-all ${expanded ? "w-52 ml-3" : "w-0"
             }`}
         >
           {text}
@@ -79,7 +78,7 @@ export function SidebarItem({ icon, text, active, alert, to = "#" }) {
 
         {alert && (
           <div
-            className={`absolute right-2 w-2 h-2 rounded bg-indigo-400 ${expanded ? "" : "top-2"
+            className={`absolute right-2 w-2 h-2 rounded-full bg-[#24344D] hover:bg-white ${expanded ? "" : "top-2"
               }`}
           />
         )}
@@ -88,7 +87,7 @@ export function SidebarItem({ icon, text, active, alert, to = "#" }) {
           <div
             className={`
               absolute left-full rounded-md px-2 py-1 ml-6
-              bg-indigo-100 text-indigo-800 text-sm
+              bg-[#2D466E] text-white text-sm
               invisible opacity-20 -translate-x-3 transition-all
               group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
             `}
