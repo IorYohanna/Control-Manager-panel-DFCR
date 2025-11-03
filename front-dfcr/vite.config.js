@@ -11,8 +11,10 @@ export default defineConfig({
         eirene: ["Eirene Sans", "sans-serif"],
         dropline: ["Dropline Regular", "serif"],
         stardom: ["Stardom", "sans-serif"],
-        neco: ["Neco","serif"]
+        necoBlack: ["Neco Black","serif"],
+        necoMedium: ["Neco Medium", "serif"]
       },
+
       colors: {},
     },
   },

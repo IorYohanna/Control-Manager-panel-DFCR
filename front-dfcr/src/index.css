@@ -19,9 +19,15 @@
   font-family: "Stardom";
   src: url("/fonts/stardom/Stardom-Regular.otf") format("opentype");
 }
+
 @font-face {
-  font-family: "Neco";
+  font-family: "Neco Black";
   src: url("/fonts/neco/Neco-Black.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "Neco Medium";
+  src: url("/fonts/neco/Neco-Medium.otf") format("opentype");
 }
 
 /* 🎨 Palette perso en variables globales */
@@ -41,14 +47,15 @@
     --font-rushford: "Rushford", "sans-serif";
     --font-dropline: "Dropline Regular", "serif";
     --font-stardom: "Stardom", "sans-serif";
-    --font-neco: "Neco", "serif";
+    --font-necoBlack: "Neco", "serif";
+    --font-necoMedium: "Neco Medium", "serif";
   }
 }
 
 /* === Définition du thème Tailwind inline === */
 @theme {
 
-  --color-blue-zodiac : var(--blue-zodiac);
+  --color-blue-zodiac: var(--blue-zodiac);
   --color-light-blue: var(--light-blue);
   --color-beige-creme: var(--beige-creme);
   --color-dark-blue: var(--dark-blue);
@@ -57,7 +64,8 @@
   --font-rushford: var(--font-rushford);
   --font-dropline: var(--font-dropline);
   --font-stardom: var(--font-stardom);
-  --font-neco: var(--font-neco);
+  --font-necoBlack: var(--font-necoBlack);
+  --font-necoMedium: var(--font-necoMedium);
 }
 
 .bg-antique-white-image {
