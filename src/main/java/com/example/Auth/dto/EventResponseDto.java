@@ -18,4 +18,5 @@ public class EventResponseDto {
     private boolean allDay;
     private String email;
     private String userName;
+    private String service;
 }

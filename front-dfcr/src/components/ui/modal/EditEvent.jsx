@@ -123,25 +123,6 @@ const ModalEdit = ({ open, isEdit, formData, setFormData, close, onEdit, onCreat
           />
         </Box>
 
-        {/* Email */}
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 2,
-            backgroundColor: 'rgba(255, 255, 255, 0.6)',
-            backdropFilter: 'blur(8px)',
-            borderRadius: '16px',
-            px: 2.5,
-            py: 2
-          }}
-        >
-          <AccountCircleIcon sx={{ color: '#2d466e', fontSize: '2rem' }} />
-          <Typography sx={{ fontWeight: 500, color: '#2d466e' }}>
-            Email@example.com
-          </Typography>
-        </Box>
-
         {/* Dates */}
         <Box sx={{ display: 'flex', gap: 2 }}>
           <Box

@@ -17,6 +17,7 @@ import {
   Delete as DeleteIcon,
   Description as DescriptionIcon,
   AccessTime as AccessTimeIcon,
+  AccountCircle
 } from "@mui/icons-material";
 const ModalView = ({ open, formData, close, onEditMode, onDelete }) => (
   <Dialog
@@ -86,6 +87,41 @@ const ModalView = ({ open, formData, close, onEditMode, onDelete }) => (
     </DialogTitle>
 
     <DialogContent sx={{ px: 4, pb: 3 }}>
+      <Box
+        sx={{
+          backgroundColor: 'rgba(255, 255, 255, 0.6)',
+          backdropFilter: 'blur(8px)',
+          borderRadius: '16px',
+          p: 2.5,
+          marginBottom: 2
+        }}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5 }}>
+          <AccountCircle sx={{ color: '#73839e', fontSize: '1.25rem' }} />
+          <Typography
+            sx={{
+              fontSize: '0.75rem',
+              fontWeight: 600,
+              color: '#73839e',
+              textTransform: 'uppercase',
+              letterSpacing: '0.05em'
+            }}
+          >
+            Créateur
+          </Typography>
+        </Box>
+        <Typography
+          sx={{
+            ml: 4.5,
+            color: '#2d466e',
+            lineHeight: 1.6,
+            fontSize: '0.938rem'
+          }}
+        >
+          {formData.email}  |  {formData.service}
+        </Typography>
+      </Box>
+
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
         {/* Time Info */}
         <Box

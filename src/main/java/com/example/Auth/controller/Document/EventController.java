@@ -32,7 +32,8 @@ public class EventController {
                         event.getEndTime(),
                         event.isAllDay(),
                         event.getEmail(),
-                        event.getUserName()))
+                        event.getCreatedBy().getName(),
+                        event.getService().getIdService()))
                 .toList();
 
         return ResponseEntity.ok(eventDtos);

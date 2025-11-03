@@ -21,7 +21,7 @@ export const useEvents = (token) => {
     }
 
     load();
-  }, []);
+  }, [token]);
 
   const addEvent = async (data) => {
     const saved = await createEvent(data, token);

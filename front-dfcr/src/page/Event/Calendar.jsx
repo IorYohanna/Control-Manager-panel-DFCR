@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import { EventModal } from "../../components/Calendar/EventModal";
 import { EventCalendar } from "../../components/Calendar/EventCalendar";
-import { Sidebar } from "../../components/Calendar/EventUtils";
 import { useEvents } from "../../hooks/useEvents";
 
 const Calendar = () => {
   const token = localStorage.getItem("token");
 
   // ✅ hook pour la data
-  const { events, loading, addEvent, removeEvent , editEvent} = useEvents(token);
+  const { events, addEvent, removeEvent , editEvent} = useEvents(token);
   
   console.log(events)
 
@@ -24,7 +23,7 @@ const Calendar = () => {
     startTime: "",
     endTime: "",
     allDay: false,
-    color: "#007BFF",
+    service: ""
   });
 
   // ✅ formulaire - utilitaire
@@ -45,7 +44,8 @@ const Calendar = () => {
       startTime: formatForInput(selectInfo.start),
       endTime: formatForInput(selectInfo.end),
       allDay: selectInfo.allDay,
-      color: "#007BFF",
+      email: "",
+      service: ""
     });
 
     setModalOpen(true);
@@ -63,6 +63,8 @@ const Calendar = () => {
       startTime: formatForInput(e.start),
       endTime: formatForInput(e.end),
       allDay: e.allDay,
+      email: e.extendedProps.email,
+      service: e.extendedProps.service
     });
 
     setModalType("view");
@@ -95,19 +97,6 @@ const Calendar = () => {
 
   return (
     <div className="w-full min-h-screen py-4 px-3 sm:px-4 md:px-6 lg:px-8">
-      
-      {/* Sidebar optionnelle - décommenter si besoin */}
-      {/* <Sidebar
-        events={events}
-        weekendsVisible={true}
-        toggleWeekends={() => {}}
-        onDelete={(id) => {
-          const target = events.find((e) => e.idEvent === id);
-          setFormData(target);
-          setModalType("delete");
-          setModalOpen(true);
-        }}
-      /> */}
 
       {/* Calendrier responsive */}
       <div className="w-full flex justify-center items-start">
@@ -119,7 +108,9 @@ const Calendar = () => {
             end: e.endTime,
             allDay: e.allDay,
             extendedProps: {
-              description: e.description
+              description: e.description,
+              email: e.email,
+              service: e.service
             }
           }))}
           handleDateSelect={handleDateSelect}
