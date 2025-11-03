@@ -23,8 +23,8 @@ function App() {
 
         <Route path="/calendar" element={<Calendar />} />
 
-        <Route path="/home" element={<MainLayout/>} >
-          <Route />
+        <Route path="/home" element={<MainLayout/>}>
+          <Route index element={<Calendar/>}/>
         </Route> 
       </Routes>
     </Router>
