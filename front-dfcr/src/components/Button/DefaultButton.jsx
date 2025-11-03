@@ -1,7 +1,7 @@
 import React from "react";
 import Button from "@mui/material/Button";
 
-const DefaultButton = ({ bgColor = "#a63a50", text = "#6DAEDB", label = " " , type="submit", disabled}) => {
+const DefaultButton = ({ bgColor = "white", text = "black", label = " " , type="submit", disabled}) => {
   return (
     <Button
       variant="contained"
@@ -16,7 +16,7 @@ const DefaultButton = ({ bgColor = "#a63a50", text = "#6DAEDB", label = " " , ty
         px: 15,
         py: 1.5,
         "&:hover": {
-          backgroundColor: bgColor, // garde la même couleur au hover, ou tu peux assombrir
+          backgroundColor: bgColor, 
         },
       }}
 

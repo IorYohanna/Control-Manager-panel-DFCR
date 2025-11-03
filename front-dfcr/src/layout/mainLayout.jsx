@@ -56,6 +56,7 @@ const MainLayout = () => {
         </div>
       </div>
       
+{/*       <NavBar/> */}
 
     </main>
   )

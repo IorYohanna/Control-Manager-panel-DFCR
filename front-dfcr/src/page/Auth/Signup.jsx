@@ -46,25 +46,25 @@ const Signup = () => {
     }
 
     return (
-        <section className="grid grid-cols-1 lg:grid-cols-2 h-screen overflow-x-auto mx-auto">
+        <section className="grid grid-cols-1 lg:grid-cols-12 h-screen overflow-x-auto mx-auto">
 
-            <div className="hidden lg:block w-full h-full overflow-hidden">
+            <div className="hidden lg:block col-span-5 w-full h-full overflow-hidden bg-beige-creme">
                 <img
-                    src="/img/bg-left.png"
+                    src="/img/bg.png"
                     alt="Background"
                     className="h-full w-full object-contain"
                 />
             </div>
 
-            <div className="flex flex-col justify-between w-full max-w-[700px] mx-auto px-16 lg:px-6 py-16 ">
+            <div className="flex flex-col justify-between col-span-7 w-full max-w-[700px] mx-auto px-16 lg:px-6 py-10 ">
 
-                <div className="text-start mb-8 ">
-                    <h1 className="font-rushford text-xl lg:text-3xl capitalize ">Inscrivez-vous des maintenant</h1>
+                <div className="text-start mb-12">
+                    <h1 className="font-necoMedium text-xl lg:text-3xl capitalize ">Inscrivez-vous des maintenant</h1>
                 </div>
 
                 <form className="mx-auto w-full relative -top-5" action="#" onSubmit={handleSignupSubmit}>
                     <div className="mb-7">
-                        <h2 className="font-eirene text-xl">Veuillez vous inscrire</h2>
+                        <h2 className="font-stardom font-bold text-xl">Veuillez vous inscrire</h2>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 font-dropline">
@@ -168,7 +168,8 @@ const Signup = () => {
                     </div>
                     <div className="flex items-center col-span-1 mx-6 mt-12  lg:justify-center lg:col-span-2">
                         <DefaultButton
-                            bgColor="var(--color-accent)"
+                            text="#24344D"
+                            bgColor="#F5ECE3"
                             label={loading ? "S'inscrire..." : "S'inscrire"}
                             type="submit"
                             disabled={loading}
@@ -186,7 +187,7 @@ const Signup = () => {
                 <div className="text-start mt-6">
                     <p className="text-sm">
                         Déjà un compte ?&nbsp;
-                        <Link to="/login" className="underline text-gray-800">
+                        <Link to="/login" className="underline font-dropline text-gray-800">
                             Connectez-vous
                         </Link>
                     </p>
