@@ -71,3 +71,29 @@ export async function deleteEvent(eventId, token) {
 
   return true;
 }
+
+/**
+ * Modifier un événement
+ */
+export async function updateEvent(eventId, eventData, token) {
+  const response = await fetch(`${API_URL}/${eventId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      ...eventData,
+      startTime: new Date(eventData.startTime).toISOString(),
+      endTime: new Date(eventData.endTime).toISOString(),
+    }),
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    console.error("Erreur modification événement:", text);
+    throw new Error(`Erreur ${response.status}`);
+  }
+
+  return await response.json();
+}

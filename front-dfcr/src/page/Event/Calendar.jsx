@@ -8,7 +8,7 @@ const Calendar = () => {
   const token = localStorage.getItem("token");
 
   // ✅ hook pour la data
-  const { events, loading, addEvent, removeEvent } = useEvents(token);
+  const { events, loading, addEvent, removeEvent , editEvent} = useEvents(token);
   
   console.log(events)
 
@@ -63,10 +63,14 @@ const Calendar = () => {
       startTime: formatForInput(e.start),
       endTime: formatForInput(e.end),
       allDay: e.allDay,
-      color: e.backgroundColor,
     });
 
     setModalType("view");
+    setModalOpen(true);
+  };
+
+  const switchToEdit = () => {
+    setModalType("edit");
     setModalOpen(true);
   };
 
@@ -82,9 +86,17 @@ const Calendar = () => {
     setModalOpen(false);
   };
 
-  return (
-    <div className="h-fit">
+  // ✅ modifer un event
+  const handleEditEvent = async () => {
+    await editEvent(formData.idEvent, formData);
+    setModalOpen(false);
+  };
 
+
+  return (
+    <div className="w-full min-h-screen py-4 px-3 sm:px-4 md:px-6 lg:px-8">
+      
+      {/* Sidebar optionnelle - décommenter si besoin */}
       {/* <Sidebar
         events={events}
         weekendsVisible={true}
@@ -97,7 +109,8 @@ const Calendar = () => {
         }}
       /> */}
 
-      <div className="h-fits">
+      {/* Calendrier responsive */}
+      <div className="w-full flex justify-center items-start">
         <EventCalendar
           events={events.map(e => ({
             idEvent: e.idEvent,
@@ -114,16 +127,17 @@ const Calendar = () => {
         />
       </div>
       
-
+      {/* Modal */}
       <EventModal
         open={modalOpen}
         setOpen={setModalOpen}
-        type={modalType}      // "create", "view", "edit", "delete"
+        type={modalType}
         formData={formData}
         setFormData={setFormData}
         onCreate={handleCreate}
-        onEdit={() => console.log("TODO edit")}
+        onEdit={handleEditEvent}
         onDelete={handleDelete}
+        onEditMode={switchToEdit}
       />
     </div>
   );

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { createEvent, getEvents , deleteEvent } from '../api/event';
+import { createEvent, getEvents , deleteEvent , updateEvent } from '../api/event';
 
 export const useEvents = (token) => {
   const [events, setEvents] = useState([]);
@@ -36,5 +36,15 @@ export const useEvents = (token) => {
     setEvents(prev => prev.filter(e => e.idEvent !== idEvent));
   };
 
-  return { events, loading, addEvent, removeEvent };
+  const editEvent = async (idEvent, data) => {
+    const updated = await updateEvent(idEvent, data, token);
+
+    setEvents(prev =>
+      prev.map(e => (e.idEvent === idEvent ? updated : e))
+    );
+
+    return updated;
+  };
+
+  return { events, loading, addEvent, removeEvent , editEvent};
 };

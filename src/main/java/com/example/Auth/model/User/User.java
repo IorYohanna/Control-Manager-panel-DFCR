@@ -101,6 +101,10 @@ public class User implements UserDetails {
         return matricule;
     };
 
+    public String getName() {
+        return username;
+    }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;

@@ -16,7 +16,6 @@ public class EventResponseDto {
     private OffsetDateTime startTime;
     private OffsetDateTime endTime;
     private boolean allDay;
-    private String color;
     private String email;
     private String userName;
 }

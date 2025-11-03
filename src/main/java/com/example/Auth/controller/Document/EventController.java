@@ -31,7 +31,6 @@ public class EventController {
                         event.getStartTime(),
                         event.getEndTime(),
                         event.isAllDay(),
-                        event.getColor(),
                         event.getEmail(),
                         event.getUserName()))
                 .toList();
@@ -47,6 +46,16 @@ public class EventController {
 
         Event created = eventService.createEvent(input);
         return ResponseEntity.status(201).body(created);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateEvent(@PathVariable Long id, @RequestBody EventDto input) {
+        try {
+            Event updated = eventService.updateEvent(id, input);
+            return ResponseEntity.ok(updated);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(404).body(e.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}")

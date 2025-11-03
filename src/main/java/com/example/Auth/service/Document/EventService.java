@@ -63,7 +63,6 @@ public class EventService {
         event.setStartTime(input.getStartTime());
         event.setEndTime(input.getEndTime());
         event.setAllDay(input.getAllDay());
-        event.setColor(input.getColor());
         event.setEmail(currentUser.getEmail());
         event.setUserName(currentUser.getUsername());
         event.setCreatedBy(currentUser);
@@ -76,7 +75,23 @@ public class EventService {
         eventRepository.deleteById(eventId);
     }
 
-    public Event updateEvent(Event event) {
-        return eventRepository.save(event);
+    public Event updateEvent(Long id, EventDto input) {
+        User currentUser = getCurrentUser();
+
+        Event existing = eventRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Événement non trouvé"));
+
+        // ✅ On vérifie que l'utilisateur a le droit de modifier
+        if (!existing.getCreatedBy().getMatricule().equals(currentUser.getMatricule())) {
+            throw new RuntimeException("Vous n'avez pas les droits pour modifier cet événement");
+        }
+
+        existing.setTitle(input.getTitle());
+        existing.setDescription(input.getDescription());
+        existing.setStartTime(input.getStartTime());
+        existing.setEndTime(input.getEndTime());
+        existing.setAllDay(input.getAllDay());
+
+        return eventRepository.save(existing);
     }
 }

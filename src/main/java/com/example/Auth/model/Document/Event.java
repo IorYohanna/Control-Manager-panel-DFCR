@@ -29,7 +29,6 @@ public class Event {
     @Column(nullable = false)
     private OffsetDateTime endTime;
     private boolean allDay;
-    private String color;
 
     @ManyToOne
     @JoinColumn(name = "created_by", referencedColumnName = "matricule", nullable = false)
@@ -42,14 +41,12 @@ public class Event {
     @JoinColumn(name = "service", referencedColumnName = "id_service", nullable = false)
     private ServiceDfcr service;
 
-    public Event(String title, String description, OffsetDateTime startTime, OffsetDateTime endTime, boolean allDay,
-            String color) {
+    public Event(String title, String description, OffsetDateTime startTime, OffsetDateTime endTime, boolean allDay) {
         this.title = title;
         this.description = description;
         this.startTime = startTime;
         this.endTime = endTime;
         this.allDay = allDay;
-        this.color = color;
     }
 
     public Event() {

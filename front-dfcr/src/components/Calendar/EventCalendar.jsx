@@ -8,13 +8,13 @@ import "./EventCalendarStyle.css";
 export const EventCalendar = ({ events, handleDateSelect, handleEventClick }) => {
     // Palette de couleurs pour les événements qui se chevauchent
     const eventColors = [
-        { bg: '#3b82f6', border: '#2563eb', text: '#ffffff' }, // Bleu
-        { bg: '#8b5cf6', border: '#7c3aed', text: '#ffffff' }, // Violet
-        { bg: '#ec4899', border: '#db2777', text: '#ffffff' }, // Rose
-        { bg: '#f59e0b', border: '#d97706', text: '#ffffff' }, // Orange
-        { bg: '#10b981', border: '#059669', text: '#ffffff' }, // Vert
-        { bg: '#06b6d4', border: '#0891b2', text: '#ffffff' }, // Cyan
-        { bg: '#f43f5e', border: '#e11d48', text: '#ffffff' }, // Rouge
+        { bg: '#7b8fab', border: '#5a729b', text: '#f5ece3' }, // Gris-bleu moyen
+        { bg: '#c8a882', border: '#a68a6a', text: '#2d466e' }, // Beige doré
+        { bg: '#8b7355', border: '#6d5940', text: '#f5ece3' }, // Brun chaud
+        { bg: '#4a5f7f', border: '#3a4d65', text: '#f5ece3' }, // Bleu ardoise
+        { bg: '#d4bfa0', border: '#b8a385', text: '#2d466e' }, // Sable clair
+        { bg: '#5d7a9e', border: '#4a6280', text: '#f5ece3' }, // Bleu acier
+        { bg: '#9b8b7e', border: '#7d6f63', text: '#f5ece3' }, // Taupe
     ];
 
     // Fonction pour déterminer les événements qui se chevauchent
@@ -57,7 +57,7 @@ export const EventCalendar = ({ events, handleDateSelect, handleEventClick }) =>
     const processedEvents = processEventsWithColors(events);
 
     return (
-        <div className="bg-white p-6 rounded-3xl shadow-lg">
+        <div className="bg-[#73839e] p-3 sm:p-4 md:p-6 rounded-2xl sm:rounded-3xl shadow-lg w-full max-w-[95vw] sm:max-w-[90vw] lg:max-w-6xl xl:max-w-7xl mx-auto">
             <FullCalendar
                 plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
                 headerToolbar={{
@@ -75,6 +75,7 @@ export const EventCalendar = ({ events, handleDateSelect, handleEventClick }) =>
                 select={handleDateSelect}
                 eventClick={handleEventClick}
                 height="auto"
+                contentHeight={500}
                 eventDisplay="block"
                 displayEventTime={true}
                 displayEventEnd={true}
@@ -90,6 +91,15 @@ export const EventCalendar = ({ events, handleDateSelect, handleEventClick }) =>
                     day: "Jour",
                 }}
                 dayHeaderFormat={{ weekday: 'short' }}
+                // Options responsive
+                views={{
+                    dayGridMonth: {
+                        dayMaxEvents: 3, // limiter le nombre d'événements visibles sur mobile
+                    },
+                    timeGridWeek: {
+                        dayMaxEvents: 3,
+                    },
+                }}
             />
         </div>
     );
