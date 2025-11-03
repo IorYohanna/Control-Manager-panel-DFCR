@@ -42,7 +42,7 @@ const MainLayout = () => {
           
         />
       </SideBar>
-      <NavBar/>
+{/*       <NavBar/> */}
 
     </main>
   )

@@ -28,17 +28,12 @@
 @layer base {
   :root {
     /* === Tes couleurs principales === */
-    --onyx: #32373bff;
-    --outer-space: #4a5859ff;
-    --khaki: #c3b299ff;
-    --carmine: #9a031eff;
-    --chestnut: #994636ff;
+    --blue-zodiac: #2D466E ;
+    --light-blue: #73839E ;
+    --beige-creme: #F5ECE3;
+    --dark-blue: #24344D;
+    --white-gray: #C4BEAF ;
 
-    --blueZodiac: #123b5f;
-    --sisal: #d3d0bc;
-    --limedSpruce: #304c4a;
-    --jasper: #9297C4;
-    --carmine: #6DAEDB;
 
     /* === Radius et fonts === */
     --radius: 0.5rem;
@@ -52,12 +47,12 @@
 
 /* === Définition du thème Tailwind inline === */
 @theme {
-  --color-primary: var(--limedSpruce); /* (titres, texte, boutons principaux) */
-  --color-secondary: var(--sisal); /* (borders, sous-titres, icônes) */
-  --color-accent: var(--carmine); /* (boutons, liens, alerte) */
-  --color-accent-dark: var(--jasper); /* hover boutons ou effets focus */
-  --color-background: var(--sisal); /* fond générale */
-  --color-foreground: var(--blueZodiac); /* texte sur le fond clair */
+
+  --color-blue-zodiac : var(--blue-zodiac);
+  --color-light-blue: var(--light-blue);
+  --color-beige-creme: var(--beige-creme);
+  --color-dark-blue: var(--dark-blue);
+  --color-white-gray: var(--white-gray);
   --font-eirene: var(--font-eirene);
   --font-rushford: var(--font-rushford);
   --font-dropline: var(--font-dropline);

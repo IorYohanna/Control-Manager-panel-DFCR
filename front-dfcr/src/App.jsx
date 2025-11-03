@@ -23,7 +23,7 @@ function App() {
 
         <Route path="/calendar" element={<Calendar />} />
 
-        <Route>
+        <Route path="/home" element={<MainLayout/>} >
           <Route />
         </Route> 
       </Routes>
