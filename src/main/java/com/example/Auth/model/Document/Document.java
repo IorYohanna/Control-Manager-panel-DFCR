@@ -48,6 +48,8 @@ public class Document {
     @OneToMany(mappedBy = "document", cascade = CascadeType.ALL)
     private List<Commentaire> commentaires;
 
+    @OneToMany(mappedBy = "document", cascade = CascadeType.ALL)
+    private List<Concerner> dossiers;
 
     public Document(String reference, String objet, String corps,
             String type, String status, byte[] pieceJointe) {
