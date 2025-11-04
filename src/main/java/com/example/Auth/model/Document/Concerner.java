@@ -18,16 +18,17 @@ public class Concerner {
     @ManyToOne
     @MapsId("idDossier")
     @JoinColumn(name = "id_dossier")
-    private Document document;
+    private Dossier dossier;
 
     @ManyToOne
     @MapsId("reference")
     @JoinColumn(name = "reference")
-    private Dossier dossier;
+    private Document document;
 
-    public Concerner() {}
+    public Concerner() {
+    }
 
-    public Concerner (Dossier dossier, Document document) {
+    public Concerner(Dossier dossier, Document document) {
         this.dossier = dossier;
         this.document = document;
         this.id.setIdDossier(dossier.getIdDossier());

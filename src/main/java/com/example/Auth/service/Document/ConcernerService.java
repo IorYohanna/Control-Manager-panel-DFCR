@@ -12,13 +12,10 @@ public class ConcernerService {
     private final DossierRepository dossierRepository;
     private final DocumentRepository documentRepository;
 
-    public ConcernerService(ConcernerRepository concernerRepository, DossierRepository dossierRepository, DocumentRepository documentRepository) {
+    public ConcernerService(ConcernerRepository concernerRepository, DossierRepository dossierRepository,
+            DocumentRepository documentRepository) {
         this.concernerRepository = concernerRepository;
         this.dossierRepository = dossierRepository;
         this.documentRepository = documentRepository;
-    }
-
-    public Concerner addDocumentToDossier(Long idDossier, String reference) {
-
     }
 }
