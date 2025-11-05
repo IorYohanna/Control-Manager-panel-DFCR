@@ -1,300 +1,165 @@
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-  TextField,
-  Checkbox,
-  FormControlLabel,
-  Box,
-  IconButton,
-  Typography,
-  Fade,
-} from "@mui/material";
-import {
-  Close as CloseIcon,
-  Edit as EditIcon,
-  Delete as DeleteIcon,
-  Description as DescriptionIcon,
-  AccessTime as AccessTimeIcon,
-  AccountCircle as AccountCircleIcon
-} from "@mui/icons-material";
+import React, { useState, useEffect } from 'react';
+import { X, Calendar, Clock, FileText, Check } from 'lucide-react';
 
-const ModalEdit = ({ open, isEdit, formData, setFormData, close, onEdit, onCreate }) => (
-  <Dialog
-    open={open}
-    onClose={close}
-    maxWidth="md"
-    fullWidth
-    TransitionComponent={Fade}
-    transitionDuration={300}
-    PaperProps={{
-      sx: {
-        borderRadius: '24px',
-        backgroundColor: '#f5ece3',
-        boxShadow: '0 25px 80px rgba(45, 70, 110, 0.2)',
-        backgroundImage: 'none',
-        maxHeight: '90vh'
-      }
-    }}
-    BackdropProps={{
-      sx: {
-        backgroundColor: 'rgba(0, 0, 0, 0.4)',
-        backdropFilter: 'blur(4px)'
-      }
-    }}
-  >
-    <DialogTitle sx={{ px: 4, pt: 4, pb: 3, position: 'relative' }}>
-      <Box>
-        <Typography
-          variant="h5"
-          sx={{
-            fontWeight: 700,
-            color: '#2d466e',
-            fontSize: '1.5rem',
-            mb: 1
-          }}
-        >
-          {isEdit ? "Modifier l'événement" : "Créer un événement"}
-        </Typography>
-        <Typography
-          sx={{
-            fontSize: '0.875rem',
-            color: '#73839e',
-            fontWeight: 500,
-            m: 0
-          }}
-        >
-          Un événement à faire savoir!
-        </Typography>
-      </Box>
-      <IconButton
+const ModalEdit = ({ open, isEdit, formData, close, onEdit, onCreate }) => {
+  const [localData, setLocalData] = useState(formData);
+
+  useEffect(() => {
+    if (open) {
+      setLocalData(formData);
+    }
+  }, [open, formData]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (isEdit) {
+      onEdit(localData);
+    } else {
+      onCreate(localData);
+    }
+  };
+
+  if (!open) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
+      {/* Backdrop */}
+      <div 
+        className="absolute inset-0 bg-black/40 backdrop-blur-sm"
         onClick={close}
-        size="small"
-        sx={{
-          position: 'absolute',
-          top: 24,
-          right: 24,
-          width: 40,
-          height: 40,
-          borderRadius: '50%',
-          color: '#73839e',
-          transition: 'all 0.2s',
-          '&:hover': {
-            backgroundColor: 'rgba(255, 255, 255, 0.5)',
-            color: '#2d466e'
-          }
-        }}
-      >
-        <CloseIcon />
-      </IconButton>
-    </DialogTitle>
-
-    <DialogContent sx={{ px: 4, pb: 3 }}>
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
-        {/* Title */}
-        <Box
-          sx={{
-            backgroundColor: 'rgba(255, 255, 255, 0.6)',
-            backdropFilter: 'blur(8px)',
-            borderRadius: '16px',
-            p: 2.5
-          }}
-        >
-          <TextField
-            label="Titre de l'événement"
-            value={formData.title}
-            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-            fullWidth
-            variant="standard"
-            InputProps={{
-              sx: {
-                fontSize: '1.125rem',
-                color: '#2d466e',
-                fontWeight: 500,
-                '&:before': { borderColor: '#73839e' },
-                '&:after': { borderColor: '#2d466e' }
-              }
-            }}
-            InputLabelProps={{
-              sx: { color: '#73839e', fontSize: '0.938rem' }
-            }}
-          />
-        </Box>
-
-        {/* Dates */}
-        <Box sx={{ display: 'flex', gap: 2 }}>
-          <Box
-            sx={{
-              flex: 1,
-              backgroundColor: 'rgba(255, 255, 255, 0.6)',
-              backdropFilter: 'blur(8px)',
-              borderRadius: '16px',
-              p: 2.5
-            }}
+      />
+      
+      {/* Modal */}
+      <div className="relative w-full max-w-2xl max-h-[90vh] bg-[#f5ece3] rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
+        {/* Header */}
+        <div className="relative px-8 pt-8 pb-6 border-b border-[#2d466e]/10">
+          <div>
+            <h2 className="text-2xl font-bold text-[#2d466e] mb-2">
+              {isEdit ? "Modifier l'événement" : "Créer un événement"}
+            </h2>
+            <p className="text-sm text-[#73839e] font-medium">
+              Un événement à faire savoir!
+            </p>
+          </div>
+          
+          <button
+            onClick={close}
+            className="absolute top-8 right-8 w-10 h-10 flex items-center justify-center rounded-full text-[#73839e] hover:bg-white/50 hover:text-[#2d466e] transition-all duration-200"
           >
-            <TextField
-              label="Début"
-              type="datetime-local"
-              value={formData.startTime}
-              onChange={(e) => setFormData({ ...formData, startTime: e.target.value })}
-              fullWidth
-              variant="standard"
-              slotProps={{
-                inputLabel: {
-                  shrink: true,
-                  sx: { color: '#73839e', fontSize: '0.938rem' }
-                },
-                input: {
-                  sx: {
-                    color: '#2d466e',
-                    '&:before': { borderColor: '#73839e' },
-                    '&:after': { borderColor: '#2d466e' }
-                  }
-                }
-              }}
-            />
-          </Box>
-          <Box
-            sx={{
-              flex: 1,
-              backgroundColor: 'rgba(255, 255, 255, 0.6)',
-              backdropFilter: 'blur(8px)',
-              borderRadius: '16px',
-              p: 2.5
-            }}
-          >
-            <TextField
-              label="Fin"
-              type="datetime-local"
-              value={formData.endTime}
-              onChange={(e) => setFormData({ ...formData, endTime: e.target.value })}
-              fullWidth
-              variant="standard"
-              slotProps={{
-                inputLabel: {
-                  shrink: true,
-                  sx: { color: '#73839e', fontSize: '0.938rem' }
-                },
-                input: {
-                  sx: {
-                    color: '#2d466e',
-                    '&:before': { borderColor: '#73839e' },
-                    '&:after': { borderColor: '#2d466e' }
-                  }
-                }
-              }}
-            />
-          </Box>
-        </Box>
+            <X size={20} />
+          </button>
+        </div>
 
-        {/* Description */}
-        <Box
-          sx={{
-            backgroundColor: 'rgba(255, 255, 255, 0.6)',
-            backdropFilter: 'blur(8px)',
-            borderRadius: '16px',
-            p: 2.5
-          }}
-        >
-          <TextField
-            label="Description"
-            value={formData.description}
-            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-            fullWidth
-            multiline
-            rows={4}
-            variant="standard"
-            InputProps={{
-              sx: {
-                color: '#2d466e',
-                '&:before': { borderColor: '#73839e' },
-                '&:after': { borderColor: '#2d466e' }
-              }
-            }}
-            InputLabelProps={{
-              sx: { color: '#73839e', fontSize: '0.938rem' }
-            }}
-          />
-        </Box>
-
-        {/* Checkbox */}
-        <Box
-          sx={{
-            backgroundColor: 'rgba(255, 255, 255, 0.6)',
-            backdropFilter: 'blur(8px)',
-            borderRadius: '16px',
-            px: 2.5,
-            py: 1.5
-          }}
-        >
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={formData.allDay}
-                onChange={(e) => setFormData({ ...formData, allDay: e.target.checked })}
-                sx={{
-                  color: '#2d466e',
-                  '&.Mui-checked': { color: '#2d466e' }
-                }}
+        {/* Content */}
+        <form onSubmit={handleSubmit} className="px-8 py-6 overflow-y-auto max-h-[calc(90vh-200px)]">
+          <div className="space-y-6">
+            {/* Title */}
+            <div className="bg-white/60 backdrop-blur-md rounded-2xl p-6 transition-all duration-200 hover:bg-white/70">
+              <label className="block text-sm font-semibold text-[#73839e] mb-3">
+                Titre de l'événement
+              </label>
+              <input
+                type="text"
+                value={localData.title}
+                onChange={(e) => setLocalData({ ...localData, title: e.target.value })}
+                className="w-full bg-transparent text-lg font-medium text-[#2d466e] border-b-2 border-[#73839e] focus:border-[#2d466e] outline-none transition-colors duration-200 pb-2"
+                placeholder="Entrez le titre..."
+                required
               />
-            }
-            label="Événement toute la journée"
-            sx={{
-              color: '#2d466e',
-              fontWeight: 500,
-              '& .MuiFormControlLabel-label': { fontSize: '0.938rem' }
-            }}
-          />
-        </Box>
-      </Box>
-    </DialogContent>
+            </div>
 
-    <DialogActions sx={{ px: 4, pb: 4, pt: 2, gap: 1.5 }}>
-      <Button
-        onClick={close}
-        sx={{
-          px: 3,
-          py: 1.25,
-          borderRadius: '50px',
-          color: '#73839e',
-          fontWeight: 500,
-          textTransform: 'none',
-          fontSize: '0.938rem',
-          transition: 'all 0.2s',
-          '&:hover': {
-            backgroundColor: 'rgba(255, 255, 255, 0.5)'
-          }
-        }}
-      >
-        Annuler
-      </Button>
-      <Box sx={{ flex: 1 }} />
-      <Button
-        onClick={isEdit ? onEdit : onCreate}
-        variant="contained"
-        sx={{
-          px: 4,
-          py: 1.25,
-          borderRadius: '50px',
-          backgroundColor: '#2d466e',
-          color: '#f5ece3',
-          fontWeight: 500,
-          textTransform: 'none',
-          fontSize: '0.938rem',
-          boxShadow: '0 4px 12px rgba(45, 70, 110, 0.3)',
-          transition: 'all 0.2s',
-          '&:hover': {
-            backgroundColor: '#1f2f4d',
-            boxShadow: '0 6px 20px rgba(45, 70, 110, 0.4)'
-          }
-        }}
-      >
-        {isEdit ? 'Enregistrer les modifications' : "Créer l'événement"}
-      </Button>
-    </DialogActions>
-  </Dialog>
-);
+            {/* Dates */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Start Time */}
+              <div className="bg-white/60 backdrop-blur-md rounded-2xl p-6 transition-all duration-200 hover:bg-white/70">
+                <label className="flex items-center gap-2 text-sm font-semibold text-[#73839e] mb-3">
+                  <Clock size={16} />
+                  Début
+                </label>
+                <input
+                  type="datetime-local"
+                  value={localData.startTime}
+                  onChange={(e) => setLocalData({ ...localData, startTime: e.target.value })}
+                  className="w-full bg-transparent text-[#2d466e] border-b-2 border-[#73839e] focus:border-[#2d466e] outline-none transition-colors duration-200 pb-2"
+                  required
+                />
+              </div>
 
-export default ModalEdit
+              {/* End Time */}
+              <div className="bg-white/60 backdrop-blur-md rounded-2xl p-6 transition-all duration-200 hover:bg-white/70">
+                <label className="flex items-center gap-2 text-sm font-semibold text-[#73839e] mb-3">
+                  <Clock size={16} />
+                  Fin
+                </label>
+                <input
+                  type="datetime-local"
+                  value={localData.endTime}
+                  onChange={(e) => setLocalData({ ...localData, endTime: e.target.value })}
+                  className="w-full bg-transparent text-[#2d466e] border-b-2 border-[#73839e] focus:border-[#2d466e] outline-none transition-colors duration-200 pb-2"
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Description */}
+            <div className="bg-white/60 backdrop-blur-md rounded-2xl p-6 transition-all duration-200 hover:bg-white/70">
+              <label className="flex items-center gap-2 text-sm font-semibold text-[#73839e] mb-3">
+                <FileText size={16} />
+                Description
+              </label>
+              <textarea
+                value={localData.description}
+                onChange={(e) => setLocalData({ ...localData, description: e.target.value })}
+                rows={4}
+                className="w-full bg-transparent text-[#2d466e] border-b-2 border-[#73839e] focus:border-[#2d466e] outline-none transition-colors duration-200 pb-2 resize-none"
+                placeholder="Ajoutez une description..."
+              />
+            </div>
+
+            {/* All Day Checkbox */}
+            <div className="bg-white/60 backdrop-blur-md rounded-2xl p-5 transition-all duration-200 hover:bg-white/70">
+              <label className="flex items-center gap-3 cursor-pointer group">
+                <div className="relative">
+                  <input
+                    type="checkbox"
+                    checked={localData.allDay}
+                    onChange={(e) => setLocalData({ ...localData, allDay: e.target.checked })}
+                    className="sr-only peer"
+                  />
+                  <div className="w-6 h-6 border-2 border-[#2d466e] rounded-md peer-checked:bg-[#2d466e] transition-all duration-200 flex items-center justify-center">
+                    {localData.allDay && <Check size={16} className="text-[#f5ece3]" />}
+                  </div>
+                </div>
+                <span className="text-[#2d466e] font-medium group-hover:text-[#1f2f4d] transition-colors duration-200">
+                  Événement toute la journée
+                </span>
+              </label>
+            </div>
+          </div>
+        </form>
+
+        {/* Footer */}
+        <div className="px-8 pb-8 pt-4 border-t border-[#2d466e]/10 flex items-center gap-4">
+          <button
+            type="button"
+            onClick={close}
+            className="px-6 py-3 rounded-full text-[#73839e] font-medium hover:bg-white/50 transition-all duration-200"
+          >
+            Annuler
+          </button>
+          
+          <div className="flex-1" />
+          
+          <button
+            onClick={handleSubmit}
+            className="px-8 py-3 rounded-full bg-[#2d466e] text-[#f5ece3] font-medium shadow-lg shadow-[#2d466e]/30 hover:bg-[#1f2f4d] hover:shadow-xl hover:shadow-[#2d466e]/40 transition-all duration-200 transform hover:scale-105"
+          >
+            {isEdit ? 'Enregistrer les modifications' : "Créer l'événement"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ModalEdit;

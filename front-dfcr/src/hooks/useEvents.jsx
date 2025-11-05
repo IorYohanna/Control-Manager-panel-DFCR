@@ -1,4 +1,4 @@
-import React, { useState, useEffect , useCallback} from 'react'
+import React, { useState, useEffect , useCallback, useMemo} from 'react'
 import { createEvent, getEvents , deleteEvent , updateEvent } from '../api/event';
 
 export const useEvents = (token) => {
@@ -25,13 +25,29 @@ export const useEvents = (token) => {
     load();
   }, [token]);
 
+  
+  const calendarEvents = useMemo(() => {
+    return events.map(e => ({
+      id: e.idEvent,
+      title: e.title,
+      start: e.startTime,
+      end: e.endTime,
+      allDay: e.allDay,
+      extendedProps: {
+        description: e.description,
+        email: e.email,
+        service: e.service
+      }
+    }));
+  }, [events]);
+
+
   const addEvent = useCallback(async (data) => {
     const saved = await createEvent(data, token);
-    console.log(saved)
-
-    // ✅ même structure que ton handleAddEvent d'origine
+    // on stocke directement dans events
     setEvents(prev => [...prev, saved]);
   }, [token]);
+
 
   const removeEvent = useCallback(async (idEvent) => {
     await deleteEvent(idEvent, token);
@@ -49,5 +65,5 @@ export const useEvents = (token) => {
     return updated;
   }, [token]);
 
-  return { events, loading, addEvent, removeEvent , editEvent};
+  return { events, loading, calendarEvents, addEvent, removeEvent , editEvent};
 };

@@ -24,16 +24,7 @@ public class EventController {
     public ResponseEntity<List<EventResponseDto>> getAllEvents() {
         List<EventResponseDto> eventDtos = eventService.getAllEvents()
                 .stream()
-                .map(event -> new EventResponseDto(
-                        event.getIdEvent(),
-                        event.getTitle(),
-                        event.getDescription(),
-                        event.getStartTime(),
-                        event.getEndTime(),
-                        event.isAllDay(),
-                        event.getEmail(),
-                        event.getCreatedBy().getName(),
-                        event.getService().getIdService()))
+                .map(EventResponseDto::new)
                 .toList();
 
         return ResponseEntity.ok(eventDtos);
@@ -47,16 +38,7 @@ public class EventController {
 
         Event event = eventService.createEvent(input);
 
-        EventResponseDto dto = new EventResponseDto(
-                event.getIdEvent(),
-                event.getTitle(),
-                event.getDescription(),
-                event.getStartTime(),
-                event.getEndTime(),
-                event.isAllDay(),
-                event.getEmail(),
-                event.getCreatedBy().getName(),
-                event.getService().getIdService());
+        EventResponseDto dto = new EventResponseDto(event);
 
         return ResponseEntity.status(201).body(dto);
     }

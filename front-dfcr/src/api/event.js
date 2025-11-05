@@ -28,6 +28,19 @@ export async function getEvents(token) {
  * Créer un événement
  */
 export async function createEvent(eventData, token) {
+  console.log("startimt", eventData.startTime);
+  console.log("endtime", eventData.endTime);
+  if (!eventData.startTime || !eventData.endTime) {
+    throw new Error("Les dates de début et de fin doivent être renseignées !");
+  }
+
+  const start = new Date(eventData.startTime);
+  const end = new Date(eventData.endTime);
+
+  if (isNaN(start) || isNaN(end)) {
+    throw new Error("Les dates fournies sont invalides !");
+  }
+
   const response = await fetch(`${API_URL}`, {
     method: "POST",
     headers: {

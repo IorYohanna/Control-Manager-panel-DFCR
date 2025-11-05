@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import { useOutletContext } from "react-router-dom";
 import { EventModal } from "../../components/Calendar/EventModal";
 import { EventCalendar } from "../../components/Calendar/EventCalendar";
@@ -6,14 +6,10 @@ import { useEvents } from "../../hooks/useEvents";
 
 const Calendar = () => {
   const { sidebarExpanded } = useOutletContext();
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("token"); 
 
   // ✅ hook pour la data
-  const { events, addEvent, removeEvent , editEvent} = useEvents(token);
-  
-  useEffect(() => {
-    console.log("Events updated:", events);
-  }, [events]);
+  const { events,calendarEvents, addEvent, removeEvent , editEvent} = useEvents(token);
 
   // ✅ état modal
   const [modalOpen, setModalOpen] = useState(false);
@@ -31,12 +27,12 @@ const Calendar = () => {
   });
 
   // ✅ formulaire - utilitaire
-  const formatForInput = (date) => {
+  const formatForInput = useCallback((date) => {
     const d = new Date(date);
     const offset = d.getTimezoneOffset();
     const local = new Date(d.getTime() - offset * 60000);
     return local.toISOString().slice(0, 16);
-  };
+  },[]);
 
   // ✅ ouvrir modal création
   const handleDateSelect = useCallback((selectInfo) => {
@@ -80,9 +76,14 @@ const Calendar = () => {
     setModalOpen(true);
   };
 
+  const switchToDelete = () => {
+    setModalType("delete");
+    setModalOpen(true);
+  };
+
   // ✅ créer un event
-  const handleCreate = async () => {
-    await addEvent(formData);
+  const handleCreate = async (data) => {
+    await addEvent(data);
     setModalOpen(false);
   };
 
@@ -93,25 +94,10 @@ const Calendar = () => {
   };
 
   // ✅ modifer un event
-  const handleEditEvent = async () => {
-    await editEvent(formData.idEvent, formData);
+  const handleEditEvent = async (data) => {
+    await editEvent(data.idEvent, data);
     setModalOpen(false);
   };
-
-  const calendarEvents = useMemo(() => {
-    return events.map(e => ({
-      id: e.idEvent,
-      title: e.title,
-      start: e.startTime,
-      end: e.endTime,
-      allDay: e.allDay,
-      extendedProps: {
-        description: e.description,
-        email: e.email,
-        service: e.service
-      }
-    }));
-  }, [events]);
 
   return (
     <div className="w-full min-h-screen py-4 px-3 sm:px-4 md:px-6 lg:px-8">
@@ -136,7 +122,9 @@ const Calendar = () => {
         onCreate={handleCreate}
         onEdit={handleEditEvent}
         onDelete={handleDelete}
+        onDeleteMode={switchToDelete}
         onEditMode={switchToEdit}
+        setModalType={setModalType}
       />
     </div>
   );

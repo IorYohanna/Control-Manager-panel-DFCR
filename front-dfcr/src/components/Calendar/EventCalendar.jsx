@@ -54,20 +54,21 @@ export const EventCalendar = ({ events, handleDateSelect, handleEventClick, side
         return processedEvents;
     };
 
-    const processedEvents = processEventsWithColors(events);
+    const processedEvents = React.useMemo(
+        () => processEventsWithColors(events),
+        [events]
+    );
 
     // Forcer la mise à jour quand la sidebar change
     useEffect(() => {
-        if (calendarRef.current) {
-            const calendarApi = calendarRef.current.getApi();
-            
-            // Attendre que la transition CSS se termine (300ms)
-            const timer = setTimeout(() => {
-                calendarApi.updateSize();
-            }, 350);
+        const calendarApi = calendarRef.current?.getApi();
+        if (!calendarApi) return;
+        
+        const timer = setTimeout(() => {
+            calendarApi.updateSize();
+        }, 350);
 
-            return () => clearTimeout(timer);
-        }
+        return () => clearTimeout(timer);
     }, [sidebarExpanded]);
 
     return (

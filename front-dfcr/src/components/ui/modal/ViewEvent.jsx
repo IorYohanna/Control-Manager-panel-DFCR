@@ -1,297 +1,125 @@
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-  Box,
-  IconButton,
-  Chip,
-  Typography,
-  Fade,
-  Slide
-} from "@mui/material";
-import {
-  Close as CloseIcon,
-  Edit as EditIcon,
-  Delete as DeleteIcon,
-  Description as DescriptionIcon,
-  AccessTime as AccessTimeIcon,
-  AccountCircle
-} from "@mui/icons-material";
-const ModalView = ({ open, formData, close, onEditMode, onDelete }) => (
-  <Dialog
-    open={open}
-    onClose={close}
-    maxWidth="sm"
-    fullWidth
-    TransitionComponent={Fade}
-    transitionDuration={300}
-    PaperProps={{
-      sx: {
-        borderRadius: '24px',
-        backgroundColor: '#f5ece3',
-        boxShadow: '0 25px 80px rgba(45, 70, 110, 0.2)',
-        backgroundImage: 'none'
-      }
-    }}
-    BackdropProps={{
-      sx: {
-        backgroundColor: 'rgba(0, 0, 0, 0.4)',
-        backdropFilter: 'blur(4px)'
-      }
-    }}
-  >
-    <DialogTitle sx={{ px: 4, pt: 4, pb: 3, position: 'relative' }}>
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 0.5 }}>
-        <Box
-          sx={{
-            width: 16,
-            height: 16,
-            borderRadius: '50%',
-            backgroundColor: formData.color || '#2d466e',
-            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)'
-          }}
-        />
-        <Typography
-          variant="h5"
-          sx={{
-            fontWeight: 700,
-            color: '#2d466e',
-            fontSize: '1.5rem'
-          }}
-        >
-          {formData.title}
-        </Typography>
-      </Box>
-      <IconButton
+import React from 'react';
+import { X, Edit, Trash2, FileText, Clock, User } from 'lucide-react';
+
+const ModalView = ({ open, formData, close, onEditMode,onDeleteMode }) => {
+  if (!open) return null;
+
+  const { idEvent, title, color, email, service, description, startTime, endTime, allDay } = formData;
+  console.log(idEvent)
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
+      {/* Backdrop */}
+      <div
+        className="absolute inset-0 bg-black/40 backdrop-blur-sm"
         onClick={close}
-        size="small"
-        sx={{
-          position: 'absolute',
-          top: 24,
-          right: 24,
-          width: 40,
-          height: 40,
-          borderRadius: '50%',
-          color: '#73839e',
-          transition: 'all 0.2s',
-          '&:hover': {
-            backgroundColor: 'rgba(255, 255, 255, 0.5)',
-            color: '#2d466e'
-          }
-        }}
-      >
-        <CloseIcon />
-      </IconButton>
-    </DialogTitle>
+      />
 
-    <DialogContent sx={{ px: 4, pb: 3 }}>
-      <Box
-        sx={{
-          backgroundColor: 'rgba(255, 255, 255, 0.6)',
-          backdropFilter: 'blur(8px)',
-          borderRadius: '16px',
-          p: 2.5,
-          marginBottom: 2
-        }}
-      >
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5 }}>
-          <AccountCircle sx={{ color: '#73839e', fontSize: '1.25rem' }} />
-          <Typography
-            sx={{
-              fontSize: '0.75rem',
-              fontWeight: 600,
-              color: '#73839e',
-              textTransform: 'uppercase',
-              letterSpacing: '0.05em'
-            }}
-          >
-            Créateur
-          </Typography>
-        </Box>
-        <Typography
-          sx={{
-            ml: 4.5,
-            color: '#2d466e',
-            lineHeight: 1.6,
-            fontSize: '0.938rem'
-          }}
-        >
-          {formData.email}  |  {formData.service}
-        </Typography>
-      </Box>
-
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
-        {/* Time Info */}
-        <Box
-          sx={{
-            backgroundColor: 'rgba(255, 255, 255, 0.6)',
-            backdropFilter: 'blur(8px)',
-            borderRadius: '16px',
-            p: 2.5
-          }}
-        >
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5 }}>
-            <AccessTimeIcon sx={{ color: '#73839e', fontSize: '1.25rem' }} />
-            <Typography
-              sx={{
-                fontSize: '0.75rem',
-                fontWeight: 600,
-                color: '#73839e',
-                textTransform: 'uppercase',
-                letterSpacing: '0.05em'
-              }}
-            >
-              Horaire
-            </Typography>
-          </Box>
-          <Box sx={{ ml: 4.5, display: 'flex', flexDirection: 'column', gap: 1 }}>
-            <Typography sx={{ color: '#2d466e', fontSize: '0.938rem' }}>
-              <strong>Début:</strong>{' '}
-              {new Date(formData.startTime).toLocaleString('fr-FR', {
-                dateStyle: 'medium',
-                timeStyle: 'short'
-              })}
-            </Typography>
-            <Typography sx={{ color: '#2d466e', fontSize: '0.938rem' }}>
-              <strong>Fin:</strong>{' '}
-              {new Date(formData.endTime).toLocaleString('fr-FR', {
-                dateStyle: 'medium',
-                timeStyle: 'short'
-              })}
-            </Typography>
-          </Box>
-        </Box>
-
-        {/* Description */}
-        {formData.description && (
-          <Box
-            sx={{
-              backgroundColor: 'rgba(255, 255, 255, 0.6)',
-              backdropFilter: 'blur(8px)',
-              borderRadius: '16px',
-              p: 2.5
-            }}
-          >
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5 }}>
-              <DescriptionIcon sx={{ color: '#73839e', fontSize: '1.25rem' }} />
-              <Typography
-                sx={{
-                  fontSize: '0.75rem',
-                  fontWeight: 600,
-                  color: '#73839e',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.05em'
-                }}
-              >
-                Description
-              </Typography>
-            </Box>
-            <Typography
-              sx={{
-                ml: 4.5,
-                color: '#2d466e',
-                lineHeight: 1.6,
-                fontSize: '0.938rem'
-              }}
-            >
-              {formData.description}
-            </Typography>
-          </Box>
-        )}
-
-        {/* All Day Badge */}
-        {formData.allDay && (
-          <Box sx={{ display: 'flex', justifyContent: 'center', pt: 1 }}>
-            <Chip
-              label="Toute la journée"
-              sx={{
-                backgroundColor: '#2d466e',
-                color: '#f5ece3',
-                fontSize: '0.875rem',
-                fontWeight: 500,
-                px: 2,
-                py: 2.5,
-                height: 'auto',
-                borderRadius: '50px',
-                '& .MuiChip-label': { px: 2 }
-              }}
+      {/* Modal */}
+      <div className="relative w-full max-w-2xl max-h-[90vh] bg-[#f5ece3] rounded-3xl shadow-2xl overflow-y-auto animate-in zoom-in-95 duration-200">
+        {/* Header */}
+        <div className="relative px-8 pt-8 pb-6 border-b border-[#2d466e]/10">
+          <div className="flex items-center gap-3 mb-2">
+            <div
+              className="w-4 h-4 rounded-full shadow"
+              style={{ backgroundColor: color || '#2d466e' }}
             />
-          </Box>
-        )}
-      </Box>
-    </DialogContent>
+            <h2 className="text-2xl font-bold text-[#2d466e]">{title}</h2>
+          </div>
+          <button
+            onClick={close}
+            className="absolute top-8 right-8 w-10 h-10 flex items-center justify-center rounded-full text-[#73839e] hover:bg-white/50 hover:text-[#2d466e] transition-all duration-200"
+          >
+            <X size={20} />
+          </button>
+        </div>
 
-    <DialogActions sx={{ px: 4, pb: 4, pt: 2, gap: 1.5 }}>
-      <Button
-        onClick={close}
-        sx={{
-          px: 3,
-          py: 1.25,
-          borderRadius: '50px',
-          color: '#73839e',
-          fontWeight: 500,
-          textTransform: 'none',
-          fontSize: '0.938rem',
-          transition: 'all 0.2s',
-          '&:hover': {
-            backgroundColor: 'rgba(255, 255, 255, 0.5)'
-          }
-        }}
-      >
-        Fermer
-      </Button>
-      <Box sx={{ flex: 1 }} />
-      <Button
-        onClick={onEditMode}
-        variant="contained"
-        startIcon={<EditIcon />}
-        sx={{
-          px: 3,
-          py: 1.25,
-          borderRadius: '50px',
-          backgroundColor: '#2d466e',
-          color: '#f5ece3',
-          fontWeight: 500,
-          textTransform: 'none',
-          fontSize: '0.938rem',
-          boxShadow: '0 4px 12px rgba(45, 70, 110, 0.3)',
-          transition: 'all 0.2s',
-          '&:hover': {
-            backgroundColor: '#1f2f4d',
-            boxShadow: '0 6px 20px rgba(45, 70, 110, 0.4)'
-          }
-        }}
-      >
-        Modifier
-      </Button>
-      <Button
-        onClick={() => onDelete(formData.idEvent)}
-        variant="outlined"
-        startIcon={<DeleteIcon />}
-        sx={{
-          px: 3,
-          py: 1.25,
-          borderRadius: '50px',
-          borderColor: '#dc2626',
-          borderWidth: 2,
-          color: '#dc2626',
-          fontWeight: 500,
-          textTransform: 'none',
-          fontSize: '0.938rem',
-          transition: 'all 0.2s',
-          '&:hover': {
-            backgroundColor: 'rgba(220, 38, 38, 0.05)',
-            borderWidth: 2,
-            borderColor: '#dc2626'
-          }
-        }}
-      >
-        Supprimer
-      </Button>
-    </DialogActions>
-  </Dialog>
-);
+        {/* Content */}
+        <div className="px-8 py-6 flex flex-col gap-6">
+          {/* Creator Info */}
+          <div className="bg-white/60 backdrop-blur-md rounded-2xl p-4">
+            <div className="flex items-center gap-2 mb-1.5">
+              <User size={16} className="text-[#73839e]" />
+              <span className="text-xs font-semibold text-[#73839e] uppercase tracking-wider">
+                Créateur
+              </span>
+            </div>
+            <p className="ml-5 text-[#2d466e] text-sm">
+              {email} | {service}
+            </p>
+          </div>
 
-export default ModalView
+          {/* Time Info */}
+          <div className="bg-white/60 backdrop-blur-md rounded-2xl p-4">
+            <div className="flex items-center gap-2 mb-1.5">
+              <Clock size={16} className="text-[#73839e]" />
+              <span className="text-xs font-semibold text-[#73839e] uppercase tracking-wider">
+                Horaire
+              </span>
+            </div>
+            <div className="ml-5 flex flex-col gap-1">
+              <p className="text-[#2d466e] text-sm">
+                <strong>Début:</strong>{' '}
+                {new Date(startTime).toLocaleString('fr-FR', { dateStyle: 'medium', timeStyle: 'short' })}
+              </p>
+              <p className="text-[#2d466e] text-sm">
+                <strong>Fin:</strong>{' '}
+                {new Date(endTime).toLocaleString('fr-FR', { dateStyle: 'medium', timeStyle: 'short' })}
+              </p>
+            </div>
+          </div>
+
+          {/* Description */}
+          {description && (
+            <div className="bg-white/60 backdrop-blur-md rounded-2xl p-4">
+              <div className="flex items-center gap-2 mb-1.5">
+                <FileText size={16} className="text-[#73839e]" />
+                <span className="text-xs font-semibold text-[#73839e] uppercase tracking-wider">
+                  Description
+                </span>
+              </div>
+              <p className="ml-5 text-[#2d466e] text-sm leading-relaxed">{description}</p>
+            </div>
+          )}
+
+          {/* All Day */}
+          {allDay && (
+            <div className="flex justify-center pt-1">
+              <span className="bg-[#2d466e] text-[#f5ece3] text-sm font-medium px-4 py-2 rounded-full">
+                Toute la journée
+              </span>
+            </div>
+          )}
+        </div>
+
+        {/* Footer */}
+        <div className="px-8 pb-8 pt-4 border-t border-[#2d466e]/10 flex items-center gap-3">
+          <button
+            onClick={close}
+            className="px-6 py-2 rounded-full text-[#73839e] font-medium hover:bg-white/50 transition-all duration-200"
+          >
+            Fermer
+          </button>
+
+          <div className="flex-1" />
+
+          <button
+            onClick={onEditMode}
+            className="px-6 py-2 rounded-full bg-[#2d466e] text-[#f5ece3] font-medium shadow-lg shadow-[#2d466e]/30 hover:bg-[#1f2f4d] transition-all duration-200 flex items-center gap-2"
+          >
+            <Edit size={16} /> Modifier
+          </button>
+
+          <button
+            onClick={onDeleteMode}
+            className="px-6 py-2 rounded-full border-2 border-red-600 text-red-600 font-medium hover:bg-red-50 transition-all duration-200 flex items-center gap-2"
+          >
+            <Trash2 size={16} /> Supprimer
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ModalView;

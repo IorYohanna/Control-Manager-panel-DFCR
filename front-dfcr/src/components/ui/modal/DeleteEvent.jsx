@@ -1,107 +1,61 @@
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-  Box,
-  Typography,
-  Fade,
-} from "@mui/material";
+import React from 'react';
+import { X } from 'lucide-react';
 
-const ModalDelete = ({ open, formData, close, onDelete }) => (
-  <Dialog
-    open={open}
-    onClose={close}
-    maxWidth="xs"
-    TransitionComponent={Fade}
-    transitionDuration={300}
-    PaperProps={{
-      sx: {
-        borderRadius: '24px',
-        backgroundColor: '#f5ece3',
-        boxShadow: '0 25px 80px rgba(45, 70, 110, 0.2)',
-        backgroundImage: 'none'
-      }
-    }}
-    BackdropProps={{
-      sx: {
-        backgroundColor: 'rgba(0, 0, 0, 0.4)',
-        backdropFilter: 'blur(4px)'
-      }
-    }}
-  >
-    <DialogTitle
-      sx={{
-        px: 4,
-        pt: 4,
-        pb: 2,
-        fontWeight: 700,
-        fontSize: '1.5rem',
-        color: '#2d466e'
-      }}
-    >
-      Supprimer l'événement
-    </DialogTitle>
-    <DialogContent sx={{ px: 4, pb: 3 }}>
-      <Box
-        sx={{
-          backgroundColor: 'rgba(255, 255, 255, 0.6)',
-          backdropFilter: 'blur(8px)',
-          borderRadius: '16px',
-          p: 2.5
-        }}
-      >
-        <Typography sx={{ color: '#2d466e', lineHeight: 1.6, m: 0 }}>
-          Voulez-vous vraiment supprimer{' '}
-          <strong style={{ fontWeight: 700 }}>{formData.title}</strong> ?
-        </Typography>
-      </Box>
-    </DialogContent>
-    <DialogActions sx={{ px: 4, pb: 4, pt: 2, gap: 1.5 }}>
-      <Button
+const ModalDelete = ({ open, formData, close, onDelete }) => {
+  if (!open) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
+      {/* Backdrop */}
+      <div
+        className="absolute inset-0 bg-black/40 backdrop-blur-sm"
         onClick={close}
-        sx={{
-          px: 3,
-          py: 1.25,
-          borderRadius: '50px',
-          color: '#73839e',
-          fontWeight: 500,
-          textTransform: 'none',
-          fontSize: '0.938rem',
-          transition: 'all 0.2s',
-          '&:hover': {
-            backgroundColor: 'rgba(255, 255, 255, 0.5)'
-          }
-        }}
-      >
-        Annuler
-      </Button>
-      <Box sx={{ flex: 1 }} />
-      <Button
-        onClick={() => onDelete(formData.idEvent)}
-        variant="contained"
-        sx={{
-          px: 3,
-          py: 1.25,
-          borderRadius: '50px',
-          backgroundColor: '#dc2626',
-          color: '#ffffff',
-          fontWeight: 500,
-          textTransform: 'none',
-          fontSize: '0.938rem',
-          boxShadow: '0 4px 12px rgba(220, 38, 38, 0.3)',
-          transition: 'all 0.2s',
-          '&:hover': {
-            backgroundColor: '#b91c1c',
-            boxShadow: '0 6px 20px rgba(220, 38, 38, 0.4)'
-          }
-        }}
-      >
-        Supprimer
-      </Button>
-    </DialogActions>
-  </Dialog>
-);
+      />
 
-export default ModalDelete
+      {/* Modal */}
+      <div className="relative w-full max-w-md bg-[#f5ece3] rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
+        {/* Header */}
+        <div className="relative px-8 pt-8 pb-4 border-b border-[#2d466e]/10">
+          <h2 className="text-2xl font-bold text-[#2d466e]">Supprimer l'événement</h2>
+          <button
+            onClick={close}
+            className="absolute top-8 right-8 w-10 h-10 flex items-center justify-center rounded-full text-[#73839e] hover:bg-white/50 hover:text-[#2d466e] transition-all duration-200"
+          >
+            <X size={20} />
+          </button>
+        </div>
+
+        {/* Content */}
+        <div className="px-8 py-6">
+          <div className="bg-white/60 backdrop-blur-md rounded-2xl p-4">
+            <p className="text-[#2d466e] text-sm leading-relaxed">
+              Voulez-vous vraiment supprimer{' '}
+              <strong className="font-bold">{formData.title}</strong> ?
+            </p>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="px-8 pb-8 pt-4 border-t border-[#2d466e]/10 flex items-center gap-3">
+          <button
+            onClick={close}
+            className="px-6 py-2 rounded-full text-[#73839e] font-medium hover:bg-white/50 transition-all duration-200"
+          >
+            Annuler
+          </button>
+
+          <div className="flex-1" />
+
+          <button
+            onClick={onDelete}
+            className="px-6 py-2 rounded-full bg-red-600 text-white font-medium shadow-lg shadow-red-600/30 hover:bg-red-700 hover:shadow-xl hover:shadow-red-600/40 transition-all duration-200"
+          >
+            Supprimer
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ModalDelete;
