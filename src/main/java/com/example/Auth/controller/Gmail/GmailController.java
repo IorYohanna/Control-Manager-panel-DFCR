@@ -4,12 +4,10 @@ import com.example.Auth.dto.Gmail.EmailDto;
 import com.example.Auth.service.Gmail.GmailService;
 import com.google.api.services.gmail.model.Message;
 import com.google.api.services.gmail.model.MessagePartHeader;
-import jakarta.annotation.security.PermitAll;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -23,7 +21,7 @@ public class GmailController {
     private GmailService gmailService;
 
     @GetMapping("/messages")
-    public List<EmailDto> getMessages(@RequestParam(defaultValue = "10") int maxResults) {
+    public List<EmailDto> getAllMessages(@RequestParam(defaultValue = "10") int maxResults) {
         try {
             List<Message> messages = gmailService.listMessages(maxResults);
             List<EmailDto> emails = new ArrayList<>();
