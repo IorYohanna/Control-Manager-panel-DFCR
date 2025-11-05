@@ -4,12 +4,11 @@ import { Link } from "react-router-dom"
 
 const SidebarContext = createContext()
 
-export default function Sidebar({ children }) {
-  const [expanded, setExpanded] = useState(true)
+export default function Sidebar({ children , expanded, setExpanded}) {
 
   return (
     <aside className="h-screen p-4">
-      <nav className="h-full w-fit flex flex-col bg-[#F5ECE3] rounded-3xl shadow-[4px_0_15px_rgba(0,0,0,0.05)]">
+      <nav className="h-full w-fit flex flex-col bg-[#F5ECE3] rounded-2xl shadow-[4px_0_15px_rgba(0,0,0,0.05)]">
         <div className="p-4 pb-2 flex justify-between items-center">
           <span className={`uppercase font-necoBlack text-2xl text-[#2D466E] overflow-hidden transition-all ${expanded ? "w-auto" : "w-0"}`}>
             dfcr
@@ -75,13 +74,6 @@ export function SidebarItem({ icon, text, active, alert, to = "#" }) {
         >
           {text}
         </span>
-
-        {alert && (
-          <div
-            className={`absolute right-2 w-2 h-2 rounded-full bg-[#24344D] hover:bg-white ${expanded ? "" : "top-2"
-              }`}
-          />
-        )}
 
         {!expanded && (
           <div
