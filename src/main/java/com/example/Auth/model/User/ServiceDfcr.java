@@ -48,6 +48,14 @@ public class ServiceDfcr {
     @OneToMany(mappedBy = "service", cascade = CascadeType.ALL)
     private List<Event> events;
 
+    public int getUserCount() {
+        return users != null ? users.size() : 0;
+    }
+
+    public int getEventCount() {
+        return events != null ? events.size() : 0;
+    }
+
     public ServiceDfcr(String idService, String serviceName, String attribution, String serviceEmail) {
         this.idService = idService;
         this.serviceName = serviceName;

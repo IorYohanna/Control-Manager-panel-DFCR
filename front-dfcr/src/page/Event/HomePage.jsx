@@ -35,11 +35,11 @@ const HomePage = () => {
                     </div>                
                 </div>
 
-                <div className='hidden xl:block h-full overflow-auto'>
+                <div className='hidden xl:block h-full overflow-auto thin-scrollbar'>
                     <InfoCards />
                 </div>
             </div>
-            <style jsx>{`
+            <style>{`
                 @keyframes fadeIn {
                     from {
                         opacity: 0;

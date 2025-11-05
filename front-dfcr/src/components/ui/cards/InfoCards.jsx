@@ -1,62 +1,100 @@
 import { Calendar, Clock, Users, TrendingUp } from "lucide-react";
+import { useState, useEffect } from "react";
+import { fetchServiceData } from "../../../api/service";
 
 export default function InfoCards() {
+    const [serviceData, setServiceData] = useState({
+        userCount: 0,
+        eventCount: 0,
+    });
+
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const loadData = async () => {
+            try {
+                const data = await fetchServiceData();
+                setServiceData({
+                    userCount: data.userCount,
+                    eventCount: data.eventCount,
+                    idService: data.idService,
+                    serviceName: data.serviceName
+                });
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadData();
+    }, []);
+
+    if (loading) return <p>Chargement...</p>;
+
     const cards = [
         {
             id: 1,
-            icon: <Calendar className="w-6 h-6" />,
-            title: "Événements à venir",
-            value: "12",
-            subtitle: "Cette semaine",
+            icon: <Clock className="w-6 h-6" />,
+            title: "Votre Service",
+            value: serviceData.idService,
+            subtitle: serviceData.serviceName,
             color: "from-[#2D466E] to-[#24344D]"
+           
         },
         {
             id: 2,
-            icon: <Clock className="w-6 h-6" />,
-            title: "Heures planifiées",
-            value: "24h",
-            subtitle: "Ce mois",
+            icon: <Users className="w-6 h-6" />,
+            title: "Utilisateurs",
+            value: loading ? "..." : serviceData.userCount,
+            subtitle: "Présents",
             color: "from-[#73839E] to-[#2D466E]"
         },
         {
             id: 3,
-            icon: <Users className="w-6 h-6" />,
-            title: "Participants",
-            value: "48",
-            subtitle: "Total",
-            color: "from-[#5a729b] to-[#73839E]"
-        }
+            icon: <Calendar className="w-6 h-6" />,
+            title: "Événements",
+            value: loading ? "..." : serviceData.eventCount,
+            subtitle: "Ce mois-ci",
+             color: "from-[#5a729b] to-[#73839E]"
+            
+        },
+
 
     ];
 
     return (
         <div className="flex flex-col gap-4 h-full">
+            <h2 className="text-2xl font-bold font-necoBlack text-beige-creme mb-2 text-center">
+                Statistiques - {serviceData.serviceName}
+            </h2>
+
             <div className="grid grid-cols-1 gap-4">
                 {cards.map((card) => (
                     <div
                         key={card.id}
                         className={`
               bg-linear-to-br ${card.color}
-              text-center
               rounded-2xl p-6 shadow-lg
-              hover:shadow-xl
+              transform transition-all duration-300
+              hover:shadow-xl text-center
               cursor-pointer
             `}
                     >
                         <div className="flex items-start justify-center mb-4">
-                            <div className="rounded-lg backdrop-blur-sm" style={{ color: "white" }}>
+                            <div className="p-3 rounded-lg backdrop-blur-sm" style={{ color: "white" }}>
                                 {card.icon}
                             </div>
                         </div>
 
                         <div className="text-white">
-                            <h3 className="text-sm font-medium opacity-90 mb-2">
+                            <h3 className="text-sm font-necoMedium uppercase font-medium opacity-90 mb-2">
                                 {card.title}
                             </h3>
-                            <p className="text-3xl font-bold mb-1">
+                            <p className="text-3xl font-eirene font-bold mb-1">
                                 {card.value}
                             </p>
-                            <p className="text-xs opacity-75">
+                            <p className="text-sm font-stardom opacity-75">
                                 {card.subtitle}
                             </p>
                         </div>
@@ -64,11 +102,11 @@ export default function InfoCards() {
                 ))}
             </div>
 
-            <div className=" bg-[#F5ECE3] rounded-2xl p-6 shadow-md">
-                <h3 className="text-lg font-bold text-[#2D466E] mb-3 text-center">
+            <div className="bg-[#F5ECE3] rounded-2xl p-6 shadow-md text-center">
+                <h3 className="text-lg font-bold text-[#2D466E] mb-3">
                     Prochaine réunion
                 </h3>
-                <div className="space-y-2 text-center">
+                <div className="space-y-2">
                     <div className="flex items-center justify-center gap-2 text-[#73839E]">
                         <Calendar className="w-4 h-4" />
                         <span className="text-sm font-medium">Demain, 10:00</span>
@@ -76,9 +114,11 @@ export default function InfoCards() {
                     <p className="text-sm text-[#2D466E] font-medium">
                         Réunion d'équipe mensuelle
                     </p>
-                    <div className="flex items-center justify-center gap-2 mt-3">
+                    <div className="flex items-center gap-2 mt-3">
                         <Users className="w-4 h-4 text-[#73839E]" />
-                        <span className="text-xs text-[#73839E]">8 participants</span>
+                        <span className="text-xs text-[#73839E]">
+                            {serviceData.userCount} participants potentiels
+                        </span>
                     </div>
                 </div>
             </div>

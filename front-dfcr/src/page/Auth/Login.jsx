@@ -40,7 +40,7 @@ const Login = () => {
       localStorage.setItem("token", data.token);
       localStorage.setItem("token_expiration", data.expiresIn);
 
-      navigate("/calendar");
+      navigate("/home");
     } catch (err) {
       console.error("Erreur d'authentification: ", err.message);
       setError(err.message);

@@ -40,6 +40,7 @@ public class SecurityConfiguration {
                                 .requestMatchers("/services/**").permitAll()
                                 .requestMatchers("/dossiers/**").permitAll()
                                 .requestMatchers("/workflow/**").permitAll()
+                                .requestMatchers("/current-user/**").authenticated()
                                 .requestMatchers("/events/**").authenticated()
                                 .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
