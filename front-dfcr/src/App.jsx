@@ -9,6 +9,7 @@ import Workflow from "./page/workflow/Workflow";
 import SideBar from "./layout/SideBar";
 import MainLayout from "./layout/mainLayout";
 import Calendar from "./page/Event/Calendar";
+import HomePage from "./page/Event/HomePage";
 
 function App() {
   return (
@@ -24,7 +25,7 @@ function App() {
         <Route path="/calendar" element={<Calendar />} />
 
         <Route path="/home" element={<MainLayout/>}>
-          <Route index element={<Calendar/>}/>
+          <Route index element={<HomePage/>}/>
         </Route> 
       </Routes>
     </Router>
