@@ -45,8 +45,20 @@ public class EventController {
             return ResponseEntity.badRequest().body("Le contenu du Event est vide");
         }
 
-        Event created = eventService.createEvent(input);
-        return ResponseEntity.status(201).body(created);
+        Event event = eventService.createEvent(input);
+
+        EventResponseDto dto = new EventResponseDto(
+                event.getIdEvent(),
+                event.getTitle(),
+                event.getDescription(),
+                event.getStartTime(),
+                event.getEndTime(),
+                event.isAllDay(),
+                event.getEmail(),
+                event.getCreatedBy().getName(),
+                event.getService().getIdService());
+
+        return ResponseEntity.status(201).body(dto);
     }
 
     @PutMapping("/{id}")

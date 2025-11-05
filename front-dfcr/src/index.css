@@ -3,43 +3,48 @@
 @font-face {
   font-family: "Eirene Sans";
   src: url("/fonts/eirene/EireneSans-Regular.otf") format("opentype");
+  font-display: swap;
 }
 
 @font-face {
   font-family: "Rushford";
   src: url("/fonts/rushford/Rushford.otf") format("opentype");
+  font-display: swap;
 }
 
 @font-face {
   font-family: "Dropline Regular";
   src: url("/fonts/dropline/DroplineRegular.otf") format("opentype");
+  font-display: swap;
 }
 
 @font-face {
   font-family: "Stardom";
   src: url("/fonts/stardom/Stardom-Regular.otf") format("opentype");
+  font-display: swap;
 }
 
 @font-face {
   font-family: "Neco Black";
   src: url("/fonts/neco/Neco-Black.otf") format("opentype");
+  font-display: swap;
 }
 
 @font-face {
   font-family: "Neco Medium";
   src: url("/fonts/neco/Neco-Medium.otf") format("opentype");
+  font-display: swap;
 }
 
 /* 🎨 Palette perso en variables globales */
 @layer base {
   :root {
     /* === Tes couleurs principales === */
-    --blue-zodiac: #2D466E ;
-    --light-blue: #73839E ;
-    --beige-creme: #F5ECE3;
-    --dark-blue: #24344D;
-    --white-gray: #C4BEAF ;
-
+    --blue-zodiac: #2d466e;
+    --light-blue: #73839e;
+    --beige-creme: #f5ece3;
+    --dark-blue: #24344d;
+    --white-gray: #c4beaf;
 
     /* === Radius et fonts === */
     --radius: 0.5rem;
@@ -52,12 +57,12 @@
   }
 
   .hide-scrollbar {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
   }
 
   .hide-scrollbar::-webkit-scrollbar {
-    display: none;  /* Chrome, Safari and Opera */
+    display: none; /* Chrome, Safari and Opera */
   }
 
   .thin-scrollbar::-webkit-scrollbar {
@@ -81,7 +86,6 @@
 
 /* === Définition du thème Tailwind inline === */
 @theme {
-
   --color-blue-zodiac: var(--blue-zodiac);
   --color-light-blue: var(--light-blue);
   --color-beige-creme: var(--beige-creme);
@@ -99,4 +103,3 @@
   background-image: url("/img/bg-left.png");
   background-color: #f0e7d8;
 }
-

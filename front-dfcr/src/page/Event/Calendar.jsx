@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo, useCallback, useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
 import { EventModal } from "../../components/Calendar/EventModal";
 import { EventCalendar } from "../../components/Calendar/EventCalendar";
@@ -11,7 +11,9 @@ const Calendar = () => {
   // ✅ hook pour la data
   const { events, addEvent, removeEvent , editEvent} = useEvents(token);
   
-  console.log(events)
+  useEffect(() => {
+    console.log("Events updated:", events);
+  }, [events]);
 
   // ✅ état modal
   const [modalOpen, setModalOpen] = useState(false);
@@ -37,7 +39,7 @@ const Calendar = () => {
   };
 
   // ✅ ouvrir modal création
-  const handleDateSelect = (selectInfo) => {
+  const handleDateSelect = useCallback((selectInfo) => {
     setModalType("create");
     setFormData({
       idEvent: "",
@@ -52,10 +54,10 @@ const Calendar = () => {
 
     setModalOpen(true);
     selectInfo.view.calendar.unselect();
-  };
+  },[]);
 
   // ✅ ouvrir modal vue + édition + suppression
-  const handleEventClick = (clickInfo) => {
+  const handleEventClick = useCallback((clickInfo) => {
     const e = clickInfo.event;
 
     setFormData({
@@ -71,7 +73,7 @@ const Calendar = () => {
 
     setModalType("view");
     setModalOpen(true);
-  };
+  },[]);
 
   const switchToEdit = () => {
     setModalType("edit");
@@ -96,6 +98,20 @@ const Calendar = () => {
     setModalOpen(false);
   };
 
+  const calendarEvents = useMemo(() => {
+    return events.map(e => ({
+      id: e.idEvent,
+      title: e.title,
+      start: e.startTime,
+      end: e.endTime,
+      allDay: e.allDay,
+      extendedProps: {
+        description: e.description,
+        email: e.email,
+        service: e.service
+      }
+    }));
+  }, [events]);
 
   return (
     <div className="w-full min-h-screen py-4 px-3 sm:px-4 md:px-6 lg:px-8">
@@ -104,18 +120,7 @@ const Calendar = () => {
       <div className="w-full flex justify-center items-start">
         <EventCalendar
           sidebarExpanded={sidebarExpanded}
-          events={events.map(e => ({
-            idEvent: e.idEvent,
-            title: e.title,
-            start: e.startTime,
-            end: e.endTime,
-            allDay: e.allDay,
-            extendedProps: {
-              description: e.description,
-              email: e.email,
-              service: e.service
-            }
-          }))}
+          events={calendarEvents}
           handleDateSelect={handleDateSelect}
           handleEventClick={handleEventClick}
         />

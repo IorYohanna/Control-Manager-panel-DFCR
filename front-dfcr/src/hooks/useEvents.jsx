@@ -27,6 +27,7 @@ export const useEvents = (token) => {
 
   const addEvent = useCallback(async (data) => {
     const saved = await createEvent(data, token);
+    console.log(saved)
 
     // ✅ même structure que ton handleAddEvent d'origine
     setEvents(prev => [...prev, saved]);
