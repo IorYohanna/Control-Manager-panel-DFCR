@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect , useCallback} from 'react'
 import { createEvent, getEvents , deleteEvent , updateEvent } from '../api/event';
 
 export const useEvents = (token) => {
@@ -6,7 +6,9 @@ export const useEvents = (token) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!token) return
     async function load() {
+      console.log("Loading events...");
       setLoading(true);
 
       try {
@@ -21,22 +23,22 @@ export const useEvents = (token) => {
     }
 
     load();
-  }, []);
+  }, [token]);
 
-  const addEvent = async (data) => {
+  const addEvent = useCallback(async (data) => {
     const saved = await createEvent(data, token);
 
     // ✅ même structure que ton handleAddEvent d'origine
     setEvents(prev => [...prev, saved]);
-  };
+  }, [token]);
 
-  const removeEvent = async (idEvent) => {
+  const removeEvent = useCallback(async (idEvent) => {
     await deleteEvent(idEvent, token);
 
     setEvents(prev => prev.filter(e => e.idEvent !== idEvent));
-  };
+  }, [token]);
 
-  const editEvent = async (idEvent, data) => {
+  const editEvent = useCallback(async (idEvent, data) => {
     const updated = await updateEvent(idEvent, data, token);
 
     setEvents(prev =>
@@ -44,7 +46,7 @@ export const useEvents = (token) => {
     );
 
     return updated;
-  };
+  }, [token]);
 
   return { events, loading, addEvent, removeEvent , editEvent};
 };
