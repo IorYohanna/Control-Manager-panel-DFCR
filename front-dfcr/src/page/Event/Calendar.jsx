@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import { useOutletContext } from "react-router-dom";
 import { EventModal } from "../../components/Calendar/EventModal";
 import { EventCalendar } from "../../components/Calendar/EventCalendar";
 import { useEvents } from "../../hooks/useEvents";
 
 const Calendar = () => {
+  const { sidebarExpanded } = useOutletContext();
   const token = localStorage.getItem("token");
 
   // ✅ hook pour la data
@@ -101,6 +103,7 @@ const Calendar = () => {
       {/* Calendrier responsive */}
       <div className="w-full flex justify-center items-start">
         <EventCalendar
+          sidebarExpanded={sidebarExpanded}
           events={events.map(e => ({
             idEvent: e.idEvent,
             title: e.title,

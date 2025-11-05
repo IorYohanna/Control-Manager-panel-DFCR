@@ -4,8 +4,7 @@ import { Link } from "react-router-dom"
 
 const SidebarContext = createContext()
 
-export default function Sidebar({ children }) {
-  const [expanded, setExpanded] = useState(true)
+export default function Sidebar({ children , expanded, setExpanded}) {
 
   return (
     <aside className="h-screen p-4">

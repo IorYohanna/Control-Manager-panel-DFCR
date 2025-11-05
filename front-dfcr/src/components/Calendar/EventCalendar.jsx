@@ -1,20 +1,22 @@
-import React from 'react'
+import React, { useRef, useEffect } from 'react';
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import "./EventCalendarStyle.css";
 
-export const EventCalendar = ({ events, handleDateSelect, handleEventClick }) => {
+export const EventCalendar = ({ events, handleDateSelect, handleEventClick, sidebarExpanded }) => {
+    const calendarRef = useRef(null);
+
     // Palette de couleurs pour les événements qui se chevauchent
     const eventColors = [
-        { bg: '#7b8fab', border: '#5a729b', text: '#f5ece3' }, // Gris-bleu moyen
-        { bg: '#c8a882', border: '#a68a6a', text: '#2d466e' }, // Beige doré
-        { bg: '#8b7355', border: '#6d5940', text: '#f5ece3' }, // Brun chaud
-        { bg: '#4a5f7f', border: '#3a4d65', text: '#f5ece3' }, // Bleu ardoise
-        { bg: '#d4bfa0', border: '#b8a385', text: '#2d466e' }, // Sable clair
-        { bg: '#5d7a9e', border: '#4a6280', text: '#f5ece3' }, // Bleu acier
-        { bg: '#9b8b7e', border: '#7d6f63', text: '#f5ece3' }, // Taupe
+        { bg: '#7b8fab', border: '#5a729b', text: '#f5ece3' },
+        { bg: '#c8a882', border: '#a68a6a', text: '#2d466e' },
+        { bg: '#8b7355', border: '#6d5940', text: '#f5ece3' },
+        { bg: '#4a5f7f', border: '#3a4d65', text: '#f5ece3' },
+        { bg: '#d4bfa0', border: '#b8a385', text: '#2d466e' },
+        { bg: '#5d7a9e', border: '#4a6280', text: '#f5ece3' },
+        { bg: '#9b8b7e', border: '#7d6f63', text: '#f5ece3' },
     ];
 
     // Fonction pour déterminer les événements qui se chevauchent
@@ -28,7 +30,6 @@ export const EventCalendar = ({ events, handleDateSelect, handleEventClick }) =>
         });
 
         const processedEvents = sortedEvents.map((event, index) => {
-            // Trouver les événements qui se chevauchent
             const overlappingEvents = sortedEvents.filter((e, i) => {
                 if (i >= index) return false;
                 const eventStart = new Date(event.start);
@@ -39,7 +40,6 @@ export const EventCalendar = ({ events, handleDateSelect, handleEventClick }) =>
                 return (eventStart < eEnd && eventEnd > eStart);
             });
 
-            // Assigner une couleur en fonction du nombre de chevauchements
             const colorIndex = overlappingEvents.length % eventColors.length;
             const color = eventColors[colorIndex];
 
@@ -56,9 +56,24 @@ export const EventCalendar = ({ events, handleDateSelect, handleEventClick }) =>
 
     const processedEvents = processEventsWithColors(events);
 
+    // Forcer la mise à jour quand la sidebar change
+    useEffect(() => {
+        if (calendarRef.current) {
+            const calendarApi = calendarRef.current.getApi();
+            
+            // Attendre que la transition CSS se termine (300ms)
+            const timer = setTimeout(() => {
+                calendarApi.updateSize();
+            }, 350);
+
+            return () => clearTimeout(timer);
+        }
+    }, [sidebarExpanded]);
+
     return (
-        <div className="bg-[#73839e] p-3 sm:p-4 md:p-6 rounded-2xl sm:rounded-3xl shadow-lg w-full max-w-[95vw] sm:max-w-[90vw] lg:max-w-6xl xl:max-w-7xl mx-auto">
+        <div className="bg-[#f5ece3] p-3 sm:p-4 md:p-6 rounded-2xl sm:rounded-3xl shadow-lg w-full max-w-[95vw] sm:max-w-[90vw] lg:max-w-6xl xl:max-w-7xl mx-auto">
             <FullCalendar
+                ref={calendarRef}
                 plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
                 headerToolbar={{
                     left: "title",
@@ -91,10 +106,9 @@ export const EventCalendar = ({ events, handleDateSelect, handleEventClick }) =>
                     day: "Jour",
                 }}
                 dayHeaderFormat={{ weekday: 'short' }}
-                // Options responsive
                 views={{
                     dayGridMonth: {
-                        dayMaxEvents: 3, // limiter le nombre d'événements visibles sur mobile
+                        dayMaxEvents: 3,
                     },
                     timeGridWeek: {
                         dayMaxEvents: 3,

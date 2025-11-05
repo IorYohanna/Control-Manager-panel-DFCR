@@ -1,11 +1,13 @@
 import { Outlet } from "react-router-dom";
 import Sidebar, { SidebarItem } from "./SideBar";
 import { BarChart3, Boxes, LayoutDashboard, LifeBuoy, Package, Receipt, UserCircle } from "lucide-react";
+import { useState } from "react";
 
 export default function MainLayout() {
+  const [sidebarExpanded, setSidebarExpanded] = useState(true);
   return (
     <div className="flex h-screen bg-linear-to-br from-[#73839E] to-[#5a729b]">
-      <Sidebar>
+      <Sidebar expanded={sidebarExpanded} setExpanded={setSidebarExpanded}>
         <SidebarItem icon={<LayoutDashboard size={20} />}
           text="Login"
           to="/login"
@@ -42,7 +44,7 @@ export default function MainLayout() {
         />
       </Sidebar>
 
-      <Outlet/>
+      <Outlet context={{ sidebarExpanded }} />
     </div>
   );
 }
