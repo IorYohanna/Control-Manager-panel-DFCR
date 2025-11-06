@@ -9,7 +9,7 @@ const Calendar = () => {
   const token = localStorage.getItem("token"); 
 
   // ✅ hook pour la data
-  const { events,calendarEvents, addEvent, removeEvent , editEvent} = useEvents(token);
+  const { calendarEvents, addEvent, removeEvent , editEvent} = useEvents(token);
 
   // ✅ état modal
   const [modalOpen, setModalOpen] = useState(false);
