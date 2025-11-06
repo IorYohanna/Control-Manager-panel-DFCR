@@ -40,6 +40,7 @@ public class SecurityConfiguration {
                                 .requestMatchers("/services/**").permitAll()
                                 .requestMatchers("/dossiers/**").permitAll()
                                 .requestMatchers("/workflow/**").permitAll()
+                                .requestMatchers("/api/auth/gmail/**").permitAll()
                                 .requestMatchers("/api/gmail/**").permitAll()
                                 .requestMatchers("/events/**").authenticated()
                                 .anyRequest().authenticated())

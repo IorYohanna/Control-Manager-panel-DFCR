@@ -1,10 +1,8 @@
 package com.example.Auth.service.Gmail;
 
-import com.google.api.client.auth.oauth2.Credential;
-import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
-import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
+import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
@@ -16,6 +14,7 @@ import com.google.api.services.gmail.model.ListMessagesResponse;
 import com.google.api.services.gmail.model.Message;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,40 +30,80 @@ public class GmailService {
     private static final List<String> SCOPES = Collections.singletonList(GmailScopes.GMAIL_READONLY);
     private static final String TOKENS_DIRECTORY_PATH = "tokens";
 
-    private final Gmail gmail;
+    private final GoogleAuthorizationCodeFlow flow;
+    private final NetHttpTransport httpTransport;
 
     public GmailService() throws Exception {
-        final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-        this.gmail = new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+        this.httpTransport = GoogleNetHttpTransport.newTrustedTransport();
+        
+        InputStream in = getClass().getResourceAsStream("/credentials.json");
+        if (in == null) {
+            throw new FileNotFoundException("Resource not found: /credentials.json");
+        }
+        
+        GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(
+            JSON_FACTORY, 
+            new InputStreamReader(in)
+        );
+
+        this.flow = new GoogleAuthorizationCodeFlow.Builder(
+                httpTransport, 
+                JSON_FACTORY, 
+                clientSecrets, 
+                SCOPES)
+                .setDataStoreFactory(new FileDataStoreFactory(new File(TOKENS_DIRECTORY_PATH)))
+                .setAccessType("offline")
+                .build();
+    }
+
+    /**
+     * Retourne le flow OAuth pour générer les URLs d'autorisation
+     */
+    public GoogleAuthorizationCodeFlow getFlow() {
+        return flow;
+    }
+
+    /**
+     * Sauvegarde le token après authentification
+     */
+    public void saveToken(GoogleTokenResponse tokenResponse) throws IOException {
+        flow.createAndStoreCredential(tokenResponse, "user");
+    }
+
+    /**
+     * Crée un client Gmail avec les credentials stockés
+     */
+    private Gmail getGmailService() throws IOException {
+        var credential = flow.loadCredential("user");
+        if (credential == null) {
+            throw new IOException("Aucune authentification trouvée. Veuillez vous connecter.");
+        }
+        
+        return new Gmail.Builder(httpTransport, JSON_FACTORY, credential)
                 .setApplicationName(APPLICATION_NAME)
                 .build();
     }
 
-    private Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) throws IOException {
-        InputStream in = getClass().getResourceAsStream("/credentials.json");
-        if (in == null)
-            throw new FileNotFoundException("Resource not found: /credentials.json");
-        GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
-
-        GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
-                HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
-                .setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH)))
-                .setAccessType("offline")
-                .build();
-
-        LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8888).build();
-        return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
-    }
-
+    /**
+     * Liste les messages
+     */
     public List<Message> listMessages(int maxResults) throws IOException {
+        Gmail gmail = getGmailService();
+        
         ListMessagesResponse response = gmail.users().messages()
                 .list("me")
                 .setMaxResults((long) maxResults)
                 .execute();
+        
         return response.getMessages();
     }
 
+    /**
+     * Récupère un message spécifique
+     */
     public Message getMessage(String messageId) throws IOException {
+        Gmail gmail = getGmailService();
+        
         return gmail.users().messages()
                 .get("me", messageId)
                 .setFormat("full")

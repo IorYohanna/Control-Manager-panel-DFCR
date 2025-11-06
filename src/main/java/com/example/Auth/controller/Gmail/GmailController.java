@@ -20,6 +20,9 @@ public class GmailController {
     @Autowired
     private GmailService gmailService;
 
+    /**
+     * Récupère tous les messages (utilise les credentials stockés côté serveur)
+     */
     @GetMapping("/messages")
     public List<EmailDto> getAllMessages(@RequestParam(defaultValue = "10") int maxResults) {
         try {
@@ -38,6 +41,9 @@ public class GmailController {
         }
     }
 
+    /**
+     * Récupère un message spécifique (utilise les credentials stockés côté serveur)
+     */
     @GetMapping("/messages/{messageId}")
     public EmailDto getMessage(@PathVariable String messageId) {
         try {
@@ -48,6 +54,9 @@ public class GmailController {
         }
     }
 
+    /**
+     * Convertit un Message Gmail en EmailDto
+     */
     private EmailDto convertToEmailDto(Message message) {
         EmailDto email = new EmailDto();
         email.setId(message.getId());
@@ -75,10 +84,12 @@ public class GmailController {
         return email;
     }
 
+    /**
+     * Extrait le corps du message
+     */
     private String getMessageBody(Message message) {
         String body = "";
 
-        // Vérifier si body direct existe
         if (message.getPayload().getBody() != null && message.getPayload().getBody().getData() != null) {
             body = new String(Base64.getUrlDecoder().decode(message.getPayload().getBody().getData()));
         } else if (message.getPayload().getParts() != null) {
@@ -93,5 +104,4 @@ public class GmailController {
 
         return body;
     }
-
 }

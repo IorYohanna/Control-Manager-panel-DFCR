@@ -10,6 +10,7 @@ import SideBar from "./layout/SideBar";
 import MainLayout from "./layout/mainLayout";
 import Calendar from "./page/Event/Calendar";
 import HomePage from "./page/Event/HomePage";
+import EmailPage from "./page/Gmail/EmailPage";
 
 function App() {
   return (
@@ -24,8 +25,9 @@ function App() {
 
         <Route path="/calendar" element={<Calendar />} />
 
-        <Route path="/home" element={<MainLayout/>}>
+        <Route path="/" element={<MainLayout/>}>
           <Route index element={<HomePage/>}/>
+          <Route path="/email" element={<EmailPage/>}/>
         </Route> 
       </Routes>
     </Router>
