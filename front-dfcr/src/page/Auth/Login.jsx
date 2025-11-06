@@ -57,16 +57,16 @@ const Login = () => {
           speed={1.5}
           curveAmount={0}
           direction="left"
-          className="text-lg text-blue-50 "
+          className="text-sm text-blue-50 capitalize "
         />
       </div>
 
-      <section className="grid grid-cols-1 lg:grid-cols-12 flex-1 mx-auto overflow-auto text-primary z-0">
+      <section className="grid grid-cols-1 lg:grid-cols-12 bg-beige-creme flex-1 mx-auto overflow-auto text-primary z-0">
         <div className="hidden lg:block col-span-5 w-full h-full overflow-hidden bg-beige-creme">
           <img
-            src="/img/bg.png"
+            src="/img/test.png"
             alt="Background"
-            className="h-full w-full object-contain"
+            className="h-full w-full object-cover"
           />
         </div>
 
@@ -101,7 +101,7 @@ const Login = () => {
                   placeholder="Entrez votre matricule"
                   value={matricule}
                   required={true}
-                  sx={{ width: "100%" }}
+                  sx={{ width: "100%", background: "#e0e0e0" }}
                   onChange={(e) => setMatricule(e.target.value)}
                 />
               </div>
@@ -120,7 +120,7 @@ const Login = () => {
                   type="password"
                   value={password}
                   required={true}
-                  sx={{ width: "100%" }}
+                  sx={{ width: "100%", background:"#e0e0e0" }}
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </div>

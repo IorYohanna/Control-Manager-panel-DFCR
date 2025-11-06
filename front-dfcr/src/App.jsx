@@ -10,6 +10,7 @@ import MainLayout from "./layout/mainLayout";
 import Calendar from "./page/Event/Calendar";
 import HomePage from "./page/Event/HomePage";
 import EmailPage from "./page/Gmail/EmailPage";
+import UserSettings from "./page/User/UserSettings";
 
 function App() {
   return (
@@ -20,14 +21,14 @@ function App() {
         <Route path="/verify" element={<Verify />} />
         <Route path="/document" element={<FormDocument />} />
         <Route path="/workflow" element={<Workflow />} />
-        <Route path="/mainlayout" element={<MainLayout />} />
 
-        <Route path="/calendar" element={<Calendar />} />
 
-        <Route path="/home" element={<MainLayout/>}>
-          <Route index element={<HomePage/>}/>
-          <Route path="/home/email" element={<EmailPage/>} />
-        </Route> 
+        <Route path="/" element={<MainLayout />}>
+          <Route index element={<HomePage />} />
+          <Route path="/email" element={<EmailPage />} />
+          <Route path="/user-settings" element={<UserSettings />} />
+        </Route>
+        
       </Routes>
     </Router>
   );

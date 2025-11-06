@@ -1,10 +1,37 @@
 import { MoreVertical, ChevronLast, ChevronFirst } from "lucide-react"
-import { useContext, createContext, useState } from "react"
+import { useContext, createContext, useState, useEffect } from "react"
 import { Link } from "react-router-dom"
+import { fectUserData } from "../api/currentUser";
 
 const SidebarContext = createContext()
 
-export default function Sidebar({ children , expanded, setExpanded}) {
+export default function Sidebar({ children, expanded, setExpanded }) {
+
+  const [userData, setUserData] = useState({
+    user: "",
+    userEmail: "",
+  });
+
+
+  useEffect( () => {
+    const loadData = async () => {
+      try {
+        const data = await fectUserData();
+        console.log(data)
+        setUserData({
+          user : data.fullName,
+          userEmail : data.email
+        })
+        
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    loadData()
+  }, [])
+
+
 
   return (
     <aside className="h-screen p-4">
@@ -26,32 +53,31 @@ export default function Sidebar({ children , expanded, setExpanded}) {
         </SidebarContext.Provider>
 
         <div className="border-t border-[#73839E] flex p-3">
-          <img
-            src="https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true"
-            alt=""
-            className="w-10 h-10 rounded-md"
-          />
           <div
             className={`
               flex justify-between items-center
               overflow-hidden transition-all ${expanded ? "w-52 ml-3" : "w-0"}
           `}
           >
-            <div className="leading-4">
-              <h4 className="font-stardom font-bold test-[#2D466E] ">John Doe</h4>
-              <span className="text-xs text-[#2f486d] font-eirene ">johndoe@gmail.com</span>
+            <div className="leading-4 ml-5 ">
+              <h4 className="font-stardom capitalize font-bold test-[#2D466E] ">
+                {userData.user}
+              </h4>
+              <span className="text-sm text-[#2f486d] font-eirene ">
+                {userData.userEmail}
+              </span>
             </div>
-            <Link to="/login" >
+            <Link to="/user-settings" >
               <MoreVertical size={20} className="text-[#2D466E]" />
             </Link>
           </div>
         </div>
       </nav>
     </aside>
-  )
+  );
 }
 
-export function SidebarItem({ icon, text, active, alert, to = "#" }) {
+export function SidebarItem({ icon, text, active, to = "#" }) {
   const { expanded } = useContext(SidebarContext)
 
   return (

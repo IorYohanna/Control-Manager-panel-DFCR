@@ -50,9 +50,9 @@ const Signup = () => {
 
             <div className="hidden lg:block col-span-5 w-full h-full overflow-hidden bg-beige-creme">
                 <img
-                    src="/img/bg.png"
+                    src="/img/signup.png"
                     alt="Background"
-                    className="h-full w-full object-contain"
+                    className="h-full w-full object-cover  "
                 />
             </div>
 
