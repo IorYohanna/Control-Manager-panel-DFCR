@@ -1,23 +1,15 @@
 package com.example.Auth.controller.Gmail;
 
 import com.example.Auth.service.Gmail.GmailService;
-import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
-import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
-import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.gson.GsonFactory;
-import com.google.api.services.gmail.GmailScopes;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -41,7 +33,7 @@ public class GmailOAuthController {
     }
 
     @GetMapping("/callback")
-    public void callback(@RequestParam String code, HttpServletResponse response) throws IOException {
+    public void callback(@RequestParam String code, HttpServletResponse response, HttpSession session) throws IOException {
         try {
             GoogleTokenResponse tokenResponse = gmailService.getFlow()
                     .newTokenRequest(code)
@@ -50,6 +42,9 @@ public class GmailOAuthController {
 
             gmailService.saveToken(tokenResponse);
 
+            // ✅ On stocke l'access_token dans la session
+            session.setAttribute("gmail_access_token", tokenResponse.getAccessToken());
+
             // Redirige vers le front avec un flag
             response.sendRedirect("http://localhost:5173/email?gmailLoginSuccess=true");
 
@@ -57,6 +52,26 @@ public class GmailOAuthController {
             response.sendRedirect("http://localhost:5173/email?gmailLoginSuccess=false");
         }
     }
+
+    @GetMapping("/status")
+    public ResponseEntity<?> status(HttpSession session) {
+        String token = (String) session.getAttribute("gmail_access_token");
+
+        if (token == null) {
+            return ResponseEntity.status(403).body("{\"authenticated\": false}");
+        }
+
+        return ResponseEntity.ok(Map.of("authenticated", true));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpSession session) {
+        // Supprime toutes les infos de session liées à Gmail
+        session.removeAttribute("gmail_access_token");
+        session.invalidate(); // détruit la session entière si tu veux
+        return ResponseEntity.ok(Map.of("message", "Déconnexion réussie"));
+    }
+
 
 
 }

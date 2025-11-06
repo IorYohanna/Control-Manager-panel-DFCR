@@ -56,23 +56,14 @@ public class GmailService {
                 .build();
     }
 
-    /**
-     * Retourne le flow OAuth pour générer les URLs d'autorisation
-     */
     public GoogleAuthorizationCodeFlow getFlow() {
         return flow;
     }
 
-    /**
-     * Sauvegarde le token après authentification
-     */
     public void saveToken(GoogleTokenResponse tokenResponse) throws IOException {
         flow.createAndStoreCredential(tokenResponse, "user");
     }
 
-    /**
-     * Crée un client Gmail avec les credentials stockés
-     */
     private Gmail getGmailService() throws IOException {
         var credential = flow.loadCredential("user");
         if (credential == null) {
@@ -84,9 +75,6 @@ public class GmailService {
                 .build();
     }
 
-    /**
-     * Liste les messages
-     */
     public List<Message> listMessages(int maxResults) throws IOException {
         Gmail gmail = getGmailService();
         
@@ -98,9 +86,6 @@ public class GmailService {
         return response.getMessages();
     }
 
-    /**
-     * Récupère un message spécifique
-     */
     public Message getMessage(String messageId) throws IOException {
         Gmail gmail = getGmailService();
         

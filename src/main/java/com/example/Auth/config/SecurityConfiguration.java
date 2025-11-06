@@ -44,7 +44,9 @@ public class SecurityConfiguration {
                                 .requestMatchers("/api/gmail/**").permitAll()
                                 .requestMatchers("/events/**").authenticated()
                                 .anyRequest().authenticated())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                )
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
