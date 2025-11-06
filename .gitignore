@@ -32,3 +32,10 @@ build/
 ### VS Code ###
 .vscode/
 .env
+
+
+# Fichier de credentials Google (secret)
+src/main/resources/credentials.json
+
+# Dossier où sont stockés les tokens OAuth
+tokens/

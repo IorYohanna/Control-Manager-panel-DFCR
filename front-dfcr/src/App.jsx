@@ -11,6 +11,7 @@ import HomePage from "./page/Event/HomePage";
 import UserSettings from "./page/User/UserSettings";
 import GoogleDriveViewer from "./page/Docs/GoogleDriveViewer";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import EmailPage from "./page/Gmail/EmailPage";
 
 function App() {
   const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
