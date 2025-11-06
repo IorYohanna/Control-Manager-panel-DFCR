@@ -10,7 +10,7 @@ export default function MainLayout() {
       <Sidebar expanded={sidebarExpanded} setExpanded={setSidebarExpanded}>
         <SidebarItem icon={<LayoutDashboard size={20} />}
           text="Login"
-          to="/login"
+          to="/"
           active
         />
 

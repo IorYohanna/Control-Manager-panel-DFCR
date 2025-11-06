@@ -7,30 +7,55 @@ import Verify from "./page/Auth/Verify";
 import FormDocument from "./page/Docs/FormDocument";
 import Workflow from "./page/workflow/Workflow";
 import MainLayout from "./layout/mainLayout";
-import Calendar from "./page/Event/Calendar";
 import HomePage from "./page/Event/HomePage";
-import EmailPage from "./page/Gmail/EmailPage";
 import UserSettings from "./page/User/UserSettings";
+import GoogleDriveViewer from "./page/Docs/GoogleDriveViewer";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 function App() {
+  const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
+  if (!clientId) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-red-50">
+        <div className="text-center p-8 bg-white rounded-lg shadow-lg">
+          <h1 className="text-2xl font-bold text-red-600 mb-4">
+            ⚠️ Configuration manquante
+          </h1>
+          <p className="text-gray-700">
+            Le Client ID Google n'est pas configuré.<br />
+            Créez un fichier <code className="bg-gray-100 px-2 py-1 rounded">.env</code> avec :
+          </p>
+          <pre className="mt-4 bg-gray-100 p-4 rounded text-left text-sm">
+            VITE_GOOGLE_CLIENT_ID=votre_client_id.apps.googleusercontent.com
+          </pre>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <Router>
-      <Routes>
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/verify" element={<Verify />} />
-        <Route path="/document" element={<FormDocument />} />
-        <Route path="/workflow" element={<Workflow />} />
+    < >
+      <Router>
+        <Routes>
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/" element={<Login />} />
+          <Route path="/verify" element={<Verify />} />
+          <Route path="/document" element={<FormDocument />} />
+          <Route path="/workflow" element={<Workflow />} />
+          <Route path="/test" element={<GoogleOAuthProvider clientId={clientId} >
+            <GoogleDriveViewer />
+          </GoogleOAuthProvider>
+          } />
 
-
-        <Route path="/" element={<MainLayout />}>
-          <Route index element={<HomePage />} />
-          <Route path="/email" element={<EmailPage />} />
-          <Route path="/user-settings" element={<UserSettings />} />
-        </Route>
-        
-      </Routes>
-    </Router>
+          <Route path="/home" element={<MainLayout />}>
+            <Route index element={<HomePage />} />
+            <Route path="/home/user-settings" element={<UserSettings />} />
+            <Route path="/home/drive" element={<GoogleDriveViewer />} />
+          </Route>
+        </Routes>
+      </Router>
+    </>
   );
 }
 
