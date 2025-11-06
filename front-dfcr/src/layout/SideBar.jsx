@@ -67,7 +67,7 @@ export default function Sidebar({ children, expanded, setExpanded }) {
                 {userData.userEmail}
               </span>
             </div>
-            <Link to="/user-settings" >
+            <Link to="/home/user-settings" >
               <MoreVertical size={20} className="text-[#2D466E]" />
             </Link>
           </div>
