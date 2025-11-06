@@ -60,8 +60,8 @@ public class SecurityConfiguration {
                 "https://backend.com",
                 "http://localhost:8080",
                 "http://localhost:5173"));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
-        config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedHeaders(List.of("Authorization", "Content-Type", "Cookie"));
         config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

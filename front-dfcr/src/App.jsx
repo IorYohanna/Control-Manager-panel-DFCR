@@ -11,7 +11,6 @@ import MainLayout from "./layout/mainLayout";
 import Calendar from "./page/Event/Calendar";
 import HomePage from "./page/Event/HomePage";
 import EmailPage from "./page/Gmail/EmailPage";
-import GmailPage from "./page/Gmail/GmailPage";
 
 function App() {
   return (
@@ -28,7 +27,7 @@ function App() {
 
         <Route path="/" element={<MainLayout/>}>
           <Route index element={<HomePage/>}/>
-          <Route path="/email" element={<GmailPage/>}/>
+          <Route path="/email" element={<EmailPage/>}/>
         </Route> 
       </Routes>
     </Router>

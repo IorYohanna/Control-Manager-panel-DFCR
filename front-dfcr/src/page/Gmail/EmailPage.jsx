@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Mail, Inbox, Star, Send, FileText, Trash2, LogOut, RefreshCw, Search, Menu, ChevronLeft, ChevronRight, User } from 'lucide-react';
+import { Mail, Inbox, Star, Send, FileText, Trash2, LogOut, RefreshCw, Search, Menu, ChevronLeft, ChevronRight, User,Loader2  } from 'lucide-react';
 
 const API_BASE_URL = 'http://localhost:8080/api';
 
@@ -13,18 +13,35 @@ export default function GmailPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [displayLimit, setDisplayLimit] = useState(10);
   const [hasMore, setHasMore] = useState(false);
+  const [logoutLoading, setLogoutLoading] = useState(false)
 
   useEffect(() => {
-    // Vérifier si l'utilisateur revient après OAuth
-    const params = new URLSearchParams(window.location.search);
-    const loginSuccess = params.get('gmailLoginSuccess');
-    
-    if (loginSuccess === 'true') {
-      setIsAuthenticated(true);
-      window.history.replaceState({}, '', '/');
-      loadEmails();
-    }
+    const checkAuth = async () => {
+      try {
+        const response = await fetch(`http://localhost:8080/api/auth/gmail/status`, {
+          credentials: 'include', // important pour envoyer les cookies
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.authenticated) {
+            setIsAuthenticated(true);
+            loadEmails(); // charger les emails
+          } else {
+            setIsAuthenticated(false);
+          }
+        } else {
+          setIsAuthenticated(false);
+        }
+      } catch (err) {
+        console.error('Erreur lors de la vérification de l’authentification', err);
+        setIsAuthenticated(false);
+      }
+    };
+
+    checkAuth();
   }, []);
+
 
   const handleLogin = async () => {
     try {
@@ -79,12 +96,26 @@ export default function GmailPage() {
     }
   };
 
-  const handleLogout = () => {
-    setIsAuthenticated(false);
-    setEmails([]);
-    setSelectedEmail(null);
-    // Optionnel: appeler un endpoint backend pour supprimer les tokens
+  const handleLogout = async () => {
+    try {
+      setLogoutLoading(true);
+      // Appel backend pour invalider la session
+      await fetch("http://localhost:8080/api/auth/gmail/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+
+      // Mettre à jour l’état local
+      setIsAuthenticated(false);
+      setEmails([]);
+      setSelectedEmail(null);
+    } catch (err) {
+      console.error("Erreur lors de la déconnexion :", err);
+    } finally {
+      setLogoutLoading(false);
+    }
   };
+
 
   const formatDate = (dateString) => {
     if (!dateString) return '';
@@ -189,10 +220,15 @@ export default function GmailPage() {
           <button onClick={loadEmails} className="p-2 hover:bg-gray-100 rounded-full" title="Actualiser">
             <RefreshCw className={`w-5 h-5 text-gray-600 ${loading ? 'animate-spin' : ''}`} />
           </button>
-          <button onClick={handleLogout} className="flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition">
-            <LogOut className="w-5 h-5" />
-            <span className="font-medium">Déconnexion</span>
+          <button
+            onClick={handleLogout}
+            disabled={logoutLoading}
+            className="flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition"
+          >
+            {logoutLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <LogOut className="w-5 h-5" />}
+            <span>Déconnexion</span>
           </button>
+
         </div>
       </header>
 

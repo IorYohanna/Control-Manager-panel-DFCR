@@ -72,6 +72,4 @@ public class GmailOAuthController {
         return ResponseEntity.ok(Map.of("message", "Déconnexion réussie"));
     }
 
-
-
 }
