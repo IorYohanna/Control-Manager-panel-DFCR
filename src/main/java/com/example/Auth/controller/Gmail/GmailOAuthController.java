@@ -46,10 +46,10 @@ public class GmailOAuthController {
             session.setAttribute("gmail_access_token", tokenResponse.getAccessToken());
 
             // Redirige vers le front avec un flag
-            response.sendRedirect("http://localhost:5173/email?gmailLoginSuccess=true");
+            response.sendRedirect("http://localhost:5173/home/email?gmailLoginSuccess=true");
 
         } catch (Exception e) {
-            response.sendRedirect("http://localhost:5173/email?gmailLoginSuccess=false");
+            response.sendRedirect("http://localhost:5173/home/email?gmailLoginSuccess=false");
         }
     }
 

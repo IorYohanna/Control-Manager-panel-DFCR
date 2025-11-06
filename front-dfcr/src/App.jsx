@@ -49,10 +49,12 @@ function App() {
           </GoogleOAuthProvider>
           } />
 
+
           <Route path="/home" element={<MainLayout />}>
             <Route index element={<HomePage />} />
             <Route path="/home/user-settings" element={<UserSettings />} />
             <Route path="/home/drive" element={<GoogleDriveViewer />} />
+            <Route path="/home/email" element={<EmailPage/>} />
           </Route>
         </Routes>
       </Router>
