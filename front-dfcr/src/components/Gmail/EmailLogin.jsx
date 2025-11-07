@@ -8,15 +8,16 @@ const EmailLogin = ({handleLogin}) => {
             <div className="bg-white rounded-3xl shadow-2xl p-10 max-w-md w-full relative overflow-hidden">
                 
                 {/* 🎨 Dégradé léger en arrière-plan */}
-                <div className="absolute top-0 left-0 w-full h-3/5 bg-linear-to-r from-[#2d466e]/20 to-[#73839e]/20 rounded-b-3xl"></div>
+                <div className="absolute top-0 left-0 w-full h-3/5 bg-linear-to-b from-[#2d466e]/30 to-transparent rounded-b-3xl"></div>
 
                 {/* Logo + titre */}
                 <div className="text-center mb-10 relative z-10">
                     <div className="inline-flex items-center justify-center w-20 h-20 bg-linear-to-r from-[#2d466e] to-[#73839e] rounded-full mb-4 shadow-lg">
                         <Mail className="w-10 h-10 text-white" />
                     </div>
-                    <h1 className="text-3xl font-bold text-[#2d466e] mb-2">Gmail Clone</h1>
-                    <p className="text-[#73839e]">Connectez-vous avec votre compte Google</p>
+                    <h1 className="text-3xl font-bold text-[#2d466e] mb-2">Gmail</h1>
+                    <p className="text-[#73839e] ">Connectez-vous avec votre compte Google</p>
+                    <p className="text-[#73839e]">Pour voir vos récentes emails</p>
                 </div>
                 
                 {/* Bouton Google */}
@@ -34,7 +35,7 @@ const EmailLogin = ({handleLogin}) => {
                 </button>
 
                 {/* Note de sécurité */}
-                <div className="mt-6 text-center text-sm text-[#73839e] relative z-10">
+                <div className="mt-6 text-center text-sm text-[#73839e] relative z-10 font-eirene">
                 <p>Accédez à vos emails Gmail en toute sécurité</p>
                 </div>
             </div>
