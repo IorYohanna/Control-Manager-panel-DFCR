@@ -16,13 +16,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.example.Auth.model.Document.Commentaire;
 import com.example.Auth.model.Document.Event;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -35,30 +28,43 @@ public class User implements UserDetails {
 
     @Id
     private String matricule;
+    
     @Column(name = "nom_utilisateur")
     private String username;
+    
     @Column(name = "prenom_utilisateur", nullable = true)
     private String surname;
+    
     @Column(unique = true, nullable = false)
     private String email;
+    
     @Column(name = "password", nullable = false)
     private String password;
+    
     @Column(nullable = false)
     private String fonction;
+    
     private Integer contact;
+
+    @Column(name = "photo_profil", columnDefinition = "bytea", nullable = true)
+    private byte[] photoProfil;
 
     @ManyToOne
     @JoinColumn(name = "id_service", nullable = false)
     private ServiceDfcr service;
 
     private Integer score;
+    
     private String evaluation;
+    
     @Column(name = "date_evaluation")
     private Date dateEvaluation;
 
     private boolean enabled;
+    
     @Column(name = "verification_code")
     private String verificationCode;
+    
     @Column(name = "verification_expired")
     private LocalDateTime verificationExpireAt;
 
@@ -99,13 +105,13 @@ public class User implements UserDetails {
     @Override
     public String getUsername() {
         return matricule;
-    };
+    }
 
     public String getName() {
         return username;
     }
-    
-    public String getSurname () {
+
+    public String getSurname() {
         return surname;
     }
 
@@ -128,5 +134,4 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return enabled;
     }
-
 }

@@ -63,6 +63,7 @@ public class CurrentUserService {
         response.put("email", user.getEmail());
         response.put("fullName", user.getSurname() + " " + user.getName());
         response.put("fonction", user.getFonction());
+        response.put("photoProfil", user.getPhotoProfil());
 
         return response;
     }

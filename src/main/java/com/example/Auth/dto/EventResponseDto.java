@@ -1,10 +1,8 @@
 package com.example.Auth.dto;
 
-import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 
 import com.example.Auth.model.Document.Event;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 

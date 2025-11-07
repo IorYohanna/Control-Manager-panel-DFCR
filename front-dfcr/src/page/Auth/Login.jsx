@@ -4,7 +4,7 @@ import Checkbox from "@mui/material/Checkbox";
 import { loginUser } from "../../api/Auth/auth";
 import Input from "../../components/input/Input";
 import DefaultButton from "../../components/Button/DefaultButton";
-import CurvedLoop from "../../components/ui/CurvedLoop";
+import CurvedLoop from "../../components/ui/text/CurvedLoop";
 
 const validateLogin = ({ matricule, password }) => {
   const errors = {};

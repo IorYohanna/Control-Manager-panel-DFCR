@@ -1,6 +1,6 @@
 import { Calendar, Clock, Users, TrendingUp } from "lucide-react";
 import { useState, useEffect } from "react";
-import { fetchServiceData } from "../../../api/currentUser";
+import { fetchServiceData } from "../../../api/User/currentUser";
 
 export default function InfoCards() {
     const [serviceData, setServiceData] = useState({

@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
-import { User, Mail, Phone, Lock, UserCircle2, LetterText, User2, Edit } from "lucide-react";
-import { Email, EmailOutlined, Public } from "@mui/icons-material";
+import { UserCircle2, Edit, Phone, User2 } from "lucide-react";
+import { EmailOutlined, Upload } from "@mui/icons-material";
+import { extractServiceData, fetchCompleteUserProfile, formatUserFormData, uploadPhoto } from "../../api/User/profileinfo";
+
 
 export default function UserSettings() {
     const [user, setUser] = useState(null);
-    const [editing, setEditing] = useState(false);
     const [loading, setLoading] = useState(true);
     const [service, setService] = useState(null);
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [previewUrl, setPreviewUrl] = useState(null);
 
     const [form, setForm] = useState({
         firstName: "",
@@ -15,35 +18,21 @@ export default function UserSettings() {
         phoneNumber: ""
     });
 
+
+
     useEffect(() => {
-        const fetchUserProfile = async () => {
+        const loadUserProfile = async () => {
             try {
-                const token = localStorage.getItem("token");
-                const res = await fetch("http://localhost:8080/current-user/profile", {
-                    method: "GET",
-                    headers: {
-                        "Authorization": `Bearer ${token}`,
-                        "Content-Type": "application/json",
-                    },
-                });
+                setLoading(true);
 
-                if (res.ok) {
-                    const data = await res.json();
-                    setUser(data);
-                    setForm({
-                        firstName: data.username,
-                        lastName: data.surname,
-                        email: data.email,
-                        phoneNumber: data.contact || "",
-                    });
+                const { userData, photoUrl } = await fetchCompleteUserProfile();
 
-                    if (data.service) {
-                        setService({
-                            serviceName: data.service.serviceName,
-                            serviceEmail: data.service.serviceEmail,
-                            idService: data.service.idService,
-                        });
-                    }
+                setUser(userData);
+                setForm(formatUserFormData(userData));
+                setService(extractServiceData(userData));
+
+                if (photoUrl) {
+                    setPreviewUrl(photoUrl);
                 }
 
             } catch (err) {
@@ -53,23 +42,33 @@ export default function UserSettings() {
             }
         };
 
-        fetchUserProfile();
+        loadUserProfile();
     }, []);
+
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
-     let handleEdit = () => {
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        setSelectedFile(file);
+        setPreviewUrl(URL.createObjectURL(file));
+    };
 
-     }
+    const handleUpload = async () => {
+        if (!selectedFile || !user) return;
+        const formData = new FormData();
+        formData.append("file", selectedFile);
+
+        const data = await uploadPhoto(user.matricule, formData)
+        return data;
+
+    }
+
 
     if (loading) {
-        return (
-            <div className="flex items-center justify-center h-screen text-[#2D466E]">
-                Chargement du profil...
-            </div>
-        );
+        return <div className="text-center text-gray-500 mt-10">Chargement...</div>;
     }
 
     if (!user) {
@@ -83,15 +82,44 @@ export default function UserSettings() {
     return (
         <div className="p-7 min-h-screen flex flex-col items-center">
             <div className="w-full max-w-3xl bg-white shadow-lg rounded-2xl p-8">
-                <div className="flex flex-rows gap-6 items-center mb-6" >
-                    <UserCircle2 className="w-20 h-20" />
-                    <h2 className="text-2xl font-bold text-[#2D466E]">
-                        Paramètres du Profil Utilisateur
-                    </h2>
+                <div className="flex flex-col items-center mb-6">
+                    <div className="relative">
+                        {previewUrl ? (
+                            <img
+                                src={previewUrl}
+                                alt=""
+                                className="w-32 h-32 rounded-full object-cover border-4 border-[#2D466E]"
+                            />
+                        ) : (
+                            <UserCircle2 className="w-32 h-32 text-gray-400" />
+                        )}
+                        <label
+                            htmlFor="photoInput"
+                            className="absolute bottom-0 right-0 bg-[#2D466E] text-white p-2 rounded-full cursor-pointer hover:bg-[#1e2e4b]"
+                        >
+                            <Upload className="w-5 h-5" />
+                        </label>
+                        <input
+                            type="file"
+                            id="photoInput"
+                            accept="image/*"
+                            onChange={handleFileChange}
+                            className="hidden"
+                        />
+                    </div>
+
+                    {selectedFile && (
+                        <button
+                            onClick={handleUpload}
+                            className="mt-3 bg-[#2D466E] text-white px-4 py-2 rounded-lg hover:bg-[#1e2e4b]"
+                        >
+                            Enregistrer la photo
+                        </button>
+                    )}
                 </div>
 
                 <div className="space-y-5 flex flex-col border border-none rounded-2xl bg-gray-50 p-4 ">
-                    <button className=" flex gap-1 cursor-pointer" onClick={handleEdit}>
+                    <button className="flex gap-1 cursor-pointer self-end">
                         <Edit />
                         Modifier
                     </button>
@@ -101,7 +129,6 @@ export default function UserSettings() {
                             icon={<User2 className="w-5 h-5 text-[#73839E] mr-2" />}
                             value={form.lastName}
                             onChange={handleChange}
-                            disabled={!editing}
                         />
 
                         <UserInfo
@@ -109,7 +136,6 @@ export default function UserSettings() {
                             icon={<User2 className="w-5 h-5 text-[#73839E] mr-2" />}
                             value={form.firstName}
                             onChange={handleChange}
-                            disabled={!editing}
                         />
 
                         <UserInfo
@@ -117,43 +143,27 @@ export default function UserSettings() {
                             icon={<EmailOutlined className="w-5 h-5 text-[#73839E] mr-2" />}
                             value={form.email}
                             onChange={handleChange}
-                            disabled={!editing}
                         />
 
                         <UserInfo
-                            label="telephone"
+                            label="Téléphone"
                             icon={<Phone className="w-5 h-5 text-[#73839E] mr-2" />}
                             value={form.phoneNumber}
                             onChange={handleChange}
-                            disabled={!editing}
                         />
                     </div>
                 </div>
 
-                <div className="mt-8 bg-gray-50 p-4 rounded-lg shadow-sm">
-                    <h3 className="font-semibold text-[#2D466E] mb-2 font-necoMedium text-xl">Votre service</h3>
-                    <div className="ml-5 space-y-0.5" >
-                        <p className="font-dropline" ><span className="font-stardom font-bold text-lg">Nom :</span> {service.serviceName}</p>
-                        <p className="font-dropline"><span className="font-stardom font-bold text-lg">Sigle :</span> {service.idService}</p>
-                        <p className="font-dropline"><span className="font-stardom font-bold text-lg">Email :</span> {service.serviceEmail}</p>
-                    </div>
-
-                </div>
-
-                <div className="mt-10 border-t pt-6">
-                    <h3 className="text-lg font-semibold text-[#2D466E] mb-4">
-                        Sécurité
-                    </h3>
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between">
-                        <div className="flex items-center gap-2 text-[#73839E]">
-                            <Lock className="w-5 h-5" />
-                            <p>Changer le mot de passe</p>
+                {service && (
+                    <div className="mt-8 bg-gray-50 p-4 rounded-lg shadow-sm">
+                        <h3 className="font-semibold text-[#2D466E] mb-2 text-xl">Votre service</h3>
+                        <div className="ml-5 space-y-0.5">
+                            <p><span className="font-bold text-lg">Nom :</span> {service.serviceName}</p>
+                            <p><span className="font-bold text-lg">Sigle :</span> {service.idService}</p>
+                            <p><span className="font-bold text-lg">Email :</span> {service.serviceEmail}</p>
                         </div>
-                        <button className="bg-[#73839E] text-white px-6 py-2 rounded-lg hover:bg-[#5a729b] mt-3 sm:mt-0">
-                            Modifier le mot de passe
-                        </button>
                     </div>
-                </div>
+                )}
             </div>
         </div>
     );
@@ -162,20 +172,19 @@ export default function UserSettings() {
 export function UserInfo({ label, icon, value, onChange, disabled }) {
     return (
         <div>
-            <label className="text-lg font-dropline text-[#2D466E]">
+            <label className="text-lg text-[#2D466E]">
                 {label}
             </label>
             <div className="flex items-center border-dark-blue border-2 rounded-md px-3 py-2 bg-gray-50 mt-1">
                 {icon}
                 <input
                     type="text"
-                    name="phoneNumber"
                     value={value}
                     onChange={onChange}
                     disabled={disabled}
-                    className="w-full bg-transparent text-md font-eirene outline-none text-[#2D466E]"
+                    className="w-full bg-transparent text-md outline-none text-[#2D466E]"
                 />
             </div>
         </div>
-    )
+    );
 }

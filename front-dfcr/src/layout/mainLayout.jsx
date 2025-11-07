@@ -29,7 +29,8 @@ export default function MainLayout() {
 
         />
         <SidebarItem icon={<Package size={20} />}
-          text="Dashboard"
+          text="Online Drive"
+          to="/home/online-drive"
 
         />
 

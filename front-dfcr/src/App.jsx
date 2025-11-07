@@ -43,15 +43,15 @@ function App() {
           <Route path="/verify" element={<Verify />} />
           <Route path="/document" element={<FormDocument />} />
           <Route path="/workflow" element={<Workflow />} />
-          <Route path="/test" element={<GoogleOAuthProvider clientId={clientId} >
-            <GoogleDriveViewer />
-          </GoogleOAuthProvider>
-          } />
+
 
           <Route path="/home" element={<MainLayout />}>
             <Route index element={<HomePage />} />
             <Route path="/home/user-settings" element={<UserSettings />} />
-            <Route path="/home/drive" element={<GoogleDriveViewer />} />
+            <Route path="/home/online-drive" element={<GoogleOAuthProvider clientId={clientId} >
+              <GoogleDriveViewer />
+            </GoogleOAuthProvider>
+            } />
           </Route>
         </Routes>
       </Router>

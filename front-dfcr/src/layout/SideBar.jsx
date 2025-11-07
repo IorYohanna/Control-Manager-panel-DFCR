@@ -1,7 +1,8 @@
 import { MoreVertical, ChevronLast, ChevronFirst } from "lucide-react"
 import { useContext, createContext, useState, useEffect } from "react"
 import { Link } from "react-router-dom"
-import { fectUserData } from "../api/currentUser";
+import { fectUserData } from "../api/User/currentUser";
+import { fetchUserPhoto } from "../api/User/profileinfo";
 
 const SidebarContext = createContext()
 
@@ -11,18 +12,21 @@ export default function Sidebar({ children, expanded, setExpanded }) {
     user: "",
     userEmail: "",
   });
+  const [previewUrl, setPreviewUrl] = useState();
 
-
-  useEffect( () => {
+  useEffect(() => {
     const loadData = async () => {
       try {
         const data = await fectUserData();
         console.log(data)
         setUserData({
-          user : data.fullName,
-          userEmail : data.email
+          user: data.fullName,
+          userEmail: data.email,
         })
-        
+
+        const imgUrl = await fetchUserPhoto(data.matricule)
+        setPreviewUrl(imgUrl);
+
       } catch (error) {
         console.error(error)
       }
@@ -30,8 +34,6 @@ export default function Sidebar({ children, expanded, setExpanded }) {
 
     loadData()
   }, [])
-
-
 
   return (
     <aside className="h-screen p-4">
@@ -53,21 +55,43 @@ export default function Sidebar({ children, expanded, setExpanded }) {
         </SidebarContext.Provider>
 
         <div className="border-t border-[#73839E] flex p-3">
-          <div
-            className={`
-              flex justify-between items-center
-              overflow-hidden transition-all ${expanded ? "w-52 ml-3" : "w-0"}
-          `}
-          >
-            <div className="leading-4 ml-5 ">
-              <h4 className="font-stardom capitalize font-bold test-[#2D466E] ">
-                {userData.user}
-              </h4>
-              <span className="text-sm text-[#2f486d] font-eirene ">
-                {userData.userEmail}
-              </span>
+          <div className="flex items-center gap-2 min-w-0 flex-1">
+            {/* Photo de profil */}
+            <div className="shrink-0">
+              <img
+                src={previewUrl}
+                alt="Profile"
+                className="w-10 h-10 rounded-full object-cover"
+              />
             </div>
-            <Link to="/home/user-settings" >
+
+            <div className="min-w-0 flex-1">
+              <div className="relative group">
+                <h4 className="font-stardom capitalize font-bold text-[#2D466E] text-sm truncate">
+                  {userData.user}
+                </h4>
+                {userData.user && userData.user.length > 20 && (
+                  <div className="absolute bottom-full left-0 mb-1 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 whitespace-nowrap">
+                    {userData.user}
+                    <div className="absolute top-full left-3 w-2 h-2 bg-gray-800 transform rotate-45"></div>
+                  </div>
+                )}
+              </div>
+
+              <div className="relative group">
+                <span className="text-xs text-[#2f486d] font-eirene truncate block">
+                  {userData.userEmail}
+                </span>
+                {userData.userEmail && userData.userEmail.length > 25 && (
+                  <div className="absolute top-full left-0 mt-1 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 whitespace-nowrap">
+                    {userData.userEmail}
+                    <div className="absolute bottom-full left-3 w-2 h-2 bg-gray-800 transform rotate-45"></div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <Link to="/home/user-settings" className="hrink-0 ml-2">
               <MoreVertical size={20} className="text-[#2D466E]" />
             </Link>
           </div>
@@ -95,8 +119,7 @@ export function SidebarItem({ icon, text, active, to = "#" }) {
       >
         {icon}
         <span
-          className={`overflow-hidden font-dropline transition-all ${expanded ? "w-52 ml-3" : "w-0"
-            }`}
+          className={`overflow-hidden font-dropline transition-all ${expanded ? "w-52 ml-3" : "w-0"}`}
         >
           {text}
         </span>

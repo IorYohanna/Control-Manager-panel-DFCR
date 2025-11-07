@@ -59,10 +59,10 @@ function GoogleDriveViewer() {
       }
 
       const data = await response.json();
-      
+
       const foldersList = data.files.filter(f => f.mimeType === 'application/vnd.google-apps.folder');
       const filesList = data.files.filter(f => f.mimeType !== 'application/vnd.google-apps.folder');
-      
+
       setFolders(foldersList);
       setFiles(filesList);
     } catch (error) {
@@ -109,7 +109,7 @@ function GoogleDriveViewer() {
       }
       // Pour les fichiers texte
       else if (
-        file.mimeType.startsWith('text/') || 
+        file.mimeType.startsWith('text/') ||
         file.mimeType === 'application/json' ||
         file.mimeType === 'application/javascript' ||
         file.name.endsWith('.txt') ||
@@ -214,20 +214,20 @@ function GoogleDriveViewer() {
 
   if (!accessToken) {
     return (
-      <div className="min-h-screen bg-linear-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-6">
-        <div className="bg-white rounded-2xl shadow-2xl p-12 max-w-md w-full text-center">
-          <div className="text-6xl mb-6">📁</div>
-          <h1 className="text-3xl font-bold text-gray-800 mb-4">
+      <div className="w-full bg-linear-to-br from-light-blue to-blue-zodiac rounded-2xl flex items-center justify-center m-6">
+        <div className="bg-linear-to-tr from-beige-creme to-white-gray rounded-2xl shadow-2xl p-12 max-w-md w-full text-center flex flex-col items-center">
+          <div className="text-6xl mb-6"><img src="/img/drive.png" alt="" className='w-20 h-20' /></div>
+          <h1 className="text-3xl font-necoBlack font-bold text-gray-800 mb-4">
             Google Drive Viewer
           </h1>
-          <p className="text-gray-600 mb-8">
+          <p className="text-gray-600 mb-8 font-necoMedium">
             Connectez-vous pour accéder à vos fichiers Google Drive
           </p>
           <button
             onClick={() => login()}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-4 rounded-lg transition-all transform hover:scale-105 w-full"
+            className="bg-blue-zodiac font-eirene text-lg hover:bg-dark-blue text-white font-semibold px-8 py-4 rounded-lg transition-all transform hover:scale-105 w-full"
           >
-            🔐 Se connecter avec Google
+            Se connecter avec Google
           </button>
         </div>
       </div>
@@ -235,31 +235,34 @@ function GoogleDriveViewer() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="flex h-screen flex-col">
-        {/* Top bar */}
-        <div className="bg-white border-b border-gray-200 px-6 py-3 flex items-center justify-between">
-          <h1 className="text-xl font-bold text-gray-800">Mon Google Drive</h1>
+    <div className="max-h-screen w-full bg-linear-to-r from-[#F5ECE3] to-[#24344D] m-6 rounded-2xl ">
+      <div className="flex h-full flex-col ">
+        <div className="border border-transparent rounded-t-2xl px-6 py-3 flex items-center justify-between">
+          <h1 className="text-2xl text-dark-blue font-necoBlack flex gap-4 items-center">
+            <img src="/img/google-drive.png" alt="" className='w-10 h-10' />
+            Mon Google Drive
+          </h1>
           <button
             onClick={logout}
-            className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors"
+            className="flex gap-2 items-center px-4 py-2 text-md font-necoMedium text-white hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors"
           >
+            <img src="/img/se-deconnecter.png" alt="" className='w-6 h-6' />
             Se déconnecter
           </button>
         </div>
 
         <div className="flex flex-1 overflow-hidden">
           {/* Sidebar - Liste des fichiers */}
-          <div className="w-1/3 bg-white border-r border-gray-200 flex flex-col">
+          <div className="w-1/3 rounded-bl-2xl border-r border-gray-200 flex flex-col">
             {/* Breadcrumb */}
-            <div className="p-4 border-b border-gray-200">
+            <div className="p-5 border-b border-gray-50">
               <div className="flex items-center space-x-2 text-sm overflow-x-auto">
                 {breadcrumb.map((crumb, index) => (
                   <div key={crumb.id} className="flex items-center">
                     {index > 0 && <span className="text-gray-400 mx-2">/</span>}
                     <button
                       onClick={() => navigateToBreadcrumb(index)}
-                      className="text-blue-600 hover:text-blue-800 hover:underline whitespace-nowrap"
+                      className="text-black font-bold text-lg font-eirene hover:text-light-blue whitespace-nowrap"
                     >
                       {crumb.name}
                     </button>
@@ -281,9 +284,9 @@ function GoogleDriveViewer() {
                     <div
                       key={folder.id}
                       onClick={() => openFolder(folder)}
-                      className="px-4 py-3 hover:bg-gray-100 cursor-pointer border-b border-gray-100 flex items-center space-x-3"
+                      className="px-4 py-3 bg-beige-creme hover:bg-gray-100 cursor-pointer border-b border-beige-creme flex items-center space-x-3"
                     >
-                      <span className="text-2xl">📁</span>
+                      <span className="text-2xl"><img src="/img/dossier.png" className='w-8 h-8' alt="" /></span>
                       <span className="text-gray-800 font-medium flex-1 truncate">
                         {folder.name}
                       </span>
@@ -295,9 +298,8 @@ function GoogleDriveViewer() {
                     <div
                       key={file.id}
                       onClick={() => previewFile(file)}
-                      className={`px-4 py-3 hover:bg-gray-100 cursor-pointer border-b border-gray-100 ${
-                        selectedFile?.id === file.id ? 'bg-blue-50' : ''
-                      }`}
+                      className={`px-4 py-3 hover:bg-gray-100 cursor-pointer${selectedFile?.id === file.id ? 'bg-blue-50' : ''
+                        }`}
                     >
                       <div className="flex items-center space-x-3">
                         {file.thumbnailLink ? (
@@ -308,10 +310,10 @@ function GoogleDriveViewer() {
                           <span className="text-2xl">📄</span>
                         )}
                         <div className="flex-1 min-w-0">
-                          <div className="text-gray-800 font-medium truncate">
+                          <div className="text-gray-800 font-medium font-dropline truncate">
                             {file.name}
                           </div>
-                          <div className="text-xs text-gray-500">
+                          <div className="text-xs text-gray-700">
                             {formatFileSize(file.size)} • {formatDate(file.modifiedTime)}
                           </div>
                         </div>
@@ -331,11 +333,11 @@ function GoogleDriveViewer() {
           </div>
 
           {/* Preview Panel */}
-          <div className="flex-1 bg-gray-100 flex flex-col">
+          <div className="flex-1 bg-beige-creme rounded-br-2xl flex flex-col">
             {selectedFile ? (
               <>
-                <div className="bg-white p-4 border-b border-gray-200 flex items-center justify-between">
-                  <h2 className="text-lg font-semibold text-gray-800 truncate flex-1">
+                <div className=" p-4 border border-transparent flex items-center justify-between">
+                  <h2 className="text-lg font-bold font-dropline text-dark-blue truncate flex-1">
                     {selectedFile.name}
                   </h2>
                   <div className="flex space-x-2">
@@ -343,75 +345,76 @@ function GoogleDriveViewer() {
                       href={selectedFile.webViewLink}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg text-sm font-medium"
+                      className="px-4 py-2 font-eirene bg-white-gray hover:bg-gray-300 text-blue-zodiac rounded-lg text-md"
                     >
                       Ouvrir dans Drive
                     </a>
                     <button
                       onClick={() => downloadFile(selectedFile)}
-                      className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium"
+                      className="px-4 py-2 bg-light-blue hover:bg-blue-zodiac text-beige-creme rounded-lg text-sm font-medium flex gap-2 items-center"
                     >
-                      ⬇ Télécharger
+                      <img src="/img/telechargements.png" alt="" className='w-4 h-4' />
+                      Télécharger
                     </button>
                   </div>
                 </div>
                 <div className="flex-1 p-4 overflow-auto">
                   {loadingPreview ? (
-                    <div className="flex items-center justify-center h-full">
+                    <div className="flex items-center justify-center h-full font-stardom">
                       <div className="text-gray-500">Chargement de la prévisualisation...</div>
                     </div>
                   ) : previewContent ? (
                     <>
                       {previewContent.type === 'image' && (
                         <div className="flex items-center justify-center h-full">
-                          <img 
-                            src={previewContent.url} 
-                            alt={selectedFile.name} 
-                            className="max-w-full max-h-full object-contain rounded-lg shadow-lg" 
+                          <img
+                            src={previewContent.url}
+                            alt={selectedFile.name}
+                            className="max-w-full max-h-full object-contain rounded-lg shadow-lg"
                           />
                         </div>
                       )}
-                      
+
                       {previewContent.type === 'text' && (
                         <div className="bg-white rounded-lg shadow-lg p-6 h-full overflow-auto">
-                          <pre className="text-sm text-gray-800 whitespace-pre-wrap font-mono">
+                          <pre className="text-sm text-gray-800 font-dropline font-bold whitespace-pre-wrap ">
                             {previewContent.content}
                           </pre>
                         </div>
                       )}
-                      
+
                       {previewContent.type === 'pdf' && (
                         <div className="h-full">
                           <iframe
                             src={previewContent.url}
-                            className="w-full h-full rounded-lg shadow-lg bg-white"
+                            className="w-full h-full font-dropline font-bold rounded-lg shadow-lg bg-white"
                             title={selectedFile.name}
                           />
                         </div>
                       )}
-                      
+
                       {previewContent.type === 'google-doc' && (
                         <div className="flex items-center justify-center h-full">
                           <div className="bg-white rounded-lg shadow-lg p-12 text-center max-w-md">
                             <div className="text-6xl mb-4">📝</div>
-                            <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                            <h3 className="text-xl font-dropline font-bold  text-gray-800 mb-2">
                               {selectedFile.name}
                             </h3>
-                            <p className="text-gray-600 mb-6">
+                            <p className="text-gray-600 mb-6 font-eirene text-lg">
                               Document Google (Docs, Sheets ou Slides)
                             </p>
                             <a
                               href={selectedFile.webViewLink}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="inline-block px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium"
+                              className="inline-block px-6 py-3 bg-blue-zodiac hover:bg-dark-blue text-beige-creme rounded-lg font-medium"
                             >
                               Ouvrir dans Google Drive
                             </a>
                           </div>
                         </div>
                       )}
-                      
+
                       {(previewContent.type === 'other' || previewContent.type === 'error') && (
                         <div className="flex items-center justify-center h-full">
                           <div className="bg-white rounded-lg shadow-lg p-12 text-center max-w-md">
@@ -447,8 +450,8 @@ function GoogleDriveViewer() {
               </>
             ) : (
               <div className="flex items-center justify-center h-full">
-                <div className="text-center text-gray-500">
-                  <div className="text-6xl mb-4">👈</div>
+                <div className="text-center text-gray-500 flex flex-col items-center justify-center">
+                  <div className="text-6xl mb-4"><img src="/img/fleche.png" alt="" className='w-20 h-20' /></div>
                   <div className="text-lg">Sélectionnez un fichier pour le prévisualiser</div>
                 </div>
               </div>
