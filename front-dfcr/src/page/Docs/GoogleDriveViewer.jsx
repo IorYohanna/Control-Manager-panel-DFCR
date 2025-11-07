@@ -451,7 +451,7 @@ function GoogleDriveViewer() {
             ) : (
               <div className="flex items-center justify-center h-full">
                 <div className="text-center text-gray-500 flex flex-col items-center justify-center">
-                  <div className="text-6xl mb-4"><img src="/img/fleche.png" alt="" className='w-20 h-20' /></div>
+                  <div className="text-6xl mb-4"><img src="/img/drive-none.png" alt="" className='w-20 h-20' /></div>
                   <div className="text-lg">Sélectionnez un fichier pour le prévisualiser</div>
                 </div>
               </div>

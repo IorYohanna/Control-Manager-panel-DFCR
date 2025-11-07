@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { UserCircle2, Edit, Phone, User2 } from "lucide-react";
+import { UserCircle2, Edit, Phone, User2, UserCircle } from "lucide-react";
 import { EmailOutlined, Upload } from "@mui/icons-material";
 import { extractServiceData, fetchCompleteUserProfile, formatUserFormData, uploadPhoto } from "../../api/User/profileinfo";
 
@@ -90,9 +90,8 @@ export default function UserSettings() {
                                 alt=""
                                 className="w-32 h-32 rounded-full object-cover border-4 border-[#2D466E]"
                             />
-                        ) : (
-                            <UserCircle2 className="w-32 h-32 text-gray-400" />
-                        )}
+                        ) : ""
+                        }
                         <label
                             htmlFor="photoInput"
                             className="absolute bottom-0 right-0 bg-[#2D466E] text-white p-2 rounded-full cursor-pointer hover:bg-[#1e2e4b]"
