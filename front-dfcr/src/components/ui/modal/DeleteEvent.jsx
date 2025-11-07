@@ -5,7 +5,7 @@ const ModalDelete = ({ open, formData, close, onDelete }) => {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in duration-75">
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/40 backdrop-blur-sm"
@@ -13,13 +13,13 @@ const ModalDelete = ({ open, formData, close, onDelete }) => {
       />
 
       {/* Modal */}
-      <div className="relative w-full max-w-md bg-[#f5ece3] rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
+      <div className="relative w-full max-w-md bg-[#f5ece3] rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-75">
         {/* Header */}
         <div className="relative px-8 pt-8 pb-4 border-b border-[#2d466e]/10">
           <h2 className="text-2xl font-bold text-[#2d466e]">Supprimer l'événement</h2>
           <button
             onClick={close}
-            className="absolute top-8 right-8 w-10 h-10 flex items-center justify-center rounded-full text-[#73839e] hover:bg-white/50 hover:text-[#2d466e] transition-all duration-200"
+            className="absolute top-8 right-8 w-10 h-10 flex items-center justify-center rounded-full text-[#73839e] hover:bg-white/50 hover:text-[#2d466e] transition-all duration-75"
           >
             <X size={20} />
           </button>
@@ -39,7 +39,7 @@ const ModalDelete = ({ open, formData, close, onDelete }) => {
         <div className="px-8 pb-8 pt-4 border-t border-[#2d466e]/10 flex items-center gap-3">
           <button
             onClick={close}
-            className="px-6 py-2 rounded-full text-[#73839e] font-medium hover:bg-white/50 transition-all duration-200"
+            className="px-6 py-2 rounded-full text-[#73839e] font-medium hover:bg-white/50 transition-all duration-75"
           >
             Annuler
           </button>
@@ -48,7 +48,7 @@ const ModalDelete = ({ open, formData, close, onDelete }) => {
 
           <button
             onClick={onDelete}
-            className="px-6 py-2 rounded-full bg-red-600 text-white font-medium shadow-lg shadow-red-600/30 hover:bg-red-700 hover:shadow-xl hover:shadow-red-600/40 transition-all duration-200"
+            className="px-6 py-2 rounded-full bg-red-600 text-white font-medium shadow-lg shadow-red-600/30 hover:bg-red-700 hover:shadow-xl hover:shadow-red-600/40 transition-all duration-75"
           >
             Supprimer
           </button>

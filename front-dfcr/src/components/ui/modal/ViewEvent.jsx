@@ -8,7 +8,7 @@ const ModalView = ({ open, formData, close, onEditMode,onDeleteMode }) => {
   console.log(idEvent)
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in duration-75">
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/40 backdrop-blur-sm"
@@ -16,7 +16,7 @@ const ModalView = ({ open, formData, close, onEditMode,onDeleteMode }) => {
       />
 
       {/* Modal */}
-      <div className="relative w-full max-w-2xl max-h-[90vh] bg-[#f5ece3] rounded-3xl shadow-2xl overflow-y-auto animate-in zoom-in-95 duration-200">
+      <div className="relative w-full max-w-2xl max-h-[90vh] bg-[#f5ece3] rounded-3xl shadow-2xl overflow-y-auto animate-in zoom-in-95 duration-75">
         {/* Header */}
         <div className="relative px-8 pt-8 pb-6 border-b border-[#2d466e]/10">
           <div className="flex items-center gap-3 mb-2">
@@ -28,7 +28,7 @@ const ModalView = ({ open, formData, close, onEditMode,onDeleteMode }) => {
           </div>
           <button
             onClick={close}
-            className="absolute top-8 right-8 w-10 h-10 flex items-center justify-center rounded-full text-[#73839e] hover:bg-white/50 hover:text-[#2d466e] transition-all duration-200"
+            className="absolute top-8 right-8 w-10 h-10 flex items-center justify-center rounded-full text-[#73839e] hover:bg-white/50 hover:text-[#2d466e] transition-all duration-75"
           >
             <X size={20} />
           </button>
@@ -96,7 +96,7 @@ const ModalView = ({ open, formData, close, onEditMode,onDeleteMode }) => {
         <div className="px-8 pb-8 pt-4 border-t border-[#2d466e]/10 flex items-center gap-3">
           <button
             onClick={close}
-            className="px-6 py-2 rounded-full text-[#73839e] font-medium hover:bg-white/50 transition-all duration-200"
+            className="px-6 py-2 rounded-full text-[#73839e] font-medium hover:bg-white/50 transition-all duration-75"
           >
             Fermer
           </button>
@@ -105,14 +105,14 @@ const ModalView = ({ open, formData, close, onEditMode,onDeleteMode }) => {
 
           <button
             onClick={onEditMode}
-            className="px-6 py-2 rounded-full bg-[#2d466e] text-[#f5ece3] font-medium shadow-lg shadow-[#2d466e]/30 hover:bg-[#1f2f4d] transition-all duration-200 flex items-center gap-2"
+            className="px-6 py-2 rounded-full bg-[#2d466e] text-[#f5ece3] font-medium shadow-lg shadow-[#2d466e]/30 hover:bg-[#1f2f4d] transition-all duration-75 flex items-center gap-2"
           >
             <Edit size={16} /> Modifier
           </button>
 
           <button
             onClick={onDeleteMode}
-            className="px-6 py-2 rounded-full border-2 border-red-600 text-red-600 font-medium hover:bg-red-50 transition-all duration-200 flex items-center gap-2"
+            className="px-6 py-2 rounded-full border-2 border-red-600 text-red-600 font-medium hover:bg-red-50 transition-all duration-75 flex items-center gap-2"
           >
             <Trash2 size={16} /> Supprimer
           </button>
