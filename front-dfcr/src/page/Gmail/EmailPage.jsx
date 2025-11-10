@@ -128,8 +128,8 @@ export default function GmailPage() {
               close={() => setSelectedEmail(null)}
             />
           ) : (
-            <div className="flex-1 flex flex-col items-center justify-center text-center p-6 bg-[#e0e7f1] rounded-tr-2xl rounded-br-2xl">
-              <Mail className="w-16 h-16 mb-4 text-[#73839e]/60" />
+            <div className="flex-1 flex flex-col items-center justify-center text-center p-6 bg-[#73839e]/20 rounded-tr-2xl rounded-br-2xl">
+              <Mail className="w-16 h-16 mb-4 text-[#73839e]" />
               <h2 className="text-xl font-semibold mb-1 text-[#2d466e]">Sélectionnez un email</h2>
               <p className="text-sm text-[#73839e]">
                 Cliquez sur un email dans la liste à gauche pour voir son contenu.

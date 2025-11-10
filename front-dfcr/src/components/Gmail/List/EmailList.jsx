@@ -11,9 +11,9 @@ export default function EmailList ({
   formatDate,
 }) {
   return (
-    <div className="bg-[#f5ece3] rounded-bl-xl shadow-inner overflow-y-auto thin-scrollbar ">
+    <div className="w-full bg-linear-to-r from-white/50 to-[#f5ece3] rounded-bl-xl shadow-inner overflow-y-auto thin-scrollbar ">
         {loading ? (
-            <div className="flex items-center justify-center h-full">
+            <div className="flex items-center justify-center h-full w-full">
             <RefreshCw className="w-8 h-8 animate-spin text-[#2d466e]" />
             </div>
         ) : emails.length === 0 ? (
