@@ -1,8 +1,13 @@
 import { useEffect, useState } from "react";
-import { UserCircle2, Edit, Phone, User2, UserCircle } from "lucide-react";
-import { EmailOutlined, Upload } from "@mui/icons-material";
-import { extractServiceData, fetchCompleteUserProfile, formatUserFormData, uploadPhoto } from "../../api/User/profileinfo";
-
+import { Briefcase, MapPin } from "lucide-react";
+import { Score, Subject, Update, Upload, Warning } from "@mui/icons-material";
+import {
+    extractServiceData,
+    fetchCompleteUserProfile,
+    formatUserFormData,
+    uploadPhoto
+} from "../../api/User/profileinfo";
+import { ActionCard, InfoRow } from "../../components/ui/cards/UserSettingsCards";
 
 export default function UserSettings() {
     const [user, setUser] = useState(null);
@@ -12,19 +17,20 @@ export default function UserSettings() {
     const [previewUrl, setPreviewUrl] = useState(null);
 
     const [form, setForm] = useState({
+        matricule: "",
         firstName: "",
         lastName: "",
         email: "",
-        phoneNumber: ""
+        phoneNumber: "",
+        fonction: "",
+        score : "",
+        evaluation: "",
     });
-
-
 
     useEffect(() => {
         const loadUserProfile = async () => {
             try {
                 setLoading(true);
-
                 const { userData, photoUrl } = await fetchCompleteUserProfile();
 
                 setUser(userData);
@@ -34,7 +40,6 @@ export default function UserSettings() {
                 if (photoUrl) {
                     setPreviewUrl(photoUrl);
                 }
-
             } catch (err) {
                 console.error("Erreur lors du chargement du profil :", err);
             } finally {
@@ -44,11 +49,6 @@ export default function UserSettings() {
 
         loadUserProfile();
     }, []);
-
-
-    const handleChange = (e) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
-    };
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
@@ -60,130 +60,156 @@ export default function UserSettings() {
         if (!selectedFile || !user) return;
         const formData = new FormData();
         formData.append("file", selectedFile);
-
-        const data = await uploadPhoto(user.matricule, formData)
-        return data;
-
-    }
-
+        await uploadPhoto(user.matricule, formData);
+    };
 
     if (loading) {
-        return <div className="text-center text-gray-500 mt-10">Chargement...</div>;
+        return (
+            <div className="w-full m-6 flex items-center justify-center bg-linear-to-br from-light-blue to-blue-zodiac">
+                <div className="text-white text-xl">Chargement...</div>
+            </div>
+        );
     }
 
     if (!user) {
         return (
-            <div className="text-center text-red-600 mt-10">
-                Impossible de charger les informations utilisateur.
+            <div className="w-full m-6 flex items-center justify-center bg-linear-to-br from-light-blue to-blue-zodiac">
+                <div className="text-white text-xl flex flex-col items-center justify-center gap-4">
+                    <Warning sx={{width: "50px", height: "50px"}}/>
+                    Impossible de charger les informations utilisateur.
+                </div>
             </div>
         );
     }
 
     return (
-        <div className="p-7 min-h-screen flex flex-col items-center">
-            <div className="w-full max-w-3xl bg-white shadow-lg rounded-2xl p-8">
-                <div className="flex flex-col items-center mb-6">
-                    <div className="relative">
-                        {previewUrl ? (
-                            <img
-                                src={previewUrl}
-                                alt=""
-                                className="w-32 h-32 rounded-full object-cover border-4 border-[#2D466E]"
-                            />
-                        ) : ""
-                        }
-                        <label
-                            htmlFor="photoInput"
-                            className="absolute bottom-0 right-0 bg-[#2D466E] text-white p-2 rounded-full cursor-pointer hover:bg-[#1e2e4b]"
-                        >
-                            <Upload className="w-5 h-5" />
-                        </label>
-                        <input
-                            type="file"
-                            id="photoInput"
-                            accept="image/*"
-                            onChange={handleFileChange}
-                            className="hidden"
-                        />
-                    </div>
+        <div className="w-full bg-linear-to-br  p-4 sm:p-8 flex items-center justify-center">
+            <div className="w-full h-full">
+                <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
+                    <div className="relative h-48 bg-linear-to-r from-light-blue via-blue-zodiac to-dark-blue" />
 
-                    {selectedFile && (
-                        <button
-                            onClick={handleUpload}
-                            className="mt-3 bg-[#2D466E] text-white px-4 py-2 rounded-lg hover:bg-[#1e2e4b]"
-                        >
-                            Enregistrer la photo
-                        </button>
-                    )}
-                </div>
+                    <div className="px-8 pb-8">
+                        <div className="relative -mt-16 mb-6">
+                            <div className="relative inline-block">
+                                {previewUrl ? (
+                                    <img
+                                        src={previewUrl}
+                                        alt="Profile"
+                                        className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-xl"
+                                    />
+                                ) : (
+                                    <div className="w-32 h-32 rounded-full bg-gray-200 border-4 border-white shadow-xl flex items-center justify-center">
+                                        <span className="text-4xl text-gray-500">👤</span>
+                                    </div>
+                                )}
+                                <label
+                                    htmlFor="photoInput"
+                                    className="absolute bottom-0 right-0 bg-white-gray text-white p-2 rounded-full cursor-pointer hover:bg-gray-500 transition-colors shadow-lg"
+                                >
+                                    <Upload className="w-4 h-4" />
+                                </label>
+                                <input
+                                    type="file"
+                                    id="photoInput"
+                                    accept="image/*"
+                                    onChange={handleFileChange}
+                                    className="hidden"
+                                />
+                            </div>
+                        </div>
 
-                <div className="space-y-5 flex flex-col border border-none rounded-2xl bg-gray-50 p-4 ">
-                    <button className="flex gap-1 cursor-pointer self-end">
-                        <Edit />
-                        Modifier
-                    </button>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 ">
-                        <UserInfo
-                            label="Prénom"
-                            icon={<User2 className="w-5 h-5 text-[#73839E] mr-2" />}
-                            value={form.lastName}
-                            onChange={handleChange}
-                        />
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                            <div className="lg:col-span-1">
+                                <h1 className="text-3xl font-bold text-gray-900 mb-1 capitalize">
+                                    {form.firstName} {form.lastName}
+                                </h1>
+                                <p className="text-gray-600 mb-2 flex items-center gap-2">
+                                    <Briefcase className="w-4 h-4" />
+                                    {form.fonction || " Votre poste"}
+                                </p>
+                                <p className="text-gray-500 text-sm mb-6 flex items-center gap-2">
+                                    <MapPin className="w-4 h-4" />
+                                    {service?.serviceName || "Votre Adresse"}
+                                </p>
 
-                        <UserInfo
-                            label="Nom"
-                            icon={<User2 className="w-5 h-5 text-[#73839E] mr-2" />}
-                            value={form.firstName}
-                            onChange={handleChange}
-                        />
+                                <div className="flex gap-3 mb-8">
+                                    <button className=" bg-gray-900 text-white py-2.5 px-4 rounded-full font-semibold hover:bg-gray-800 transition-colors">
+                                        Modifier Profile
+                                    </button>
+                                    {selectedFile && (
+                                        <button
+                                            onClick={handleUpload}
+                                            className=" bg-gray-900 text-white py-2.5 px-4 rounded-full font-semibold hover:bg-gray-800 transition-colors"
+                                        >
+                                            Enregistrer la photo
+                                        </button>
+                                    )}
 
-                        <UserInfo
-                            label="Email"
-                            icon={<EmailOutlined className="w-5 h-5 text-[#73839E] mr-2" />}
-                            value={form.email}
-                            onChange={handleChange}
-                        />
+                                </div>
 
-                        <UserInfo
-                            label="Téléphone"
-                            icon={<Phone className="w-5 h-5 text-[#73839E] mr-2" />}
-                            value={form.phoneNumber}
-                            onChange={handleChange}
-                        />
-                    </div>
-                </div>
+                                <div className="space-y-3">
+                                    <ActionCard
+                                        title="PEFA | score"
+                                        description={form.score}
+                                        icon={<Score/>}
+                                    />
+                                    <ActionCard
+                                        title="PEFA | Sujet Evaluation"
+                                        description={form.evaluation}
+                                        icon={<Subject/>}
+                                    />
+                                    <ActionCard
+                                        title="Mise à jour"
+                                        description="N'éviter pas à mettre à jour votre profil | Photo de Profil"
+                                        icon={<Update/>}
+                                    />
+                                </div>
 
-                {service && (
-                    <div className="mt-8 bg-gray-50 p-4 rounded-lg shadow-sm">
-                        <h3 className="font-semibold text-[#2D466E] mb-2 text-xl">Votre service</h3>
-                        <div className="ml-5 space-y-0.5">
-                            <p><span className="font-bold text-lg">Nom :</span> {service.serviceName}</p>
-                            <p><span className="font-bold text-lg">Sigle :</span> {service.idService}</p>
-                            <p><span className="font-bold text-lg">Email :</span> {service.serviceEmail}</p>
+                            </div>
+
+                            <div className="lg:col-span-2 space-y-8">
+                                <div className="bg-gray-50 rounded-2xl p-6">
+                                    <div className="flex items-center justify-between mb-4">
+                                        <h3 className="text-sm font-semibold text-gray-500 uppercase flex items-center gap-2">
+                                            <Briefcase className="w-4 h-4" />
+                                            Poste Occupé
+                                        </h3>
+                                    </div>
+                                    <p className="text-xl uppercase font-semibold text-gray-900">
+                                        {form.fonction || "Votre Poste"}
+                                    </p>
+                                </div>
+
+
+                                <div className="bg-gray-50 rounded-2xl p-6">
+                                    <h3 className="text-sm font-semibold text-gray-500 uppercase mb-4">
+                                        Contact
+                                    </h3>
+                                    <div className="space-y-3">
+                                        <InfoRow label="Matricule" value={form.matricule} />
+                                        <InfoRow label="Email" value={form.email} />
+                                        <InfoRow label="Téléphone" value={form.phoneNumber} />
+                                    </div>
+                                </div>
+
+                                {service && (
+                                    <div className="bg-gray-50 rounded-2xl p-6">
+                                        <h3 className="text-sm font-necoBlack font-semibold text-gray-500 uppercase mb-4">
+                                            détails service
+                                        </h3>
+                                        <div className="space-y-3">
+                                            <InfoRow label="Service" value={service.serviceName} />
+                                            <InfoRow label="Sigle" value={service.idService} />
+                                            <InfoRow label="Email" value={service.serviceEmail} />
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
-                )}
+                </div>
             </div>
         </div>
     );
 }
 
-export function UserInfo({ label, icon, value, onChange, disabled }) {
-    return (
-        <div>
-            <label className="text-lg text-[#2D466E]">
-                {label}
-            </label>
-            <div className="flex items-center border-dark-blue border-2 rounded-md px-3 py-2 bg-gray-50 mt-1">
-                {icon}
-                <input
-                    type="text"
-                    value={value}
-                    onChange={onChange}
-                    disabled={disabled}
-                    className="w-full bg-transparent text-md outline-none text-[#2D466E]"
-                />
-            </div>
-        </div>
-    );
-}

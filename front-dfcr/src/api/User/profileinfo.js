@@ -80,10 +80,14 @@ export const fetchCompleteUserProfile = async () => {
 
 export const formatUserFormData = (userData) => {
     return {
+        matricule: userData.matricule || "",
         firstName: userData.username || "",
         lastName: userData.surname || "",
         email: userData.email || "",
         phoneNumber: userData.contact || "",
+        fonction : userData.fonction || "",
+        score : userData.score || "",
+        evaluation : userData.evaluation || "",
     };
 };
 

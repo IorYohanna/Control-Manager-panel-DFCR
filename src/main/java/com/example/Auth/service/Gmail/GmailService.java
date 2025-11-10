@@ -36,7 +36,7 @@ public class GmailService {
     public GmailService() throws Exception {
         this.httpTransport = GoogleNetHttpTransport.newTrustedTransport();
         
-        InputStream in = getClass().getResourceAsStream("/credentials.json");
+        InputStream in = getClass().getResourceAsStream("/static/credentials.json");
         if (in == null) {
             throw new FileNotFoundException("Resource not found: /credentials.json");
         }

@@ -13,35 +13,18 @@ export default function MainLayout() {
           to="/"
           active
         />
-
-        <SidebarItem icon={<BarChart3 size={20} />}
-          text="Signup"
-          to="/signup"
-          alert
-
-        />
-        <SidebarItem icon={<UserCircle size={20} />}
-          text="Verify"
-
-        />
         <SidebarItem icon={<Boxes size={20} />}
           text="Workflow"
-
+          to="/home/workflow"
         />
         <SidebarItem icon={<Package size={20} />}
-          text="Online Drive"
+          text="Docs en Ligne"
           to="/home/online-drive"
-
         />
-
-        <hr className='my-3' />
 
         <SidebarItem icon={<Receipt size={20} />}
           text="Dashboard"
-        />
-        <SidebarItem icon={<LifeBuoy size={20} />}
-          text="Dashboard"
-
+          to="/home"
         />
       </Sidebar>
 

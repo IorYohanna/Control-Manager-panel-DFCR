@@ -57,7 +57,7 @@ const Verify = () => {
         try {
             const data = await VerifyUser(matricule, verificationCode);
             console.log(" Verification Réussie :", data);
-            Navigate("/login")
+            Navigate("/")
         } catch (err) {
             console.error("Erreur de verfication : ", err.message)
             setError(err.message);
@@ -67,17 +67,17 @@ const Verify = () => {
     }
 
     return (
-        <section className="grid grid-cols-1 lg:grid-cols-2 h-screen overflow-x-auto mx-auto">
+        <section className="bg-beige-creme grid grid-cols-1 lg:grid-cols-2 h-screen overflow-x-auto mx-auto">
             <div className="flex flex-col justify-between w-full max-w-[700px] mx-auto px-16 lg:px-6 py-16 ">
 
                 <div className="text-start mb-8 ">
-                    <h1 className="font-rushford text-xl lg:text-3xl capitalize ">S'identifier</h1>
+                    <h1 className="font-necoBlack text-xl lg:text-3xl uppercase ">S'identifier</h1>
                 </div>
 
                 <form className="mx-auto w-full relative -top-5 flex flex-col justify-center items-center gap-4 " onSubmit={handleVerifySubmit}
                 >
                     <div className="mb-7">
-                        <h2 className="font-eirene text-xl">Veuillez vous identifer</h2>
+                        <h2 className="font-necoMedium text-xl ml-26">Veuillez vous identifer</h2>
                     </div>
 
                     <div className="font-dropline flex flex-col gap-4">
@@ -89,6 +89,7 @@ const Verify = () => {
                                 placeholder="Entrez votre Matricule"
                                 required={true}
                                 value={matricule}
+                                sx={{ width: "150%", background:"#e0e0e0" }}
                                 onChange={(e) => setMatricule(e.target.value)}
                             />
                         </div>
@@ -101,11 +102,12 @@ const Verify = () => {
                                 placeholder="Entrez votre code "
                                 required={true}
                                 value={verificationCode}
+                                sx={{ width: "150%", background:"#e0e0e0" }}
                                 onChange={(e) => setVerificationCode(e.target.value)}
                             />
                         </div>
                     </div>
-                    <div className="flex items-center col-span-1 mx-6 mt-12  lg:justify-center lg:col-span-2">
+                    <div className="flex items-center col-span-1 mx-6 mt-12 ml-32 lg:justify-center lg:col-span-2">
                         <DefaultButton
                             bgColor="var(--color-accent)"
                             label={loading ? "Verification..." : "Verifier"}

@@ -5,6 +5,7 @@ import EmailList from '../../components/Gmail/List/EmailList';
 import EmailViewer from '../../components/Gmail/List/EmailViewer';
 
 import * as GmailAPI from "../../api/Email/gmail";
+import { Mail } from 'lucide-react';
 
 export default function GmailPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -98,27 +99,44 @@ export default function GmailPage() {
         displayLimit={displayLimit}
       />
 
-      <div className="flex flex-col md:flex-row flex-1 overflow-hidden bg-[#f5ece3] rounded-bl-2xl rounded-br-2xl">
-        <EmailList
-          emails={filteredEmails}
-          loading={loading}
-          selectedEmail={selectedEmail}
-          setSelectedEmail={setSelectedEmail}
-          loadMoreEmails={loadMoreEmails}
-          hasMore={hasMore}
-          extractSenderName={GmailAPI.extractSenderName}
-          formatDate={GmailAPI.formatDate}
-        />
+      <div className="flex flex-1 overflow-hidden bg-[#f5ece3] rounded-bl-2xl rounded-br-2xl">
 
-        {selectedEmail && (
-          <EmailViewer
-            email={selectedEmail}
+        {/* LISTE DES EMAILS */}
+        <div className={`transition-all duration-300
+            ${selectedEmail ? "hidden sm:hidden md:flex md:w-1/3" : "flex w-full md:w-1/3"}`}>
+          <EmailList
+            emails={filteredEmails}
+            loading={loading}
+            selectedEmail={selectedEmail}
+            setSelectedEmail={setSelectedEmail}
+            loadMoreEmails={loadMoreEmails}
+            hasMore={hasMore}
             extractSenderName={GmailAPI.extractSenderName}
             formatDate={GmailAPI.formatDate}
-            getEmailBody={GmailAPI.getEmailBody}
-            close={() => setSelectedEmail(null)}
           />
-        )}
+        </div>
+
+        {/* VIEWER OU PLACEHOLDER */}
+        <div className={`flex-1 transition-all duration-300
+            ${selectedEmail ? "w-full md:flex" : "hidden md:flex"}`}>
+          {selectedEmail ? (
+            <EmailViewer
+              email={selectedEmail}
+              extractSenderName={GmailAPI.extractSenderName}
+              formatDate={GmailAPI.formatDate}
+              getEmailBody={GmailAPI.getEmailBody}
+              close={() => setSelectedEmail(null)}
+            />
+          ) : (
+            <div className="flex-1 flex flex-col items-center justify-center text-center p-6 bg-[#e0e7f1] rounded-tr-2xl rounded-br-2xl">
+              <Mail className="w-16 h-16 mb-4 text-[#73839e]/60" />
+              <h2 className="text-xl font-semibold mb-1 text-[#2d466e]">Sélectionnez un email</h2>
+              <p className="text-sm text-[#73839e]">
+                Cliquez sur un email dans la liste à gauche pour voir son contenu.
+              </p>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

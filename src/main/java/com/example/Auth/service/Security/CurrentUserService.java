@@ -40,6 +40,8 @@ public class CurrentUserService {
         response.put("contact", user.getContact());
         response.put("fonction", user.getFonction());
         response.put("createdAt", user.getCreatedAt());
+        response.put("score", user.getScore());
+        response.put("evaluation", user.getEvaluation());
 
         if (user.getService() != null) {
             ServiceDfcr service = user.getService();

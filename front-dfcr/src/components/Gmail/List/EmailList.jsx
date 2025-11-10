@@ -11,7 +11,7 @@ export default function EmailList ({
   formatDate,
 }) {
   return (
-    <div className="w-1/3 bg-[#f5ece3] rounded-bl-xl shadow-inner overflow-y-auto thin-scrollbar">
+    <div className="bg-[#f5ece3] rounded-bl-xl shadow-inner overflow-y-auto thin-scrollbar ">
         {loading ? (
             <div className="flex items-center justify-center h-full">
             <RefreshCw className="w-8 h-8 animate-spin text-[#2d466e]" />
@@ -33,13 +33,13 @@ export default function EmailList ({
                     : "hover:bg-white"
                     }`}
                 >
-                <div className="flex justify-between">
+                <div className="flex justify-between ">
                     <strong className="text-[#2d466e]">{extractSenderName(email.from)}</strong>
                     <span className="text-sm text-[#73839e]">{formatDate(email.date)}</span>
                 </div>
 
                 <p className="font-medium text-[#2d466e]">{email.subject}</p>
-                <p className="text-[#73839e] text-sm truncate">{email.snippet}</p>
+                <p className="text-[#73839e] text-sm truncate font-eirene">{email.snippet}</p>
                 </div>
             ))}
 

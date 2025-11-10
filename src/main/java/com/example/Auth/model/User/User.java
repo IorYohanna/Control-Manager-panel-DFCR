@@ -94,6 +94,11 @@ public class User implements UserDetails {
         this.service = service;
     }
 
+    public User(String score, String evaluation){
+        this.score = Integer.valueOf(score);
+        this.evaluation = evaluation ;
+    }
+
     public User() {
     }
 

@@ -107,7 +107,7 @@ export function SidebarItem({ icon, text, active, to = "#" }) {
       >
         {icon}
         <span
-          className={`overflow-hidden font-dropline transition-all ${expanded ? "w-52 ml-3" : "w-0"
+          className={`overflow-hidden font-dropline transition-all truncate ${expanded ? "w-52 ml-3" : "w-0"
             }`}
         >
           {text}

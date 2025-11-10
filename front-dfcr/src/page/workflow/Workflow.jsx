@@ -28,7 +28,7 @@ const Workflow = ({ reference }) => {
     };
 
     return (
-        <div style={{ display: "flex", gap: "10px" }}>
+        <div className="w-full" style={{ display: "flex", gap: "10px" }}>
             <button onClick={() => updateStatus("A_FAIRE")}>A FAIRE</button>
             <button onClick={() => updateStatus("EN_COURS")}>EN COURS</button>
             <button onClick={() => updateStatus("TERMINE")}>TERMINE</button>

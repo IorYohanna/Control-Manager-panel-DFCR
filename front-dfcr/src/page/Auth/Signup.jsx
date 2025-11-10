@@ -176,10 +176,11 @@ const Signup = () => {
                         />
                     </div>
 
-                    {error &&
-                        <div className="flex items-center justify-center col-span-1 lg:col-end-2 mt-6 mx-16 " >
-                            <p className="text-red-500 text-sm">{error}</p>
-                        </div>}
+                    {error && (
+                        <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm mt-6">
+                            {error}
+                        </div>
+                    )}
 
 
                 </form>
