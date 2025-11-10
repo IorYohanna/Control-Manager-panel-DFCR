@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import Sidebar, { SidebarItem } from "./SideBar";
 import { BarChart3, Boxes, LayoutDashboard, LifeBuoy, Package, Receipt, UserCircle } from "lucide-react";
 import { useState } from "react";
+import { Email } from "@mui/icons-material";
 
 export default function MainLayout() {
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
@@ -20,6 +21,10 @@ export default function MainLayout() {
         <SidebarItem icon={<Package size={20} />}
           text="Docs en Ligne"
           to="/home/online-drive"
+        />
+        <SidebarItem icon={<Email size={20} />}
+          text="Gmail"
+          to="/home/email"
         />
 
         <SidebarItem icon={<Receipt size={20} />}

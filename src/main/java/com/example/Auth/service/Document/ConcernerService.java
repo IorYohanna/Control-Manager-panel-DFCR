@@ -1,4 +1,4 @@
-package com.example.Auth.service.Document;
+/* package com.example.Auth.service.Document;
 
 import com.example.Auth.model.Document.Concerner;
 import com.example.Auth.repository.Document.ConcernerRepository;
@@ -18,4 +18,4 @@ public class ConcernerService {
         this.dossierRepository = dossierRepository;
         this.documentRepository = documentRepository;
     }
-}
+} */
