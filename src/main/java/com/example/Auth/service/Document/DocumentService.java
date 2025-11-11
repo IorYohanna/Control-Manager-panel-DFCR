@@ -2,8 +2,11 @@ package com.example.Auth.service.Document;
 
 import com.example.Auth.dto.Document.DocumentDto;
 import com.example.Auth.model.Document.Document;
+import com.example.Auth.model.User.User;
 import com.example.Auth.repository.Document.DocumentRepository;
 
+import com.example.Auth.repository.User.UserRepository;
+import com.example.Auth.service.Security.CurrentUserService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,18 +24,22 @@ import java.util.Optional;
 @Service
 public class DocumentService {
     private final DocumentRepository documentRepository;
+    private final UserRepository userRepository;
     private final FileUtilsService fileUtilsService;
+    private final CurrentUserService currentUserService;
     private final LoggerService log;
 
-    public DocumentService(DocumentRepository documentRepository, FileUtilsService fileUtilsService,
-            LoggerService log) {
+    public DocumentService(DocumentRepository documentRepository, UserRepository userRepository, FileUtilsService fileUtilsService, CurrentUserService currentUserService,
+                           LoggerService log) {
         this.documentRepository = documentRepository;
+        this.userRepository = userRepository;
         this.fileUtilsService = fileUtilsService;
+        this.currentUserService = currentUserService;
         this.log = log;
     }
 
     public List<Document> getAllDocuments() {
-        return new ArrayList<>(documentRepository.findAll());
+        return documentRepository.findAll();
     }
 
     public Optional<Document> getDocumentByReference(String reference) {
@@ -47,25 +54,22 @@ public class DocumentService {
             String status,
             MultipartFile pieceJointe) throws IOException {
 
-        DocumentDto dto = new DocumentDto();
-        dto.setReference(reference);
-        dto.setObjet(objet);
-        dto.setCorps(corps);
-        dto.setType(type);
-        dto.setStatus(status);
-        dto.setPieceJointe(pieceJointe.getBytes());
+        User creator = userRepository.findByMatricule(currentUserService.getMatricule())
+                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+        if(documentRepository.findById(reference).isPresent()){
+            throw new RuntimeException("Document avec cette référence existe déjà");
+        }
 
         Document doc = new Document();
-        doc.setReference(dto.getReference());
-        doc.setObjet(dto.getObjet());
-        doc.setCorps(dto.getCorps());
-        doc.setType(dto.getType());
-        doc.setStatus(dto.getStatus());
+        doc.setReference(reference);
+        doc.setObjet(objet);
+        doc.setCorps(corps);
+        doc.setType(type);
+        doc.setStatus(status);
         doc.setPieceJointe(fileUtilsService.convertToBytes(pieceJointe));
+        doc.setCreator(creator);
 
-        Document savedDoc = documentRepository.save(doc);
-
-        return savedDoc;
+        return documentRepository.save(doc);
     }
 
     public Document updateDocument(String reference, DocumentDto input) {

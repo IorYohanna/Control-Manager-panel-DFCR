@@ -27,9 +27,11 @@ public class DashboardService {
 
         List<UserInfoDto> users = service.getUsers().stream()
                 .map(user -> new UserInfoDto(
-                        user.getUsername(),
+                        user.getMatricule(),
+                        user.getName(),
                         user.getSurname(),
-                        user.getFonction()))
+                        user.getFonction(),
+                        user.getPhotoProfil()))
                 .toList();
         return new ServiceStatisticsDto(
                 service.getServiceName(),

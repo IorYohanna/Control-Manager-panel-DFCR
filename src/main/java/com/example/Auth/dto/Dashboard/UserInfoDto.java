@@ -8,7 +8,9 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class UserInfoDto {
+    private String matricule;
     private String username;
     private String surname;
     private String fonction;
+    private byte[] photoProfil;
 }

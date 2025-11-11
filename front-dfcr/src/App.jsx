@@ -44,7 +44,7 @@ function App() {
           <Route path="/" element={<Login />} />
           <Route path="/verify" element={<Verify />} />
           <Route path="/document" element={<FormDocument />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+    
           
 
 

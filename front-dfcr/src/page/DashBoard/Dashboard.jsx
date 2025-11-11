@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useOutletContext } from "react-router-dom";
 import Service from "./Service";
 import { TrendingUp } from "lucide-react";
 
@@ -6,14 +7,19 @@ const idServices = ["saga", "sf"];
 
 const Dashboard = () => {
   const [activeService, setActiveService] = useState(idServices[0]);
+  const { sidebarExpanded } = useOutletContext();
+
+  
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#f5ece3] via-[#f5ece3] to-[#e8dfd0] ">
+    <div className=" bg-gradient-to-br from-[#2d466e] via-[#3d5680] to-[#2d466e] overflow-auto ">
 
       {/* HEADER HERO */}
-      <div className="bg-gradient-to-br fixed w-full from-[#2d466e] via-[#3d5680] to-[#2d466e]">
+      <div className={`bg-gradient-to-br fixed from-[#2d466e] via-[#3d5680] to-[#2d466e] z-50 ${
+              sidebarExpanded ? 'w-[80%]' : 'w-[93%]' 
+            }`}>
 
-        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 p-6">
+        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 px-7 py-5">
 
           {/* LEFT : LOGO + TITRE */}
           <div className="flex items-center gap-4">
@@ -65,7 +71,7 @@ const Dashboard = () => {
       </div>
 
       {/* SERVICE CONTENT */}
-      <div className="p-4 sm:p-3 lg:p-5 overflow-auto">
+      <div className="">
         <Service activeService={activeService} />
       </div>
       

@@ -14,6 +14,7 @@ const Service = ({ activeService }) => {
       try {
         const serviceInfo = await getServiceStatistics(activeService);
         setServiceData(serviceInfo);
+        console.log("test", serviceInfo)
 
         const eventList = await getEventsService(activeService);
         setEvents(eventList);
@@ -131,17 +132,17 @@ const Service = ({ activeService }) => {
   };
 
   return (
-    <div className="min-h-screen bg-[#f5ece3] font-eirene">
+    <div className="min-h-screen bg-[#f5ece3] p-5">
       {/* Header with refined styling */}
-      <div className="mb-5">
+      <div className="mt-25 flex items-center justify-between">
         <h1 className="text-5xl font-bold text-[#2d466e] mb-3 tracking-tight">
-          {serviceData.serviceName || activeService}
+          {serviceData.serviceName || activeService} || {serviceData.service}
         </h1>
         <p className="text-[#73839e] text-lg">Dashboard de pilotage et suivi</p>
       </div>
 
       {/* Bento Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 auto-rows-auto">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 auto-rows-auto font-dropline">
         
         {/* KPI Card - Users */}
         <div className="bg-white rounded-3xl p-7 shadow-lg hover:shadow-xl transition-all duration-300 border-2 border-[#2d466e]/10 hover:border-[#2d466e]/30">
@@ -288,20 +289,41 @@ const Service = ({ activeService }) => {
           
           <div className="space-y-4">
             {(serviceData.users || []).slice(0, 4).map((user, idx) => (
-              <div key={idx} className="flex items-center justify-between p-3 rounded-2xl hover:bg-[#f5ece3]/50 transition-all">
+              <div
+                key={idx}
+                className="flex items-center justify-between p-3 rounded-2xl hover:bg-[#f5ece3]/50 transition-all"
+              >
                 <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#2d466e] to-[#73839e] flex items-center justify-center text-white font-bold text-sm shadow-md">
-                    {user.name?.[0]}{user.surname?.[0]}
+                  <div className="w-12 h-12 rounded-full border-4 border-white shadow-xl flex items-center justify-center overflow-hidden bg-gray-200">
+                    {user.photoProfil ? (
+                      <img
+                        src={user.photoProfil ? `data:image/jpeg;base64,${user.photoProfil}` : ''}
+                        alt={user.fullName || `${user.username || ''} ${user.surname || ''}`}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.target.onerror = null; // Évite une boucle infinie
+                          e.target.style.display = 'none';
+                          e.target.parentElement.innerHTML =
+                            '<span class="text-4xl text-gray-500">👤</span>';
+                        }}
+                      />
+                    ) : (
+                      <span className="text-4xl text-gray-500">👤</span>
+                    )}
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-[#2d466e]">{user.name} {user.surname}</p>
-                    <p className="text-xs text-[#73839e] font-medium">{user.fonction || 'Membre'}</p>
+                    <p className="text-sm font-semibold text-[#2d466e]">
+                      {user.fullName || `${user.username || ''} ${user.surname || ''}`}
+                    </p>
+                    <p className="text-xs text-[#73839e] font-medium">
+                      {user.fonction || 'Membre'}
+                    </p>
                   </div>
                 </div>
-                <div className="w-3 h-3 rounded-full bg-green-500 shadow-sm ring-2 ring-green-200" />
               </div>
             ))}
           </div>
+
           
           {serviceData.users?.length > 4 && (
             <button className="w-full mt-5 text-sm text-[#2d466e] hover:text-[#3d5680] font-semibold bg-[#f5ece3] hover:bg-[#e8dfd0] py-3 rounded-2xl transition-all">
