@@ -74,22 +74,38 @@ public class DocumentController {
     }
 
     @GetMapping("/{reference}")
-    public ResponseEntity<Document> getDocumentByReference(@PathVariable String reference) {
+    public ResponseEntity<DocumentResponseDto> getDocumentByReference(@PathVariable String reference) {
         return documentService.getDocumentByReference(reference)
+                .map(doc -> new DocumentResponseDto(
+                        doc.getReference(),
+                        doc.getObjet(),
+                        doc.getCorps(),
+                        doc.getType(),
+                        doc.getStatus(),
+                        doc.getCreator().getMatricule(),
+                        doc.getCreator().getName(),
+                        doc.getCreator().getUsername()
+                ))
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{reference}")
-    public ResponseEntity<Document> updateDocument(@PathVariable String reference,
+    public ResponseEntity<DocumentResponseDto> updateDocument(@PathVariable String reference,
             @RequestBody DocumentDto documentDto) {
         Document updatedDocument = documentService.updateDocument(reference, documentDto);
-        return updatedDocument != null ? ResponseEntity.ok(updatedDocument) : ResponseEntity.notFound().build();
-    }
 
-    @GetMapping("/type/{type}")
-    public List<Document> getMethodName(@PathVariable String type) {
-        return documentService.findByType(type);
+        DocumentResponseDto responseDto = new DocumentResponseDto(
+                updatedDocument.getReference(),
+                updatedDocument.getObjet(),
+                updatedDocument.getCorps(),
+                updatedDocument.getType(),
+                updatedDocument.getStatus(),
+                updatedDocument.getCreator().getMatricule(),
+                updatedDocument.getCreator().getName(),
+                updatedDocument.getCreator().getUsername()
+        );
+        return ResponseEntity.ok(responseDto);
     }
 
     @GetMapping("/download/{reference}")
