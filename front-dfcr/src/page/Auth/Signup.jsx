@@ -6,7 +6,8 @@ import TextField from "@mui/material/TextField";
 import { Link, useNavigate } from "react-router-dom";
 import { signupUser } from "../../api/Auth/auth";
 
-const options = ['SAGA', 'SG', 'SF', 'SFPR', 'SCRI', 'SPSE'];
+const options = ['SAGA', 'SG', 'SF', 'SRFP', 'SCRI', 'SPSE', 'ORDSEC', 'SP', 'Chargé de Mission', 'Coordinateur des activités'];
+const fonctions = ['Directeur', 'Chef de service', 'Employé']
 
 const Signup = () => {
     const [username, setUsername] = useState("")
@@ -46,7 +47,7 @@ const Signup = () => {
     }
 
     return (
-        <section className="grid grid-cols-1 lg:grid-cols-12 h-screen overflow-x-auto mx-auto">
+        <section className="bg-beige-creme grid grid-cols-1 lg:grid-cols-12 h-screen overflow-x-auto mx-auto">
 
             <div className="hidden lg:block col-span-5 w-full h-full overflow-hidden bg-beige-creme">
                 <img
@@ -75,6 +76,7 @@ const Signup = () => {
                                 label="Matricule"
                                 placeholder="Entrez votre matricule"
                                 value={matricule}
+                                sx={{ width: "100%", background: "#e0e0e0" }}
                                 required={true}
                                 onChange={(e) => setMatricule(e.target.value)}
                             />
@@ -88,6 +90,7 @@ const Signup = () => {
                                 placeholder="Entrez votre nom"
                                 value={username}
                                 required={true}
+                                sx={{ width: "100%", background: "#e0e0e0" }}
                                 onChange={(e) => setUsername(e.target.value)}
                             />
                         </div>
@@ -99,6 +102,7 @@ const Signup = () => {
                                 label="Prénom"
                                 placeholder="Entrez votre prénom"
                                 value={surname}
+                                sx={{ width: "100%", background: "#e0e0e0" }}
                                 onChange={(e) => setSurname(e.target.value)}
                             />
                         </div>
@@ -112,6 +116,7 @@ const Signup = () => {
                                 type="password"
                                 value={password}
                                 required={true}
+                                sx={{ width: "100%", background: "#e0e0e0" }}
                                 onChange={(e) => setPassword(e.target.value)}
                             />
                         </div>
@@ -123,19 +128,20 @@ const Signup = () => {
                                 label="Email"
                                 placeholder="Entrez votre email"
                                 value={email}
+                                sx={{ width: "100%", background: "#e0e0e0" }}
                                 onChange={(e) => setEmail(e.target.value)}
                             />
                         </div>
 
                         <div className="flex flex-col">
                             <label htmlFor="fonction" className="mb-1 text-sm text-gray-700">Fonction</label>
-                            <Input
-                                id="fonction"
-                                label="Fonction"
-                                placeholder="Entrez votre fonction"
+                            <Autocomplete
+                                sx={{ width: "100%", background: "#e0e0e0" }}
+                                disablePortal
+                                options={fonctions}
+                                renderInput={(params) => <TextField {...params} placeholder="Fonction" />}
                                 value={fonction}
-                                required={true}
-                                onChange={(e) => setFonction(e.target.value)}
+                                onChange={(event, newValue) => setFonction(newValue)}
                             />
                         </div>
 
@@ -146,6 +152,7 @@ const Signup = () => {
                                 label="Contact"
                                 placeholder="Entrez votre contact"
                                 value={contact}
+                                sx={{ width: "100%", background: "#e0e0e0" }}
                                 onChange={(e) => setContact(e.target.value)}
                             />
                         </div>
@@ -153,11 +160,7 @@ const Signup = () => {
                         <div className="flex flex-col w-[300px] ">
                             <label htmlFor="service" className="mb-1 text-sm text-gray-700">Service</label>
                             <Autocomplete
-                                sx={
-                                    {
-                                        width: "auto"
-                                    }
-                                }
+                                sx={{ width: "105%", background: "#e0e0e0" }}
                                 disablePortal
                                 options={options}
                                 renderInput={(params) => <TextField {...params} placeholder="Service" />}

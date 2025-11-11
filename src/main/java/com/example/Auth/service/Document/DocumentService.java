@@ -2,7 +2,11 @@ package com.example.Auth.service.Document;
 
 import com.example.Auth.dto.Document.DocumentDto;
 import com.example.Auth.model.Document.Document;
+import com.example.Auth.model.Document.Workflow;
+import com.example.Auth.model.User.User;
 import com.example.Auth.repository.Document.DocumentRepository;
+import com.example.Auth.repository.Document.WorkflowRepository;
+import com.example.Auth.repository.User.UserRepository;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -21,12 +25,17 @@ import java.util.Optional;
 @Service
 public class DocumentService {
     private final DocumentRepository documentRepository;
+    private final WorkflowRepository workflowRepository;
+    private final UserRepository userRepository;
     private final FileUtilsService fileUtilsService;
     private final LoggerService log;
 
-    public DocumentService(DocumentRepository documentRepository, FileUtilsService fileUtilsService,
+    public DocumentService(DocumentRepository documentRepository, WorkflowRepository workflowRepository,
+            UserRepository userRepository, FileUtilsService fileUtilsService,
             LoggerService log) {
         this.documentRepository = documentRepository;
+        this.userRepository = userRepository;
+        this.workflowRepository = workflowRepository;
         this.fileUtilsService = fileUtilsService;
         this.log = log;
     }
@@ -65,7 +74,24 @@ public class DocumentService {
 
         Document savedDoc = documentRepository.save(doc);
 
+        User directeur = getDirecteur();
+
+        Workflow workflow = new Workflow();
+        workflow.setDocument(savedDoc);
+        workflow.setTypeWorkflow("RECEPTION");
+        workflow.setAction("RECEVOIR");
+        workflow.setStatus("EN_ATTENTE");
+        workflow.setDestinataire(directeur);
+        workflow.setRemarque("Document créé et en attente de traitement");
+
+        workflowRepository.save(workflow);
+
         return savedDoc;
+    }
+
+    private User getDirecteur() {
+        return userRepository.findByFonction("Directeur")
+                .orElseThrow(() -> new RuntimeException("Aucun directeur trouvé"));
     }
 
     public Document updateDocument(String reference, DocumentDto input) {
@@ -127,6 +153,11 @@ public class DocumentService {
 
     public List<Document> findByType(String type) {
         return documentRepository.findByType(type);
+    }
+
+    public Document getDocumentAvecWorkflows(String reference) {
+        return documentRepository.findById(reference)
+                .orElseThrow(() -> new RuntimeException("Document non trouvé"));
     }
 
 }
