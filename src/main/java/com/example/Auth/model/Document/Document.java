@@ -3,6 +3,7 @@ package com.example.Auth.model.Document;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.example.Auth.model.User.User;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -37,19 +38,24 @@ public class Document {
     @OneToMany(mappedBy = "document", cascade = CascadeType.ALL)
     private List<Workflow> workflows;
 
-    @CreatedDate
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
 
-    @LastModifiedDate
-    @Column(nullable = false)
-    private LocalDateTime updatedAt;
+
+    @ManyToOne
+    @JoinColumn(name="matricule")
+    private User creator;
+
+    @OneToMany(mappedBy = "document", cascade = CascadeType.ALL)
+    private List<Concerner> dossiers;
 
     @OneToMany(mappedBy = "document", cascade = CascadeType.ALL)
     private List<Commentaire> commentaires;
 
-    @OneToMany(mappedBy = "document", cascade = CascadeType.ALL)
-    private List<Concerner> dossiers;
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+    @LastModifiedDate
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
 
     public Document(String reference, String objet, String corps,
             String type, String status, byte[] pieceJointe) {

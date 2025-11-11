@@ -1,5 +1,6 @@
 package com.example.Auth.service.User;
 
+import com.example.Auth.model.Document.Event;
 import org.springframework.stereotype.Service;
 
 import com.example.Auth.dto.User.ServiceDto;
@@ -66,6 +67,16 @@ public class ServiceService {
 
         serviceRepository.deleteById(id);
         log.info("Suppression du service : " + id);
+    }
+
+    public List<Event> getAllEvents(String id) {
+        Optional<ServiceDfcr> serviceOpt = serviceRepository.findById(id);
+        if (serviceOpt.isEmpty()) {
+            throw new RuntimeException("Service non trouvé avec id : " + id);
+        }
+
+        ServiceDfcr service = serviceOpt.get();
+        return service.getEvents();
     }
 }
 

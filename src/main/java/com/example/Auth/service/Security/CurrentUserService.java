@@ -82,6 +82,9 @@ public class CurrentUserService {
     public String getRole() {
         return getAuthenticatedUser().getFonction();
     }
+    public String getMatricule() {
+        return getAuthenticatedUser().getMatricule();
+    }
 
     public Map<String, Object> getServiceInfo() {
         ServiceDfcr service = userServiceInfoService.getCurrentUserService();

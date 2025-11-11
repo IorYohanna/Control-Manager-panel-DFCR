@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
+import com.example.Auth.model.Document.Document;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -81,6 +82,9 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL)
     private List<Event> events;
+
+    @OneToMany(mappedBy="creator", cascade = CascadeType.ALL)
+    private List<Document> documents;
 
     public User(String matricule, String surname, String username, String password, String email, String fonction,
             String contact, ServiceDfcr service) {

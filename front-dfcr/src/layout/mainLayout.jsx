@@ -33,7 +33,13 @@ export default function MainLayout() {
         />
       </Sidebar>
 
-      <Outlet context={{ sidebarExpanded }} />
+      <div 
+        className={`flex-1 overflow-auto transition-all duration-300 ${
+          sidebarExpanded ? 'ml-0' : 'ml-0'
+        } thin-scrollbar`}
+      >
+        <Outlet context={{ sidebarExpanded }} />
+      </div>
     </div>
   );
 }

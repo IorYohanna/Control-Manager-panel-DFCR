@@ -1,6 +1,7 @@
 package com.example.Auth.controller.Document;
 
 import com.example.Auth.dto.Document.DocumentDto;
+import com.example.Auth.dto.Document.DocumentResponseDto;
 import com.example.Auth.model.Document.Document;
 import com.example.Auth.service.Document.DocumentService;
 
@@ -25,13 +26,25 @@ public class DocumentController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Document>> getAllDocument() {
-        List<Document> document = documentService.getAllDocuments();
-        return ResponseEntity.ok(document);
+    public ResponseEntity<List<DocumentResponseDto>> getAllDocument() {
+        List<DocumentResponseDto> documents = documentService.getAllDocuments()
+                .stream()
+                .map(doc -> new DocumentResponseDto(
+                        doc.getReference(),
+                        doc.getObjet(),
+                        doc.getCorps(),
+                        doc.getType(),
+                        doc.getStatus(),
+                        doc.getCreator().getMatricule(),
+                        doc.getCreator().getName(),
+                        doc.getCreator().getUsername()
+                ))
+                .toList();
+        return ResponseEntity.ok(documents);
     }
 
     @PostMapping(value = "/create", consumes = "multipart/form-data")
-    public ResponseEntity<Document> createDocument(
+    public ResponseEntity<DocumentResponseDto> createDocument(
             @RequestParam("reference") String reference,
             @RequestParam("objet") String objet,
             @RequestParam("corps") String corps,
@@ -41,7 +54,19 @@ public class DocumentController {
         try {
             Document doc = documentService.createDocument(
                     reference, objet, corps, type, status, pieceJointe);
-            return ResponseEntity.ok(doc);
+            DocumentResponseDto responseDto = new DocumentResponseDto(
+                    doc.getReference(),
+                    doc.getObjet(),
+                    doc.getCorps(),
+                    doc.getType(),
+                    doc.getStatus(),
+                    doc.getCreator().getMatricule(),
+                    doc.getCreator().getName(),
+                    doc.getCreator().getUsername()
+            );
+
+
+            return ResponseEntity.ok(responseDto);
 
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
