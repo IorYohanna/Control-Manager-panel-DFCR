@@ -36,7 +36,7 @@ export default function EmailViewer ({
             <span className="text-[#73839e] text-sm font-medium">{formatDate(email.date)}</span>
         </div>
 
-        <div className="whitespace-pre-wrap text-[#2d466e] leading-relaxed font-eirene font-black text-auto md:text-lg lg:text-xl">
+        <div className="whitespace-pre-wrap text-[#2d466e] leading-relaxed font-necoMedium text-auto md:text-lg lg:text-xl">
             {getEmailBody(email.body) || email.snippet}
         </div>
 

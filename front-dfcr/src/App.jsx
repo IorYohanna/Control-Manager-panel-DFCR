@@ -12,6 +12,7 @@ import GoogleDriveViewer from "./page/Docs/GoogleDriveViewer";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import EmailPage from "./page/Gmail/EmailPage";
 import Workflow from "./page/workflow/Workflow";
+import Dashboard from "./page/DashBoard/Dashboard";
 
 function App() {
   const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
@@ -43,6 +44,7 @@ function App() {
           <Route path="/" element={<Login />} />
           <Route path="/verify" element={<Verify />} />
           <Route path="/document" element={<FormDocument />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           
 
 
@@ -57,6 +59,7 @@ function App() {
             <Route path="/home/drive" element={<GoogleDriveViewer />} />
             <Route path="/home/email" element={<EmailPage/>} />
             <Route path="/home/workflow" element={<Workflow/>} />
+            <Route path="/home/dashboard" element={<Dashboard/>} />
           </Route>
         </Routes>
       </Router>
