@@ -2,6 +2,7 @@ const API_URL = "http://localhost:8080/documents";
 
 export async function createDocument(formData) {
   const token = localStorage.getItem("token");
+
   const response = await fetch(`${API_URL}/create`, {
     method: "POST",
     headers: { Authorization: `Bearer ${token}` },
