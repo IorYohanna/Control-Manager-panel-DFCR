@@ -1,5 +1,6 @@
 package com.example.Auth.controller.User;
 
+import com.example.Auth.dto.User.UserResponseDto;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -84,9 +85,19 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> allUsers() {
+    public ResponseEntity<List<UserResponseDto>> GetAllUsers() {
         List<User> users = userService.allUsers();
-        return ResponseEntity.ok(users);
+        List<UserResponseDto> userDtos = users.stream()
+                .map(UserResponseDto::new)
+                .toList();
+        return ResponseEntity.ok(userDtos);
+    }
+
+
+    // ✅ Endpoint pour obtenir l'utilisateur connecté
+    @GetMapping("/auth/me")
+    public User getCurrentUser() {
+        return currentUserService.getCurrentUser();
     }
 
     @GetMapping("/hello")

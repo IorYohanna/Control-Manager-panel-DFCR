@@ -11,12 +11,15 @@ export default defineConfig({
         eirene: ["Eirene Sans", "sans-serif"],
         dropline: ["Dropline Regular", "serif"],
         stardom: ["Stardom", "sans-serif"],
-        necoBlack: ["Neco Black","serif"],
-        necoMedium: ["Neco Medium", "serif"]
+        necoBlack: ["Neco Black", "serif"],
+        necoMedium: ["Neco Medium", "serif"],
       },
 
       colors: {},
     },
   },
   plugins: [react(), tailwindcss()],
+  define: {
+    global: "window",
+  },
 });

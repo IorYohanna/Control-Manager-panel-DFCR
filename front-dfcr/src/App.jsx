@@ -14,6 +14,7 @@ import EmailPage from "./page/Gmail/EmailPage";
 import Dashboard from "./page/DashBoard/Dashboard";
 import WorkflowManagement from "./page/workflow/Workflow";
 import Historique from "./page/Docs/Historique";
+import Chat from "./page/Chat/Chat";
 
 function App() {
   const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
@@ -46,6 +47,7 @@ function App() {
           <Route path="/verify" element={<Verify />} />
           <Route path="/document" element={<FormDocument />} />
           <Route path="/historique" element={<Historique/>} />
+          <Route path="/chat" element={<Chat/>}/>
         
 
 
