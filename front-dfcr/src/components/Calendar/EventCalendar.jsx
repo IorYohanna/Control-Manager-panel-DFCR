@@ -1,12 +1,15 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
+import listPlugin from "@fullcalendar/list";
 import "./EventCalendarStyle.css";
 
 export const EventCalendar = ({ events, handleDateSelect, handleEventClick, sidebarExpanded }) => {
     const calendarRef = useRef(null);
+    const [viewMode, setViewMode] = useState("dayGridMonth");
+    const [isListView, setIsListView] = useState(false);
 
     // Palette de couleurs pour les événements qui se chevauchent
     const eventColors = [
@@ -71,15 +74,38 @@ export const EventCalendar = ({ events, handleDateSelect, handleEventClick, side
         return () => clearTimeout(timer);
     }, [sidebarExpanded]);
 
+     // 🔁 Fonction pour changer de vue
+    const toggleView = () => {
+        const calendarApi = calendarRef.current?.getApi();
+        if (!calendarApi) return;
+        
+        if (isListView) {
+            // Retour au dernier mode calendrier utilisé
+            calendarApi.changeView(viewMode);
+            setIsListView(false);
+        } else {
+            // Passage en mode liste
+            setViewMode(calendarApi.view.type); // Sauvegarde du mode actuel
+            calendarApi.changeView("listWeek");
+            setIsListView(true);
+        }
+    };
+
     return (
         <div className="bg-[#f5ece3] p-3 sm:p-4 md:p-6 rounded-2xl sm:rounded-3xl shadow-lg w-full max-w-[95vw] sm:max-w-[90vw] lg:max-w-6xl xl:max-w-7xl mx-auto">
             <FullCalendar
                 ref={calendarRef}
-                plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+                plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
                 headerToolbar={{
                     left: "title",
-                    center: "dayGridMonth,timeGridWeek,timeGridDay",
-                    right: "prev,today,next",
+                    center: isListView ? "" : "dayGridMonth,timeGridWeek,timeGridDay",
+                    right: "prev,today,next,viewToggle",
+                }}
+                customButtons={{
+                    viewToggle: {
+                        text: isListView ? "📅" : "📋",
+                        click: toggleView,
+                    }
                 }}
                 initialView="dayGridMonth"
                 editable={false}
@@ -114,6 +140,7 @@ export const EventCalendar = ({ events, handleDateSelect, handleEventClick, side
                     timeGridWeek: {
                         dayMaxEvents: 3,
                     },
+                    listWeek: { buttonText: 'Liste', noEventsText: 'Aucun événement' },
                 }}
             />
         </div>

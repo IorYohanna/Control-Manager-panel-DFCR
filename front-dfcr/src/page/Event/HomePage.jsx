@@ -25,8 +25,8 @@ const HomePage = () => {
 
     return (
         <div className=' w-full p-6 bg-linear-to-br from-[#73839E] to-[#5a729b]'>
-            <div className='grid grid-cols-1 xl:grid-cols-3  h-full gap-6'>
-                <div className='xl:col-span-2 overflow-hidden flex flex-col'>
+            <div className='grid grid-cols-2 xl:grid-cols-5  h-full gap-6'>
+                <div className='xl:col-span-4 overflow-hidden flex flex-col'>
                     <h2 className='capitalize text-center font-necoMedium text-xl text-[#F5ECE3] drop-shadow-lg animate-fadeIn'>
                         Citation du jour: "{citationActuelle}"
                     </h2>
