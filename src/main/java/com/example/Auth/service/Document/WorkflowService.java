@@ -22,7 +22,6 @@ public class WorkflowService {
     @Autowired
     private DocumentRepository documentRepository;
 
-
     private Workflow getOrCreateWorkflow(Document document) {
         return workflowRepository
                 .findTopByDocumentReferenceOrderByCreatedAtDesc(document.getReference())
@@ -30,11 +29,11 @@ public class WorkflowService {
     }
 
 
-    private Workflow updateDocumentAndWorkflow(Document document, String documentStatus, 
-                                               Workflow workflow, String workflowType, 
-                                               String action, String workflowStatus, 
-                                               User acteur, User destinataire, 
-                                               ServiceDfcr service, String remarque) {
+    private Workflow updateDocumentAndWorkflow(Document document, String documentStatus,
+            Workflow workflow, String workflowType,
+            String action, String workflowStatus,
+            User acteur, User destinataire,
+            ServiceDfcr service, String remarque) {
         document.setStatus(documentStatus);
         documentRepository.save(document);
 
@@ -49,7 +48,6 @@ public class WorkflowService {
 
         return workflowRepository.save(workflow);
     }
-
 
     /**
      * 1. Document arrive au Directeur - Status: EN_ATTENTE
@@ -68,8 +66,8 @@ public class WorkflowService {
      */
     @Transactional
     public Workflow directeurEnvoieService(String reference, User directeur,
-                                           ServiceDfcr service, String typeWorkflow,
-                                           String remarque) {
+            ServiceDfcr service, String typeWorkflow,
+            String remarque) {
         Document document = documentRepository.findById(reference)
                 .orElseThrow(() -> new RuntimeException("Document non trouvé"));
 
@@ -84,7 +82,7 @@ public class WorkflowService {
      */
     @Transactional
     public Workflow chefAssigneEmploye(String reference, User chefService,
-                                       User employe, String remarque) {
+            User employe, String remarque) {
         Document document = documentRepository.findById(reference)
                 .orElseThrow(() -> new RuntimeException("Document non trouvé"));
 
@@ -113,7 +111,7 @@ public class WorkflowService {
      */
     @Transactional
     public Workflow employeTermineEtEnvoie(String reference, User employe,
-                                           User chefService, String remarque) {
+            User chefService, String remarque) {
         Document document = documentRepository.findById(reference)
                 .orElseThrow(() -> new RuntimeException("Document non trouvé"));
 
@@ -128,12 +126,12 @@ public class WorkflowService {
      */
     @Transactional
     public Workflow chefValideEtEnvoieDirecteur(String reference, User chefService,
-                                                User directeur, String remarque) {
+            User directeur, String remarque) {
         Document document = documentRepository.findById(reference)
                 .orElseThrow(() -> new RuntimeException("Document non trouvé"));
 
         Workflow workflow = getOrCreateWorkflow(document);
-        return updateDocumentAndWorkflow(document, "validation_validation", workflow,
+        return updateDocumentAndWorkflow(document, "validation_directeur", workflow,
                 "VALIDATION_CHEF", "VALIDER", "validation_directeur",
                 chefService, directeur, null, remarque);
     }
@@ -143,7 +141,7 @@ public class WorkflowService {
      */
     @Transactional
     public Workflow chefRefuseDocument(String reference, User chefService,
-                                       User employe, String remarque) {
+            User employe, String remarque) {
         Document document = documentRepository.findById(reference)
                 .orElseThrow(() -> new RuntimeException("Document non trouvé"));
 
@@ -158,7 +156,7 @@ public class WorkflowService {
      */
     @Transactional
     public Workflow directeurValideComplet(String reference, User directeur,
-                                           String remarque) {
+            String remarque) {
         Document document = documentRepository.findById(reference)
                 .orElseThrow(() -> new RuntimeException("Document non trouvé"));
 
@@ -175,21 +173,20 @@ public class WorkflowService {
      */
     @Transactional
     public Workflow directeurRefuseIncomplet(String reference, User directeur,
-                                             ServiceDfcr service, String remarque) {
+            ServiceDfcr service, String remarque) {
         Document document = documentRepository.findById(reference)
                 .orElseThrow(() -> new RuntimeException("Document non trouvé"));
 
         Workflow workflow = getOrCreateWorkflow(document);
         workflow.setEstComplet(false);
 
-        return updateDocumentAndWorkflow(document, "refuse", workflow,
-                "VALIDATION_DIRECTEUR", "REFUSER", "refuse",
+        return updateDocumentAndWorkflow(document, "au_service", workflow,
+                "VALIDATION_DIRECTEUR", "REFUSER", "au_service",
                 directeur, null, service, remarque);
     }
 
-
     public List<Workflow> getWorkflowHistory(String reference) {
-        return workflowRepository.findByDocument_ReferenceOrderByCreatedAtAsc(reference);
+        return workflowRepository.findByDocument_Reference(reference);
     }
 
     public List<Workflow> getDocumentsEnAttente(String matricule) {

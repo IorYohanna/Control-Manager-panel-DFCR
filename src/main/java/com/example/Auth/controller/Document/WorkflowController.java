@@ -8,6 +8,8 @@ import com.example.Auth.repository.User.ServiceRepository;
 import com.example.Auth.repository.User.UserRepository;
 import com.example.Auth.service.Document.WorkflowService;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -269,21 +271,13 @@ public class WorkflowController {
         }
     }
 
-    /**
-     * Récupérer l'historique des workflows d'un document
-     */
+
     @GetMapping("/history/{reference}")
-    public ResponseEntity<WorkflowResponse> getWorkflowHistory(@PathVariable String reference) {
-        try {
-            // À implémenter dans WorkflowService
-            return ResponseEntity.ok(new WorkflowResponse(
-                true,
-                "Historique récupéré",
-                null
-            ));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new WorkflowResponse(false, e.getMessage()));
+    public ResponseEntity<List<Workflow>> getWorkflowHistory(@PathVariable String reference) {
+        List<Workflow> history = workflowService.getWorkflowHistory(reference);
+        if (history.isEmpty()) {
+            return ResponseEntity.noContent().build();
         }
+        return ResponseEntity.ok(history);
     }
 }

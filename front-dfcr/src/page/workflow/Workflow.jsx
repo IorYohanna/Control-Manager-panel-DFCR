@@ -345,8 +345,8 @@ const WorkflowManagement = () => {
           <button
             onClick={() => setActiveTab('documents')}
             className={`px-6 py-3 rounded-xl font-semibold transition-all ${activeTab === 'documents'
-                ? 'bg-blue-600 text-white shadow-lg'
-                : 'bg-white text-gray-600 hover:bg-gray-50'
+              ? 'bg-blue-600 text-white shadow-lg'
+              : 'bg-white text-gray-600 hover:bg-gray-50'
               }`}
           >
             <FileText className="inline mr-2" size={18} />
@@ -355,8 +355,8 @@ const WorkflowManagement = () => {
           <button
             onClick={() => setActiveTab('workflow')}
             className={`px-6 py-3 rounded-xl font-semibold transition-all ${activeTab === 'workflow'
-                ? 'bg-blue-600 text-white shadow-lg'
-                : 'bg-white text-gray-600 hover:bg-gray-50'
+              ? 'bg-blue-600 text-white shadow-lg'
+              : 'bg-white text-gray-600 hover:bg-gray-50'
               }`}
             disabled={!selectedDocument}
           >
@@ -366,8 +366,8 @@ const WorkflowManagement = () => {
           <button
             onClick={() => setActiveTab('history')}
             className={`px-6 py-3 rounded-xl font-semibold transition-all ${activeTab === 'history'
-                ? 'bg-blue-600 text-white shadow-lg'
-                : 'bg-white text-gray-600 hover:bg-gray-50'
+              ? 'bg-blue-600 text-white shadow-lg'
+              : 'bg-white text-gray-600 hover:bg-gray-50'
               }`}
             disabled={!selectedDocument}
           >
@@ -425,7 +425,7 @@ const DocumentList = ({ documents, selectedDocument, onSelectDocument, loading, 
     'assigne': 'bg-indigo-100 text-indigo-800',
     'en_traitement': 'bg-orange-100 text-orange-800',
     'termine': 'bg-green-100 text-green-800',
-    'complet' : 'bg-pink-100 text-pink-800',
+    'complet': 'bg-pink-100 text-pink-800',
     'validation_directeur': 'bg-teal-100 text-teal-800',
     'refuse': 'bg-red-100 text-red-800'
   };
@@ -490,15 +490,17 @@ const DocumentList = ({ documents, selectedDocument, onSelectDocument, loading, 
               key={doc.reference}
               onClick={() => onSelectDocument(doc)}
               className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${selectedDocument?.reference === doc.reference
-                  ? 'border-blue-500 bg-blue-50'
-                  : 'border-gray-200 hover:border-blue-300 bg-white'
+                ? 'border-blue-500 bg-blue-50'
+                : 'border-gray-200 hover:border-blue-300 bg-white'
                 }`}
             >
               <div className="font-semibold text-gray-800 mb-1">{doc.reference}</div>
               <div className="text-sm text-gray-600 mb-2 truncate">{doc.objet}</div>
               <span className={`text-xs px-2 py-1 rounded-full ${statusColors[doc.status] || 'bg-gray-100 text-gray-800'}`}>
                 {doc.status}
+
               </span>
+
             </div>
           ))
         )}
@@ -721,8 +723,8 @@ const WorkflowActions = ({ document, currentUser, serviceUsers, availableActions
           {/* Message */}
           {message && (
             <div className={`p-4 rounded-lg flex items-center gap-3 ${message.type === 'success'
-                ? 'bg-green-50 text-green-800 border border-green-200'
-                : 'bg-red-50 text-red-800 border border-red-200'
+              ? 'bg-green-50 text-green-800 border border-green-200'
+              : 'bg-red-50 text-red-800 border border-red-200'
               }`}>
               {message.type === 'success' ? <CheckCircle size={20} /> : <XCircle size={20} />}
               {message.text}
@@ -767,7 +769,7 @@ const ActionForm = ({ action, formData, setFormData, currentUser, serviceUsers }
   const needsDirecteurSelection = ['chef-validate'].includes(action);
   const needsRemarque = !['start-work'].includes(action);
   const needsTypeWorkflow = ['send-to-service'].includes(action);
-  const needsDirecteurValidation = ['directeur-validate'].includes(action); 
+  const needsDirecteurValidation = ['directeur-validate'].includes(action);
   return (
     <div className="space-y-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
       <h3 className="font-semibold text-gray-700">Paramètres de l'action</h3>
@@ -951,7 +953,8 @@ const WorkflowHistory = ({ document }) => {
       const res = await workflowAPI.getHistory(document.reference);
       if (res.ok) {
         const data = await safeJsonParse(res);
-        setHistory(data.workflows || []);
+        console.log(data)
+        setHistory(Array.isArray(data) ? data : data.workflows || []);
       } else {
         setError('Impossible de charger l\'historique');
       }
