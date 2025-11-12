@@ -1,4 +1,4 @@
-
+// le nombre de user par service
 export async function fetchServiceData() {
     const token = localStorage.getItem('token');
 
@@ -24,7 +24,7 @@ export async function fetchServiceData() {
     }
 }
 
-
+//info basic sur un user
 export async function fectUserData() {
     const token = localStorage.getItem('token');
     try {
@@ -50,7 +50,8 @@ export async function fectUserData() {
 }
 
 
-export const fetchUserProfile = async () => {
+//tout les infos de profile du user avec le service ou il se  trouve
+export  async function fetchUserProfile () {
     try {
         const token = localStorage.getItem("token");
         if (!token) {

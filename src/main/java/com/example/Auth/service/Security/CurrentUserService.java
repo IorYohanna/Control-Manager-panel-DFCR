@@ -42,6 +42,7 @@ public class CurrentUserService {
         response.put("createdAt", user.getCreatedAt());
         response.put("score", user.getScore());
         response.put("evaluation", user.getEvaluation());
+        response.put("photo", user.getPhotoProfil());
 
         if (user.getService() != null) {
             ServiceDfcr service = user.getService();

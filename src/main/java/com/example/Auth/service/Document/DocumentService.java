@@ -8,7 +8,6 @@ import com.example.Auth.repository.Document.DocumentRepository;
 import com.example.Auth.repository.Document.WorkflowRepository;
 import com.example.Auth.repository.User.UserRepository;
 
-import com.example.Auth.repository.User.UserRepository;
 import com.example.Auth.service.Security.CurrentUserService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -20,7 +19,6 @@ import com.example.Auth.utils.FileUtilsService;
 import com.example.Auth.utils.LoggerService;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -83,7 +81,7 @@ public class DocumentService {
         workflow.setDocument(savedDoc);
         workflow.setTypeWorkflow("RECEPTION");
         workflow.setAction("RECEVOIR");
-        workflow.setStatus("EN_ATTENTE");
+        workflow.setStatus("en_attente");
         workflow.setDestinataire(directeur);
         workflow.setRemarque("Document créé et en attente de traitement");
 

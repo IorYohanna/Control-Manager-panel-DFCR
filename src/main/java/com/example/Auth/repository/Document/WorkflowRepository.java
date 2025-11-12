@@ -25,6 +25,10 @@ public interface WorkflowRepository extends JpaRepository<Workflow, Long> {
     List<Workflow> findByDestinataire_Matricule(String matricule);
 
     List<Workflow> findByDestinataire_MatriculeAndStatus(String matricule, String status);
+    
+    List<Workflow> findByActeur_MatriculeAndStatus (String matricule, String status );
+
+    Optional<Workflow> findTopByDocumentReferenceOrderByCreatedAtDesc(String reference);
 
     Long countByDestinataire_MatriculeAndStatus(String matricule, String status);
 }

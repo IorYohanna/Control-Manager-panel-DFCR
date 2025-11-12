@@ -6,7 +6,7 @@ import TextField from "@mui/material/TextField";
 import { Link, useNavigate } from "react-router-dom";
 import { signupUser } from "../../api/Auth/auth";
 
-const options = ['SAGA', 'SG', 'SF', 'SRFP', 'SCRI', 'SPSE', 'ORDSEC', 'SP', 'Chargé de Mission', 'Coordinateur des activités'];
+const options = ['SAGA', 'SG', 'SF', 'SRFP', 'SCRI', 'SPSE', 'ORDSEC', 'SP', 'Chargé de Mission', 'Coordinateur des activités', "Aucun"];
 const fonctions = ['Directeur', 'Chef de service', 'Employé']
 
 const Signup = () => {

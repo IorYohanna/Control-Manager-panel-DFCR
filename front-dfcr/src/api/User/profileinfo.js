@@ -1,6 +1,5 @@
 import { fetchUserProfile } from "./currentUser";
 
-
 export const fetchUserPhoto = async (matricule) => {
     try {
         const token = localStorage.getItem("token");

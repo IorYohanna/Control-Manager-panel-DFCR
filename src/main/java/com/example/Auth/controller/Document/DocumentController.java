@@ -36,8 +36,8 @@ public class DocumentController {
                         doc.getType(),
                         doc.getStatus(),
                         doc.getCreator().getMatricule(),
-                        doc.getCreator().getName(),
-                        doc.getCreator().getUsername()
+                        doc.getCreator().getUsername(),
+                        doc.getCreator().getSurname()
                 ))
                 .toList();
         return ResponseEntity.ok(documents);
@@ -54,6 +54,7 @@ public class DocumentController {
         try {
             Document doc = documentService.createDocument(
                     reference, objet, corps, type, status, pieceJointe);
+
             DocumentResponseDto responseDto = new DocumentResponseDto(
                     doc.getReference(),
                     doc.getObjet(),
@@ -61,14 +62,13 @@ public class DocumentController {
                     doc.getType(),
                     doc.getStatus(),
                     doc.getCreator().getMatricule(),
-                    doc.getCreator().getName(),
-                    doc.getCreator().getUsername()
+                    doc.getCreator().getName(),      // ← Corrigé
+                    doc.getCreator().getUsername()   // ← Corrigé
             );
 
-
             return ResponseEntity.ok(responseDto);
-
         } catch (Exception e) {
+            e.printStackTrace(); // ← Ajoutez ceci pour voir l'erreur exacte
             return ResponseEntity.internalServerError().build();
         }
     }

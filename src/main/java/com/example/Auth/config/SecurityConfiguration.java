@@ -43,7 +43,8 @@ public class SecurityConfiguration {
                                 .requestMatchers("/api/auth/gmail/**").permitAll()
                                 .requestMatchers("/api/gmail/**").permitAll()
                                 .requestMatchers("/events/**").authenticated()
-                                .requestMatchers("/users/**").authenticated()
+                                .requestMatchers("/users/**").permitAll()
+                                .requestMatchers("/documents/**").permitAll()
                                 .anyRequest().authenticated())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)

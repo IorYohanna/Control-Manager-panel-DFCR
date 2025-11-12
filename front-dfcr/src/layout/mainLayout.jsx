@@ -2,7 +2,7 @@ import { Outlet } from "react-router-dom";
 import Sidebar, { SidebarItem } from "./SideBar";
 import { BarChart3, Boxes, LayoutDashboard, LifeBuoy, Package, Receipt, UserCircle } from "lucide-react";
 import { useState } from "react";
-import { Email } from "@mui/icons-material";
+import { Email, Work } from "@mui/icons-material";
 
 export default function MainLayout() {
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
@@ -31,6 +31,12 @@ export default function MainLayout() {
           text="Dashboard"
           to="/home"
         />
+
+        <SidebarItem icon={<Work/>} size={20} 
+          text="Documents"
+          to="/home/workflow"
+        /> 
+          
       </Sidebar>
 
       <div 

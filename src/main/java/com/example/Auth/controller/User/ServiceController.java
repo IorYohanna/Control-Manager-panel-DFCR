@@ -1,8 +1,6 @@
 package com.example.Auth.controller.User;
-
 import com.example.Auth.dto.EventDto;
 import com.example.Auth.dto.EventResponseDto;
-import com.example.Auth.model.Document.Event;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,7 +9,6 @@ import com.example.Auth.model.User.ServiceDfcr;
 import com.example.Auth.service.User.ServiceService;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/services")
