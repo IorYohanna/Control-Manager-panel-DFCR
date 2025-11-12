@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 import Sidebar, { SidebarItem } from "./SideBar";
-import { BarChart3, Boxes, LayoutDashboard, LifeBuoy, Package, Receipt, UserCircle } from "lucide-react";
+import { BarChart3, Boxes, LayoutDashboard, LifeBuoy, Package, Receipt, UserCircle , Calendar} from "lucide-react";
 import { useState } from "react";
 import { Email, Work } from "@mui/icons-material";
 
@@ -26,10 +26,14 @@ export default function MainLayout() {
           text="Gmail"
           to="/home/email"
         />
+        <SidebarItem icon={<Calendar size={20} />}
+          text="Event"
+          to="/home"
+        />
 
         <SidebarItem icon={<Receipt size={20} />}
           text="Dashboard"
-          to="/home"
+          to="/home/dashboard"
         />
 
         <SidebarItem icon={<Work/>} size={20} 

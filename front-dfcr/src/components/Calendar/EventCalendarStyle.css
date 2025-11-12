@@ -13,6 +13,7 @@
 .fc .fc-toolbar-title {
   text-transform: capitalize;
   color: var(--primary);
+  font-weight: 500;
 }
 
 @media (min-width: 640px) {
@@ -23,7 +24,7 @@
 
 @media (min-width: 1024px) {
   .fc .fc-toolbar-title {
-    font-size: 1.75rem;
+    font-size: 1.2rem;
   }
 }
 
