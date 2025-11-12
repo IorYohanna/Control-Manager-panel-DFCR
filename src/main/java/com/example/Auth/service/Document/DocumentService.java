@@ -161,4 +161,8 @@ public class DocumentService {
                 .orElseThrow(() -> new RuntimeException("Document non trouvé"));
     }
 
+    public List<Document> getAllDocumentsSorted() {
+        return documentRepository.findAllByOrderByCreatedAtDesc();
+    }
+
 }

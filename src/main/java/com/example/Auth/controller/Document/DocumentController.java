@@ -1,6 +1,7 @@
 package com.example.Auth.controller.Document;
 
 import com.example.Auth.dto.Document.DocumentDto;
+import com.example.Auth.dto.Document.DocumentHistoriqueDto;
 import com.example.Auth.dto.Document.DocumentResponseDto;
 import com.example.Auth.model.Document.Document;
 import com.example.Auth.service.Document.DocumentService;
@@ -62,8 +63,8 @@ public class DocumentController {
                     doc.getType(),
                     doc.getStatus(),
                     doc.getCreator().getMatricule(),
-                    doc.getCreator().getName(),      // ← Corrigé
-                    doc.getCreator().getUsername()   // ← Corrigé
+                    doc.getCreator().getName(),
+                    doc.getCreator().getUsername()
             );
 
             return ResponseEntity.ok(responseDto);
@@ -124,6 +125,25 @@ public class DocumentController {
         boolean deleted = documentService.deleteDocument(reference);
         return deleted ? ResponseEntity.ok(Map.of("delete", "Document Supprimer avec succes  "))
                 : ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/historique")
+    public ResponseEntity<List<DocumentHistoriqueDto>> getDocumentHistorique() {
+        List<DocumentHistoriqueDto> documents = documentService.getAllDocumentsSorted()
+                .stream()
+                .map(doc -> new DocumentHistoriqueDto(
+                        doc.getReference(),
+                        doc.getObjet(),
+                        doc.getCorps(),
+                        doc.getType(),
+                        doc.getStatus(),
+                        doc.getCreator().getMatricule(),
+                        doc.getCreator().getUsername(),
+                        doc.getCreator().getSurname(),
+                        doc.getCreatedAt()
+                ))
+                .toList();
+        return ResponseEntity.ok(documents);
     }
 
 }
