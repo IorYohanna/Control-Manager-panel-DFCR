@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 import Sidebar, { SidebarItem } from "./SideBar";
-import { BarChart3, Boxes, LayoutDashboard, LifeBuoy, Package, Receipt, UserCircle , Calendar} from "lucide-react";
+import { Boxes, LayoutDashboard, Package, Receipt , Calendar, MessageCircle} from "lucide-react";
 import { useState } from "react";
 import { Email, Work } from "@mui/icons-material";
 
@@ -39,6 +39,10 @@ export default function MainLayout() {
         <SidebarItem icon={<Work/>} size={20} 
           text="Documents"
           to="/home/workflow"
+        /> 
+        <SidebarItem icon={<MessageCircle/>} size={20} 
+          text="Messagerie Instantanée"
+          to="/home/chat"
         /> 
           
       </Sidebar>

@@ -41,4 +41,14 @@ public class MessageService {
                 user1, user2, user1, user2
         );
     }
+
+    public Message getById(Long id) {
+        return messageRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Message not found with id: " + id));
+    }
+
+    public void deleteMessage(Long id) {
+        messageRepository.deleteById(id);
+    }
+
 }

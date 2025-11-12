@@ -62,6 +62,7 @@ function App() {
             <Route path="/home/email" element={<EmailPage/>} />
             <Route path="/home/dashboard" element={<Dashboard/>} />
             <Route path="/home/workflow" element={<WorkflowManagement/>} />
+            <Route path="/home/chat" element={<Chat/>} />
           </Route>
         </Routes>
       </Router>

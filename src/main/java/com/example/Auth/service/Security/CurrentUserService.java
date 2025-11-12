@@ -21,6 +21,10 @@ public class CurrentUserService {
     @Autowired
     private UserServiceInfoService userServiceInfoService;
 
+    public User getCurrentUser() {
+        return getAuthenticatedUser();
+    }
+
     private User getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();

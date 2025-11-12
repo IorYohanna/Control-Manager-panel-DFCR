@@ -12,8 +12,8 @@ export default function Chat() {
   const [chatLoading, setChatLoading] = useState(false);
 
   const stompClientRef = useRef(null);
+  const chatContainerRef = useRef(null);
 
-  // Récupère l'utilisateur courant depuis le token ou l'API
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -31,7 +31,7 @@ export default function Chat() {
     }
   }, []);
 
-  // Récupère la liste des utilisateurs
+
   useEffect(() => {
     if (!currentUser) return;
     const token = localStorage.getItem("token");
@@ -44,7 +44,7 @@ export default function Chat() {
       .finally(() => setLoading(false));
   }, [currentUser]);
 
-  // Charge l'historique de conversation à chaque changement d'utilisateur sélectionné
+
   useEffect(() => {
     if (!selectedUser || !currentUser) {
       setMessages([]);
@@ -66,7 +66,6 @@ export default function Chat() {
       .finally(() => setChatLoading(false));
   }, [selectedUser, currentUser]);
 
-  // WebSocket STOMP connection
   useEffect(() => {
     if (!currentUser) return;
 
@@ -74,9 +73,7 @@ export default function Chat() {
     const socket = new SockJS("http://localhost:8080/ws-message");
     const client = new Client({
       webSocketFactory: () => socket,
-      connectHeaders: {
-        Authorization: `Bearer ${token}`,
-      },
+      connectHeaders: { Authorization: `Bearer ${token}` },
       debug: (str) => console.log("STOMP:", str),
       reconnectDelay: 5000,
       heartbeatIncoming: 4000,
@@ -84,7 +81,6 @@ export default function Chat() {
       onConnect: () => {
         console.log("WebSocket connected");
 
-        // S'abonner aux messages privés
         client.subscribe(`/user/queue/messages`, (msg) => {
           try {
             const receivedMessage = JSON.parse(msg.body);
@@ -94,7 +90,6 @@ export default function Chat() {
           }
         });
 
-        // S'abonner aux erreurs (optionnel)
         client.subscribe(`/user/queue/errors`, (msg) => {
           console.error("WebSocket error:", msg.body);
         });
@@ -117,28 +112,44 @@ export default function Chat() {
 
   // Envoyer un message
   const sendMessage = () => {
-    if (!stompClientRef.current?.connected) {
-      console.error("WebSocket not connected");
-      return;
-    }
-
+    if (!stompClientRef.current?.connected) return;
     if (!input.trim() || !selectedUser || !currentUser) return;
 
-    try {
-      stompClientRef.current.publish({
-        destination: "/app/chat",
-        body: JSON.stringify({
-          senderMatricule: currentUser,
-          receiverMatricule: selectedUser,
-          content: input.trim(),
-        }),
-        headers: { "content-type": "application/json" },
-      });
-      setInput("");
-    } catch (error) {
-      console.error("Error sending message:", error);
-    }
+    stompClientRef.current.publish({
+      destination: "/app/chat",
+      body: JSON.stringify({
+        senderMatricule: currentUser,
+        receiverMatricule: selectedUser,
+        content: input.trim(),
+      }),
+      headers: { "content-type": "application/json" },
+    });
+    setInput("");
   };
+
+    const deleteMessage = (id) => {
+    const confirmed = window.confirm("Voulez-vous vraiment supprimer ce message ?");
+    if (!confirmed) return;
+
+    const token = localStorage.getItem("token");
+    fetch(`http://localhost:8080/messages/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+    })
+        .then((res) => {
+        if (!res.ok) throw new Error("Impossible de supprimer le message");
+        setMessages((prev) => prev.filter((m) => m.id !== id));
+        })
+        .catch(console.error);
+    };
+
+
+  // Scroll automatique en bas
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  }, [messages]);
 
   if (loading)
     return (
@@ -154,43 +165,53 @@ export default function Chat() {
     );
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen font-sans text-gray-800 p-5">
       {/* Sidebar utilisateurs */}
-      <div className="w-64 border-r border-gray-200 bg-gray-50 p-4 overflow-y-auto">
-        <h2 className="text-lg font-semibold mb-2">Utilisateurs</h2>
-        <p className="text-sm text-gray-500 mb-4">Connecté: {currentUser}</p>
-        {users.length === 0 ? (
-          <p className="text-gray-400 text-sm">Aucun utilisateur disponible</p>
-        ) : (
-          users.map((user) => (
-            <div
-              key={user.matricule}
-              onClick={() => setSelectedUser(user.matricule)}
-              className={`p-2 rounded cursor-pointer mb-2 hover:bg-gray-200 ${
-                selectedUser === user.matricule ? "bg-blue-100" : "bg-white"
-              }`}
-            >
-              <p className="font-medium">{user.nom || user.matricule}</p>
-              <p className="text-xs text-gray-500">{user.matricule}</p>
-            </div>
-          ))
-        )}
+      <div className="w-64 bg-[#2d466e] text-white p-4 flex flex-col rounded-tl-2xl rounded-bl-2xl">
+        <h2 className="text-xl font-bold mb-4">Utilisateurs</h2>
+        <p className="text-sm mb-4 opacity-80">Connecté: {currentUser}</p>
+        <div className="flex-1 overflow-y-auto space-y-2">
+          {users.length === 0 ? (
+            <p className="text-gray-300 text-sm">Aucun utilisateur disponible</p>
+          ) : (
+            users.map((user) => (
+              <div
+                key={user.matricule}
+                onClick={() => setSelectedUser(user.matricule)}
+                className={`cursor-pointer rounded-lg p-2 transition-colors duration-200 
+                  ${
+                    selectedUser === user.matricule
+                      ? "bg-[#73839e]"
+                      : "hover:bg-[#73839e]/40"
+                  }`}
+              >
+                <p className="font-medium">{user.surname} {user.username}</p>
+                <p className="text-xs opacity-70">{user.matricule}</p>
+              </div>
+            ))
+          )}
+        </div>
       </div>
 
       {/* Zone de chat */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col bg-[#f5ece3] rounded-tr-2xl rounded-br-2xl">
         {selectedUser ? (
           <>
-            <div className="p-4 border-b border-gray-200 font-semibold text-lg">
+            {/* Header chat */}
+            <div className="p-4 border-b border-[#73839e]/40 font-semibold text-lg bg-[#73839e]/10">
               Chat avec {selectedUser}
             </div>
-            <div className="flex-1 p-4 overflow-y-auto bg-gray-100 space-y-3">
+
+            {/* Messages */}
+            <div
+              className="flex-1 p-4 overflow-y-auto space-y-3"
+              id="chat-container"
+              ref={chatContainerRef}
+            >
               {chatLoading ? (
-                <p className="text-gray-400 text-center mt-10">
-                  Chargement des messages...
-                </p>
+                <p className="text-gray-500 text-center mt-10">Chargement des messages...</p>
               ) : messages.length === 0 ? (
-                <p className="text-gray-400 text-center mt-10">Aucun message</p>
+                <p className="text-gray-500 text-center mt-10">Aucun message</p>
               ) : (
                 messages
                   .filter(
@@ -202,22 +223,33 @@ export default function Chat() {
                     <div
                       key={m.id || Math.random()}
                       className={`flex ${
-                        m.senderMatricule === currentUser
-                          ? "justify-end"
-                          : "justify-start"
-                      }`}
+                        m.senderMatricule === currentUser ? "justify-end" : "justify-start"
+                      } items-end`}
                     >
+                      {m.senderMatricule === currentUser && (
+                        <button
+                          onClick={() => deleteMessage(m.id)}
+                          className="ml-2 text-xs text-red-500 hover:text-red-700"
+                        >
+                          ✕
+                        </button>
+                      )}
+
                       <div
-                        className={`px-4 py-2 rounded-lg max-w-[70%] ${
-                          m.senderMatricule === currentUser
-                            ? "bg-blue-500 text-white"
-                            : "bg-white text-gray-800 shadow"
-                        }`}
+                        className={`px-4 py-2 rounded-2xl max-w-[70%] break-words shadow-lg
+                          ${
+                            m.senderMatricule === currentUser
+                              ? "bg-[#2d466e] text-white rounded-br-none"
+                              : "bg-[#73839e]/30 text-[#2d466e] rounded-bl-none"
+                          }`}
                       >
                         <p className="text-xs opacity-70 mb-1">{m.senderName}</p>
                         <p>{m.content}</p>
                         <p className="text-[10px] opacity-50 mt-1 text-right">
-                          {new Date(m.sentAt).toLocaleTimeString()}
+                          {new Date(m.sentAt).toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
                         </p>
                       </div>
                     </div>
@@ -225,25 +257,26 @@ export default function Chat() {
               )}
             </div>
 
-            <div className="p-4 border-t border-gray-200 flex gap-2">
+            {/* Input message */}
+            <div className="p-4 border-t border-[#73839e]/40 flex gap-2 bg-[#73839e]/5">
               <input
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyPress={(e) => e.key === "Enter" && sendMessage()}
                 placeholder="Tapez votre message..."
-                className="flex-1 border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="flex-1 border border-[#73839e]/40 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#2d466e]"
               />
               <button
                 onClick={sendMessage}
-                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                className="bg-[#2d466e] text-white px-4 py-2 rounded-full hover:bg-[#73839e]"
               >
                 Envoyer
               </button>
             </div>
           </>
         ) : (
-          <div className="flex-1 flex items-center justify-center text-gray-500 text-lg">
+          <div className="flex-1 flex items-center justify-center text-[#73839e] text-lg">
             👈 Sélectionnez un utilisateur pour commencer à discuter
           </div>
         )}

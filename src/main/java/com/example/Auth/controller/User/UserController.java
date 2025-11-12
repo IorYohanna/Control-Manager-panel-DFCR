@@ -1,6 +1,7 @@
 package com.example.Auth.controller.User;
 
 import com.example.Auth.dto.User.UserResponseDto;
+import com.example.Auth.service.Security.CurrentUserService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,9 +30,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 @CrossOrigin(origins = "http://localhost:5173")
 public class UserController {
     private final UserService userService;
+    private final CurrentUserService currentUserService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, CurrentUserService currentUserService) {
         this.userService = userService;
+        this.currentUserService = currentUserService;
     }
 
     @PutMapping("/{matricule}")
@@ -92,7 +95,6 @@ public class UserController {
                 .toList();
         return ResponseEntity.ok(userDtos);
     }
-
 
     // ✅ Endpoint pour obtenir l'utilisateur connecté
     @GetMapping("/auth/me")

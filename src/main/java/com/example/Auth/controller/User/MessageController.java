@@ -3,6 +3,8 @@ package com.example.Auth.controller.User;
 import com.example.Auth.dto.User.MessageDto;
 import com.example.Auth.model.User.Message;
 import com.example.Auth.service.User.MessageService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -62,4 +64,33 @@ public class MessageController {
                 .toList();
         return messageDtos;
     }
+    // Supprimer un message par ID (REST)
+    @DeleteMapping("/messages/{id}")
+    public ResponseEntity<Void> deleteMessage(@PathVariable Long id, Principal principal) {
+        Message message = messageService.getById(id);
+
+        // Vérifie que l'utilisateur est l'expéditeur
+        if (!message.getSender().getMatricule().equals(principal.getName())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        messageService.deleteMessage(id);
+
+        // Notifie le destinataire via WebSocket
+        messagingTemplate.convertAndSendToUser(
+                message.getReceiver().getMatricule(),
+                "/queue/messages/delete",
+                id
+        );
+
+        // Notifie l'expéditeur aussi pour mise à jour en front
+        messagingTemplate.convertAndSendToUser(
+                message.getSender().getMatricule(),
+                "/queue/messages/delete",
+                id
+        );
+
+        return ResponseEntity.ok().build();
+    }
+
 }
