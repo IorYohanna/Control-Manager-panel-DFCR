@@ -16,7 +16,7 @@ public interface WorkflowRepository extends JpaRepository<Workflow, Long> {
 
     List<Workflow> findByDocument_ReferenceOrderByCreatedAtDesc(String reference);
 
-    List<Workflow> findByDocument_Reference(String reference);
+    List<Workflow> findByDocumentReference(String reference);
 
     Optional<Workflow> findFirstByDocument_ReferenceOrderByCreatedAtDesc(String reference);
 

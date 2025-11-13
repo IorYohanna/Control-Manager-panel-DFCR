@@ -22,10 +22,10 @@ public class WorkflowController {
 
     @Autowired
     private WorkflowService workflowService;
-    
+
     @Autowired
     private UserRepository userRepository;
-    
+
     @Autowired
     private ServiceRepository serviceRepository;
 
@@ -37,29 +37,27 @@ public class WorkflowController {
         try {
             // Récupérer les entités
             User directeur = userRepository.findById(request.getDirecteurMatricule())
-                .orElseThrow(() -> new RuntimeException("Directeur non trouvé"));
-            
+                    .orElseThrow(() -> new RuntimeException("Directeur non trouvé"));
+
             ServiceDfcr service = serviceRepository.findById(request.getServiceId())
-                .orElseThrow(() -> new RuntimeException("Service non trouvé"));
-            
+                    .orElseThrow(() -> new RuntimeException("Service non trouvé"));
+
             // Appeler le service
             Workflow workflow = workflowService.directeurEnvoieService(
-                request.getReference(),
-                directeur,
-                service,
-                request.getTypeWorkflow(),
-                request.getRemarque()
-            );
-            
+                    request.getReference(),
+                    directeur,
+                    service,
+                    request.getTypeWorkflow(),
+                    request.getRemarque());
+
             return ResponseEntity.ok(new WorkflowResponse(
-                true,
-                "Document envoyé au service avec succès",
-                workflow
-            ));
-            
+                    true,
+                    "Document envoyé au service avec succès",
+                    workflow));
+
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new WorkflowResponse(false, e.getMessage()));
+                    .body(new WorkflowResponse(false, e.getMessage()));
         }
     }
 
@@ -70,27 +68,25 @@ public class WorkflowController {
     public ResponseEntity<WorkflowResponse> assignToEmploye(@RequestBody AssignRequest request) {
         try {
             User chefService = userRepository.findById(request.getChefMatricule())
-                .orElseThrow(() -> new RuntimeException("Chef de service non trouvé"));
-            
+                    .orElseThrow(() -> new RuntimeException("Chef de service non trouvé"));
+
             User employe = userRepository.findById(request.getEmployeMatricule())
-                .orElseThrow(() -> new RuntimeException("Employé non trouvé"));
-            
+                    .orElseThrow(() -> new RuntimeException("Employé non trouvé"));
+
             Workflow workflow = workflowService.chefAssigneEmploye(
-                request.getReference(),
-                chefService,
-                employe,
-                request.getRemarque()
-            );
-            
+                    request.getReference(),
+                    chefService,
+                    employe,
+                    request.getRemarque());
+
             return ResponseEntity.ok(new WorkflowResponse(
-                true,
-                "Document assigné à l'employé avec succès",
-                workflow
-            ));
-            
+                    true,
+                    "Document assigné à l'employé avec succès",
+                    workflow));
+
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new WorkflowResponse(false, e.getMessage()));
+                    .body(new WorkflowResponse(false, e.getMessage()));
         }
     }
 
@@ -101,22 +97,20 @@ public class WorkflowController {
     public ResponseEntity<WorkflowResponse> startWork(@RequestBody WorkRequest request) {
         try {
             User employe = userRepository.findById(request.getEmployeMatricule())
-                .orElseThrow(() -> new RuntimeException("Employé non trouvé"));
-            
+                    .orElseThrow(() -> new RuntimeException("Employé non trouvé"));
+
             Workflow workflow = workflowService.employeCommenceTraitement(
-                request.getReference(),
-                employe
-            );
-            
+                    request.getReference(),
+                    employe);
+
             return ResponseEntity.ok(new WorkflowResponse(
-                true,
-                "Traitement commencé",
-                workflow
-            ));
-            
+                    true,
+                    "Traitement commencé",
+                    workflow));
+
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new WorkflowResponse(false, e.getMessage()));
+                    .body(new WorkflowResponse(false, e.getMessage()));
         }
     }
 
@@ -127,27 +121,25 @@ public class WorkflowController {
     public ResponseEntity<WorkflowResponse> finishWork(@RequestBody WorkRequest request) {
         try {
             User employe = userRepository.findById(request.getEmployeMatricule())
-                .orElseThrow(() -> new RuntimeException("Employé non trouvé"));
-            
+                    .orElseThrow(() -> new RuntimeException("Employé non trouvé"));
+
             User chefService = userRepository.findById(request.getChefMatricule())
-                .orElseThrow(() -> new RuntimeException("Chef de service non trouvé"));
-            
+                    .orElseThrow(() -> new RuntimeException("Chef de service non trouvé"));
+
             Workflow workflow = workflowService.employeTermineEtEnvoie(
-                request.getReference(),
-                employe,
-                chefService,
-                request.getRemarque()
-            );
-            
+                    request.getReference(),
+                    employe,
+                    chefService,
+                    request.getRemarque());
+
             return ResponseEntity.ok(new WorkflowResponse(
-                true,
-                "Document terminé et envoyé au chef",
-                workflow
-            ));
-            
+                    true,
+                    "Document terminé et envoyé au chef",
+                    workflow));
+
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new WorkflowResponse(false, e.getMessage()));
+                    .body(new WorkflowResponse(false, e.getMessage()));
         }
     }
 
@@ -158,27 +150,25 @@ public class WorkflowController {
     public ResponseEntity<WorkflowResponse> chefValidate(@RequestBody ChefActionRequest request) {
         try {
             User chefService = userRepository.findById(request.getChefMatricule())
-                .orElseThrow(() -> new RuntimeException("Chef de service non trouvé"));
-            
+                    .orElseThrow(() -> new RuntimeException("Chef de service non trouvé"));
+
             User directeur = userRepository.findById(request.getDirecteurMatricule())
-                .orElseThrow(() -> new RuntimeException("Directeur non trouvé"));
-            
+                    .orElseThrow(() -> new RuntimeException("Directeur non trouvé"));
+
             Workflow workflow = workflowService.chefValideEtEnvoieDirecteur(
-                request.getReference(),
-                chefService,
-                directeur,
-                request.getRemarque()
-            );
-            
+                    request.getReference(),
+                    chefService,
+                    directeur,
+                    request.getRemarque());
+
             return ResponseEntity.ok(new WorkflowResponse(
-                true,
-                "Document validé et envoyé au directeur",
-                workflow
-            ));
-            
+                    true,
+                    "Document validé et envoyé au directeur",
+                    workflow));
+
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new WorkflowResponse(false, e.getMessage()));
+                    .body(new WorkflowResponse(false, e.getMessage()));
         }
     }
 
@@ -189,27 +179,25 @@ public class WorkflowController {
     public ResponseEntity<WorkflowResponse> chefReject(@RequestBody ChefActionRequest request) {
         try {
             User chefService = userRepository.findById(request.getChefMatricule())
-                .orElseThrow(() -> new RuntimeException("Chef de service non trouvé"));
-            
+                    .orElseThrow(() -> new RuntimeException("Chef de service non trouvé"));
+
             User employe = userRepository.findById(request.getEmployeMatricule())
-                .orElseThrow(() -> new RuntimeException("Employé non trouvé"));
-            
+                    .orElseThrow(() -> new RuntimeException("Employé non trouvé"));
+
             Workflow workflow = workflowService.chefRefuseDocument(
-                request.getReference(),
-                chefService,
-                employe,
-                request.getRemarque()
-            );
-            
+                    request.getReference(),
+                    chefService,
+                    employe,
+                    request.getRemarque());
+
             return ResponseEntity.ok(new WorkflowResponse(
-                true,
-                "Document refusé et renvoyé à l'employé",
-                workflow
-            ));
-            
+                    true,
+                    "Document refusé et renvoyé à l'employé",
+                    workflow));
+
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new WorkflowResponse(false, e.getMessage()));
+                    .body(new WorkflowResponse(false, e.getMessage()));
         }
     }
 
@@ -220,23 +208,21 @@ public class WorkflowController {
     public ResponseEntity<WorkflowResponse> directeurValidate(@RequestBody DirecteurActionRequest request) {
         try {
             User directeur = userRepository.findById(request.getDirecteurMatricule())
-                .orElseThrow(() -> new RuntimeException("Directeur non trouvé"));
-            
+                    .orElseThrow(() -> new RuntimeException("Directeur non trouvé"));
+
             Workflow workflow = workflowService.directeurValideComplet(
-                request.getReference(),
-                directeur,
-                request.getRemarque()
-            );
-            
+                    request.getReference(),
+                    directeur,
+                    request.getRemarque());
+
             return ResponseEntity.ok(new WorkflowResponse(
-                true,
-                "Document validé comme complet",
-                workflow
-            ));
-            
+                    true,
+                    "Document validé comme complet",
+                    workflow));
+
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new WorkflowResponse(false, e.getMessage()));
+                    .body(new WorkflowResponse(false, e.getMessage()));
         }
     }
 
@@ -247,37 +233,35 @@ public class WorkflowController {
     public ResponseEntity<WorkflowResponse> directeurReject(@RequestBody DirecteurActionRequest request) {
         try {
             User directeur = userRepository.findById(request.getDirecteurMatricule())
-                .orElseThrow(() -> new RuntimeException("Directeur non trouvé"));
-            
+                    .orElseThrow(() -> new RuntimeException("Directeur non trouvé"));
+
             ServiceDfcr service = serviceRepository.findById(request.getServiceId())
-                .orElseThrow(() -> new RuntimeException("Service non trouvé"));
-            
+                    .orElseThrow(() -> new RuntimeException("Service non trouvé"));
+
             Workflow workflow = workflowService.directeurRefuseIncomplet(
-                request.getReference(),
-                directeur,
-                service,
-                request.getRemarque()
-            );
-            
+                    request.getReference(),
+                    directeur,
+                    service,
+                    request.getRemarque());
+
             return ResponseEntity.ok(new WorkflowResponse(
-                true,
-                "Document refusé et renvoyé au service",
-                workflow
-            ));
-            
+                    true,
+                    "Document refusé et renvoyé au service",
+                    workflow));
+
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new WorkflowResponse(false, e.getMessage()));
+                    .body(new WorkflowResponse(false, e.getMessage()));
         }
     }
 
-
     @GetMapping("/history/{reference}")
-    public ResponseEntity<List<Workflow>> getWorkflowHistory(@PathVariable String reference) {
-        List<Workflow> history = workflowService.getWorkflowHistory(reference);
+    public ResponseEntity<List<WorkflowHistorique>> getWorkflowHistory(@PathVariable String reference) {
+        List<WorkflowHistorique> history = workflowService.getWorkflowHistory(reference);
         if (history.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(history);
     }
+
 }

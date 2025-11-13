@@ -159,7 +159,7 @@ function GoogleDriveViewer() {
 
   if (!accessToken) {
     return (
-      <div className="w-full bg-linear-to-br from-light-blue to-blue-zodiac rounded-2xl flex items-center justify-center m-6">
+      <div className="w-full min-h-screen bg-linear-to-br from-light-blue to-blue-zodiac flex items-center justify-center">
         <div className="bg-linear-to-tr from-beige-creme to-white-gray rounded-2xl shadow-2xl p-12 max-w-md w-full text-center flex flex-col items-center">
           <div className="text-6xl mb-6"><img src="/img/drive.png" alt="" className='w-20 h-20' /></div>
           <h1 className="text-3xl font-necoBlack font-bold text-gray-800 mb-4">

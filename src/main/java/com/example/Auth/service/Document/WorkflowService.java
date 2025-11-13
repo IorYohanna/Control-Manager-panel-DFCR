@@ -1,5 +1,6 @@
 package com.example.Auth.service.Document;
 
+import com.example.Auth.dto.Workflow.WorkflowHistorique;
 import com.example.Auth.model.Document.Document;
 import com.example.Auth.model.Document.Workflow;
 import com.example.Auth.model.User.User;
@@ -185,9 +186,27 @@ public class WorkflowService {
                 directeur, null, service, remarque);
     }
 
-    public List<Workflow> getWorkflowHistory(String reference) {
-        return workflowRepository.findByDocument_Reference(reference);
+    public List<WorkflowHistorique> getWorkflowHistory(String reference) {
+        List<Workflow> workflows = workflowRepository.findByDocumentReference(reference);
+
+        return workflows.stream().map(this::toHistoriqueDto).toList();
     }
+
+    private WorkflowHistorique toHistoriqueDto(Workflow workflow) {
+        WorkflowHistorique dto = new WorkflowHistorique();
+        dto.setReference(workflow.getDocument().getReference());
+        dto.setTypeWorkflow(workflow.getTypeWorkflow());
+        dto.setAction(workflow.getAction());
+        dto.setStatus(workflow.getStatus());
+        dto.setMatriculeActeur(workflow.getActeur().getMatricule());
+        dto.setActeurFonction(workflow.getActeur().getFonction());
+        dto.setRemarque(workflow.getRemarque());
+        dto.setEstComplet(workflow.getEstComplet());
+        dto.setCreatedAt(workflow.getCreatedAt());
+        return dto;
+    }
+
+
 
     public List<Workflow> getDocumentsEnAttente(String matricule) {
         return workflowRepository.findByDestinataire_MatriculeAndStatus(matricule, "en_attente");

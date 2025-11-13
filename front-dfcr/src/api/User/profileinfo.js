@@ -28,6 +28,55 @@ export const fetchUserPhoto = async (matricule) => {
     }
 };
 
+
+export async function updateUser(matricule, formData) {
+    const token = localStorage.getItem("token");
+    try {
+        const res = await fetch(`http://localhost:8080/users/${matricule}`, {
+            method: "PUT",
+            headers: {
+                    "Authorization": `Bearer ${token}`,
+            },
+            body: JSON.stringify(formData),
+        });
+
+        if (!res.ok) {
+            const errorData = await res.json();
+            throw new Error(errorData.message || "Erreur lors de la mise à jour de l'utilisateur");
+        }
+
+        const updatedUser = await res.json();
+        return updatedUser;
+    } catch (err) {
+        console.error("Erreur updateUser:", err);
+        throw err;
+    }
+}
+
+export async function deleteUser(matricule) {
+    const token = localStorage.getItem("token");
+    
+    try {
+        const res = await fetch(`http://localhost:8080/users/${matricule}`, {
+            method: "DELETE",
+            headers: {
+                    "Authorization": `Bearer ${token}`,
+            }
+        });
+
+        if (!res.ok) {
+            const errorData = await res.json();
+            throw new Error(errorData.message || "Erreur lors de la suppression de l'utilisateur");
+        }
+
+        return true; // succès
+    } catch (err) {
+        console.error("Erreur deleteUser:", err);
+        throw err;
+    }
+}
+
+
 export const uploadPhoto = async ( matricule, formData ) => {
     const token = localStorage.getItem("token");
 

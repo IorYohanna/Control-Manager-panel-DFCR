@@ -96,7 +96,6 @@ public class UserController {
         return ResponseEntity.ok(userDtos);
     }
 
-    // ✅ Endpoint pour obtenir l'utilisateur connecté
     @GetMapping("/auth/me")
     public User getCurrentUser() {
         return currentUserService.getCurrentUser();

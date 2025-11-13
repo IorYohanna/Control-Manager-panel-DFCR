@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Briefcase, MapPin } from "lucide-react";
 import { Score, Subject, Update, Upload, Warning } from "@mui/icons-material";
 import {
+    deleteUser,
     extractServiceData,
     fetchCompleteUserProfile,
     formatUserFormData,
@@ -83,10 +84,10 @@ export default function UserSettings() {
     }
 
     return (
-        <div className="w-full bg-linear-to-br  p-4 sm:p-8 flex items-center justify-center">
+        <div className="w-full bg-linear-to-br p-4 flex items-center justify-center">
             <div className="w-full h-full">
                 <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
-                    <div className="relative h-48 bg-linear-to-r from-light-blue via-blue-zodiac to-dark-blue" />
+                    <div className="relative h-30 bg-linear-to-r from-light-blue via-blue-zodiac to-dark-blue" />
 
                     <div className="px-8 pb-8">
                         <div className="relative -mt-16 mb-6">
@@ -135,6 +136,9 @@ export default function UserSettings() {
                                 <div className="flex gap-3 mb-8">
                                     <button className=" bg-gray-900 text-white py-2.5 px-4 rounded-full font-semibold hover:bg-gray-800 transition-colors">
                                         Modifier Profile
+                                    </button>
+                                    <button onClick={deleteUser} className=" bg-red-700 text-white py-2.5 px-4 rounded-full font-semibold hover:bg-gray-800 transition-colors">
+                                        Supprimer Profile
                                     </button>
                                     {selectedFile && (
                                         <button
