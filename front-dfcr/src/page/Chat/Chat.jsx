@@ -246,7 +246,7 @@ export default function Chat() {
                       <p className={`text-xs truncate ${
                         selectedUser === user.matricule ? "text-[#f5ece3]/80" : "text-[#73839e]"
                       }`}>
-                        {user.matricule}
+                        {user.fonction}
                       </p>
                     </div>
                   </div>
@@ -271,7 +271,7 @@ export default function Chat() {
                       <h3 className="font-semibold text-[#2d466e]">
                         {selectedUserInfo.surname} {selectedUserInfo.username}
                       </h3>
-                      <p className="text-xs text-[#73839e]">{selectedUserInfo.matricule}</p>
+                      <p className="text-xs text-[#73839e]">{selectedUserInfo.fonction}</p>
                     </div>
                   </div>
                   <button className="p-2 hover:bg-[#f5ece3]/50 rounded-lg transition-colors">
