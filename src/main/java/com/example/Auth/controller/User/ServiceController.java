@@ -1,5 +1,4 @@
 package com.example.Auth.controller.User;
-import com.example.Auth.dto.EventDto;
 import com.example.Auth.dto.EventResponseDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

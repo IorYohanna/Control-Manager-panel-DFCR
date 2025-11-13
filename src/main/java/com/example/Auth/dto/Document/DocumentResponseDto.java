@@ -1,9 +1,5 @@
 package com.example.Auth.dto.Document;
 
-import java.util.Base64;
-
-import com.example.Auth.model.Document.Document;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;

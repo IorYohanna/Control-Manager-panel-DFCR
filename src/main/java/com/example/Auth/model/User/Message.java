@@ -1,6 +1,5 @@
 package com.example.Auth.model.User;
 
-import com.example.Auth.model.User.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

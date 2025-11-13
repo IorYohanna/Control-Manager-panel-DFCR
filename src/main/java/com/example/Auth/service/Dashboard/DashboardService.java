@@ -3,13 +3,11 @@ package com.example.Auth.service.Dashboard;
 import com.example.Auth.dto.Dashboard.ServiceStatisticsDto;
 import com.example.Auth.dto.Dashboard.UserInfoDto;
 import com.example.Auth.model.User.ServiceDfcr;
-import com.example.Auth.model.User.User;
 import com.example.Auth.repository.User.ServiceRepository;
 import com.example.Auth.repository.User.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class DashboardService {

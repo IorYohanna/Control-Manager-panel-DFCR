@@ -236,7 +236,7 @@ export default function Chat() {
                       )}
 
                       <div
-                        className={`px-4 py-2 rounded-2xl max-w-[70%] break-words shadow-lg
+                        className={`px-4 py-2 rounded-2xl max-w-[70%] wrap-break-word shadow-lg
                           ${
                             m.senderMatricule === currentUser
                               ? "bg-[#2d466e] text-white rounded-br-none"

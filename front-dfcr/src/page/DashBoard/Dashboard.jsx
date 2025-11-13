@@ -3,7 +3,7 @@ import { useOutletContext } from "react-router-dom";
 import Service from "./Service";
 import { TrendingUp } from "lucide-react";
 
-const idServices = ["saga", "sf"];
+const idServices = ['SAGA', 'SF', 'SRFP', 'SCRI', 'SPSE'];
 
 const Dashboard = () => {
   const [activeService, setActiveService] = useState(idServices[0]);
@@ -12,12 +12,12 @@ const Dashboard = () => {
   
 
   return (
-    <div className=" bg-gradient-to-br from-[#2d466e] via-[#3d5680] to-[#2d466e] overflow-auto ">
+    <div className=" overflow-auto p-5 ">
 
       {/* HEADER HERO */}
       <div className={`bg-gradient-to-br fixed from-[#2d466e] via-[#3d5680] to-[#2d466e] z-50 ${
-              sidebarExpanded ? 'w-[80%]' : 'w-[93%]' 
-            }`}>
+              sidebarExpanded ? 'w-[75%]' : 'w-[89%]' 
+            } rounded-xl m-2`}>
 
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 px-7 py-5">
 
@@ -71,7 +71,7 @@ const Dashboard = () => {
       </div>
 
       {/* SERVICE CONTENT */}
-      <div className="">
+      <div className=" rounded-2xl">
         <Service activeService={activeService} />
       </div>
       

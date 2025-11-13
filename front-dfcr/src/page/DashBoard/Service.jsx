@@ -126,7 +126,7 @@ const Service = ({ activeService }) => {
   
 // historique par date de creation de route /historique 
   return (
-    <div className="min-h-screen bg-[#f5ece3] p-5">
+    <div className="min-h-screen bg-[#f5ece3] p-5 rounded-2xl">
       {/* Header with refined styling */}
       <div className="mt-25 flex items-center justify-between">
         <h1 className="text-5xl font-bold text-[#2d466e] mb-3 tracking-tight">
