@@ -65,9 +65,14 @@ export default function InfoCards() {
 
     return (
         <div className="flex flex-col gap-4 h-full">
-            <h2 className="text-2xl font-bold font-necoBlack text-beige-creme mb-2 text-center">
-                Statistiques - {serviceData.serviceName}
-            </h2>
+            <div className="bg-white rounded-2xl shadow-lg p-4 border border-[#73839e]/10">
+                <h2 className="text-lg font-necoBlack font-bold text-[#2d466e] text-center">
+                Statistiques
+                </h2>
+                <p className="text-sm text-[#73839e] text-center mt-1">
+                {serviceData.serviceName}
+                </p>
+            </div>
 
             <div className="grid grid-cols-1 gap-4">
                 {cards.map((card) => (

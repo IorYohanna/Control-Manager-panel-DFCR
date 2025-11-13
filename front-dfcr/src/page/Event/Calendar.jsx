@@ -6,16 +6,12 @@ import { useEvents } from "../../hooks/useEvents";
 
 const Calendar = () => {
   const { sidebarExpanded } = useOutletContext();
-  const token = localStorage.getItem("token"); 
+  const token = localStorage.getItem("token");
 
-  // ✅ hook pour la data
-  const { calendarEvents, addEvent, removeEvent , editEvent} = useEvents(token);
+  const { calendarEvents, addEvent, removeEvent, editEvent } = useEvents(token);
 
-  // ✅ état modal
   const [modalOpen, setModalOpen] = useState(false);
   const [modalType, setModalType] = useState(null);
-
-  // ✅ état des données du formulaire
   const [formData, setFormData] = useState({
     idEvent: "",
     title: "",
@@ -26,15 +22,13 @@ const Calendar = () => {
     service: ""
   });
 
-  // ✅ formulaire - utilitaire
   const formatForInput = useCallback((date) => {
     const d = new Date(date);
     const offset = d.getTimezoneOffset();
     const local = new Date(d.getTime() - offset * 60000);
     return local.toISOString().slice(0, 16);
-  },[]);
+  }, []);
 
-  // ✅ ouvrir modal création
   const handleDateSelect = useCallback((selectInfo) => {
     setModalType("create");
     setFormData({
@@ -47,15 +41,12 @@ const Calendar = () => {
       email: "",
       service: ""
     });
-
     setModalOpen(true);
     selectInfo.view.calendar.unselect();
-  },[]);
+  }, [formatForInput]);
 
-  // ✅ ouvrir modal vue + édition + suppression
   const handleEventClick = useCallback((clickInfo) => {
     const e = clickInfo.event;
-
     setFormData({
       idEvent: e.extendedProps.idEvent || e.id,
       title: e.title,
@@ -66,43 +57,30 @@ const Calendar = () => {
       email: e.extendedProps.email,
       service: e.extendedProps.service
     });
-
     setModalType("view");
     setModalOpen(true);
-  },[]);
+  }, [formatForInput]);
 
-  const switchToEdit = () => {
-    setModalType("edit");
-    setModalOpen(true);
-  };
+  const switchToEdit = () => setModalType("edit");
+  const switchToDelete = () => setModalType("delete");
 
-  const switchToDelete = () => {
-    setModalType("delete");
-    setModalOpen(true);
-  };
-
-  // ✅ créer un event
   const handleCreate = async (data) => {
     await addEvent(data);
     setModalOpen(false);
   };
 
-  // ✅ supprimer un event
   const handleDelete = async () => {
     await removeEvent(formData.idEvent);
     setModalOpen(false);
   };
 
-  // ✅ modifer un event
   const handleEditEvent = async (data) => {
     await editEvent(data.idEvent, data);
     setModalOpen(false);
   };
 
   return (
-    <div className="w-full min-h-screen py-4 px-3 sm:px-4 md:px-6 lg:px-8">
-
-      {/* Calendrier responsive */}
+    <div className="w-full min-h-screen">
       <div className="w-full flex justify-center items-start">
         <EventCalendar
           sidebarExpanded={sidebarExpanded}
@@ -111,8 +89,7 @@ const Calendar = () => {
           handleEventClick={handleEventClick}
         />
       </div>
-      
-      {/* Modal */}
+
       <EventModal
         open={modalOpen}
         setOpen={setModalOpen}
@@ -128,6 +105,6 @@ const Calendar = () => {
       />
     </div>
   );
-}
+};
 
 export default Calendar;
