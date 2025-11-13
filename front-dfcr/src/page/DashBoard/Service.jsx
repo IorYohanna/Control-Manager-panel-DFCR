@@ -128,7 +128,7 @@ const Service = ({ activeService }) => {
   return (
     <div className="min-h-screen bg-[#f5ece3] p-5 rounded-2xl">
       {/* Header with refined styling */}
-      <div className="mt-25 flex items-center justify-between">
+      <div className=" flex items-center justify-between">
         <h1 className="text-5xl font-bold text-[#2d466e] mb-3 tracking-tight">
           {serviceData.serviceName || activeService}
         </h1>

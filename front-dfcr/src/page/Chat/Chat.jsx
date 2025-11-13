@@ -168,8 +168,11 @@ export default function Chat() {
     <div className="flex h-screen font-sans text-gray-800 p-5">
       {/* Sidebar utilisateurs */}
       <div className="w-64 bg-[#2d466e] text-white p-4 flex flex-col rounded-tl-2xl rounded-bl-2xl">
-        <h2 className="text-xl font-bold mb-4">Utilisateurs</h2>
-        <p className="text-sm mb-4 opacity-80">Connecté: {currentUser}</p>
+        <div className="">
+          <h2 className="text-xl font-bold mb-4">Utilisateurs</h2>
+          <p className="text-sm mb-4 opacity-80">Connecté: {currentUser}</p>
+        </div>
+       
         <div className="flex-1 overflow-y-auto space-y-2">
           {users.length === 0 ? (
             <p className="text-gray-300 text-sm">Aucun utilisateur disponible</p>
