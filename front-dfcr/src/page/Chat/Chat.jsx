@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
+import { Send, Search, MoreVertical, Trash2, User, MessageCircle, Clock } from "lucide-react";
 
 export default function Chat() {
   const [users, setUsers] = useState([]);
@@ -10,6 +11,7 @@ export default function Chat() {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [chatLoading, setChatLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const stompClientRef = useRef(null);
   const chatContainerRef = useRef(null);
@@ -31,7 +33,6 @@ export default function Chat() {
     }
   }, []);
 
-
   useEffect(() => {
     if (!currentUser) return;
     const token = localStorage.getItem("token");
@@ -43,7 +44,6 @@ export default function Chat() {
       .then((data) => setUsers(data.filter((u) => u.matricule !== currentUser)))
       .finally(() => setLoading(false));
   }, [currentUser]);
-
 
   useEffect(() => {
     if (!selectedUser || !currentUser) {
@@ -110,7 +110,6 @@ export default function Chat() {
     };
   }, [currentUser]);
 
-  // Envoyer un message
   const sendMessage = () => {
     if (!stompClientRef.current?.connected) return;
     if (!input.trim() || !selectedUser || !currentUser) return;
@@ -127,162 +126,297 @@ export default function Chat() {
     setInput("");
   };
 
-    const deleteMessage = (id) => {
+  const deleteMessage = (id) => {
     const confirmed = window.confirm("Voulez-vous vraiment supprimer ce message ?");
     if (!confirmed) return;
 
     const token = localStorage.getItem("token");
     fetch(`http://localhost:8080/messages/${id}`, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` },
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
     })
-        .then((res) => {
+      .then((res) => {
         if (!res.ok) throw new Error("Impossible de supprimer le message");
         setMessages((prev) => prev.filter((m) => m.id !== id));
-        })
-        .catch(console.error);
-    };
+      })
+      .catch(console.error);
+  };
 
-
-  // Scroll automatique en bas
   useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
   }, [messages]);
 
-  if (loading)
+  const filteredUsers = users.filter(
+    (user) =>
+      user.username?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.surname?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.matricule?.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const selectedUserInfo = users.find((u) => u.matricule === selectedUser);
+
+  if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        Chargement...
+      <div className="flex items-center justify-center h-screen bg-[#f5ece3]">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-[#2d466e] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-[#73839e] font-medium">Chargement...</p>
+        </div>
       </div>
     );
-  if (!currentUser)
+  }
+
+  if (!currentUser) {
     return (
-      <div className="flex items-center justify-center h-screen text-red-600">
-        Utilisateur non connecté
+      <div className="flex items-center justify-center h-screen bg-[#f5ece3]">
+        <div className="text-center p-8 bg-white rounded-2xl shadow-lg border border-[#73839e]/20">
+          <p className="text-red-600 font-semibold">Utilisateur non connecté</p>
+        </div>
       </div>
     );
+  }
 
   return (
-    <div className="flex h-screen font-sans text-gray-800 p-5">
-      {/* Sidebar utilisateurs */}
-      <div className="w-64 bg-[#2d466e] text-white p-4 flex flex-col rounded-tl-2xl rounded-bl-2xl">
-        <div className="">
-          <h2 className="text-xl font-bold mb-4">Utilisateurs</h2>
-          <p className="text-sm mb-4 opacity-80">Connecté: {currentUser}</p>
-        </div>
-       
-        <div className="flex-1 overflow-y-auto space-y-2">
-          {users.length === 0 ? (
-            <p className="text-gray-300 text-sm">Aucun utilisateur disponible</p>
-          ) : (
-            users.map((user) => (
-              <div
-                key={user.matricule}
-                onClick={() => setSelectedUser(user.matricule)}
-                className={`cursor-pointer rounded-lg p-2 transition-colors duration-200 
-                  ${
-                    selectedUser === user.matricule
-                      ? "bg-[#73839e]"
-                      : "hover:bg-[#73839e]/40"
-                  }`}
-              >
-                <p className="font-medium">{user.surname} {user.username}</p>
-                <p className="text-xs opacity-70">{user.matricule}</p>
+    <div className="flex h-screen p-4 sm:p-6">
+      <div className="flex w-full max-w-7xl mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden border border-[#73839e]/20">
+        
+        {/* Sidebar utilisateurs */}
+        <div className="w-80 border-r border-[#73839e]/20 flex flex-col bg-[#f5ece3]">
+          
+          {/* Header Sidebar */}
+          <div className="p-5 bg-gradient-to-br from-[#2d466e] to-[#3d5680] text-white">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-full bg-[#f5ece3]/20 backdrop-blur-sm flex items-center justify-center border border-[#f5ece3]/30">
+                <User className="w-5 h-5" />
               </div>
-            ))
-          )}
-        </div>
-      </div>
-
-      {/* Zone de chat */}
-      <div className="flex-1 flex flex-col bg-[#f5ece3] rounded-tr-2xl rounded-br-2xl">
-        {selectedUser ? (
-          <>
-            {/* Header chat */}
-            <div className="p-4 border-b border-[#73839e]/40 font-semibold text-lg bg-[#73839e]/10">
-              Chat avec {selectedUser}
+              <div className="flex-1 min-w-0">
+                <h2 className="text-lg font-bold truncate">Messages</h2>
+                <p className="text-xs text-[#f5ece3]/80 truncate">{currentUser}</p>
+              </div>
             </div>
 
-            {/* Messages */}
-            <div
-              className="flex-1 p-4 overflow-y-auto space-y-3"
-              id="chat-container"
-              ref={chatContainerRef}
-            >
-              {chatLoading ? (
-                <p className="text-gray-500 text-center mt-10">Chargement des messages...</p>
-              ) : messages.length === 0 ? (
-                <p className="text-gray-500 text-center mt-10">Aucun message</p>
-              ) : (
-                messages
-                  .filter(
-                    (m) =>
-                      m.senderMatricule === selectedUser ||
-                      m.receiverMatricule === selectedUser
-                  )
-                  .map((m) => (
-                    <div
-                      key={m.id || Math.random()}
-                      className={`flex ${
-                        m.senderMatricule === currentUser ? "justify-end" : "justify-start"
-                      } items-end`}
-                    >
-                      {m.senderMatricule === currentUser && (
-                        <button
-                          onClick={() => deleteMessage(m.id)}
-                          className="ml-2 text-xs text-red-500 hover:text-red-700"
-                        >
-                          ✕
-                        </button>
-                      )}
-
-                      <div
-                        className={`px-4 py-2 rounded-2xl max-w-[70%] wrap-break-word shadow-lg
-                          ${
-                            m.senderMatricule === currentUser
-                              ? "bg-[#2d466e] text-white rounded-br-none"
-                              : "bg-[#73839e]/30 text-[#2d466e] rounded-bl-none"
-                          }`}
-                      >
-                        <p className="text-xs opacity-70 mb-1">{m.senderName}</p>
-                        <p>{m.content}</p>
-                        <p className="text-[10px] opacity-50 mt-1 text-right">
-                          {new Date(m.sentAt).toLocaleTimeString([], {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}
-                        </p>
-                      </div>
-                    </div>
-                  ))
-              )}
-            </div>
-
-            {/* Input message */}
-            <div className="p-4 border-t border-[#73839e]/40 flex gap-2 bg-[#73839e]/5">
+            {/* Search Bar */}
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#73839e]" />
               <input
                 type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyPress={(e) => e.key === "Enter" && sendMessage()}
-                placeholder="Tapez votre message..."
-                className="flex-1 border border-[#73839e]/40 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#2d466e]"
+                placeholder="Rechercher..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 rounded-lg bg-[#f5ece3]/20 backdrop-blur-sm border border-[#f5ece3]/30 text-white placeholder-[#f5ece3]/60 text-sm focus:outline-none focus:ring-2 focus:ring-[#f5ece3]/40 transition-all"
               />
-              <button
-                onClick={sendMessage}
-                className="bg-[#2d466e] text-white px-4 py-2 rounded-full hover:bg-[#73839e]"
-              >
-                Envoyer
-              </button>
             </div>
-          </>
-        ) : (
-          <div className="flex-1 flex items-center justify-center text-[#73839e] text-lg">
-            👈 Sélectionnez un utilisateur pour commencer à discuter
           </div>
-        )}
+
+          {/* Liste utilisateurs */}
+          <div className="flex-1 overflow-y-auto p-3 space-y-1">
+            {filteredUsers.length === 0 ? (
+              <div className="text-center py-8 text-[#73839e]">
+                <MessageCircle className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                <p className="text-sm">Aucun utilisateur trouvé</p>
+              </div>
+            ) : (
+              filteredUsers.map((user) => (
+                <div
+                  key={user.matricule}
+                  onClick={() => setSelectedUser(user.matricule)}
+                  className={`cursor-pointer rounded-xl p-3 transition-all duration-200 group
+                    ${
+                      selectedUser === user.matricule
+                        ? "bg-[#2d466e] text-white shadow-md"
+                        : "hover:bg-[#f5ece3]/60"
+                    }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm flex-shrink-0 ${
+                      selectedUser === user.matricule
+                        ? "bg-[#f5ece3]/20 text-white border border-[#f5ece3]/30"
+                        : "bg-gradient-to-br from-[#2d466e] to-[#3d5680] text-white"
+                    }`}>
+                      {user.surname?.[0]}{user.username?.[0]}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className={`font-semibold text-sm truncate ${
+                        selectedUser === user.matricule ? "text-white" : "text-[#2d466e]"
+                      }`}>
+                        {user.surname} {user.username}
+                      </p>
+                      <p className={`text-xs truncate ${
+                        selectedUser === user.matricule ? "text-[#f5ece3]/80" : "text-[#73839e]"
+                      }`}>
+                        {user.matricule}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+
+        {/* Zone de chat */}
+        <div className="flex-1 flex flex-col">
+          {selectedUser && selectedUserInfo ? (
+            <>
+              {/* Header chat */}
+              <div className="p-4 border-b border-[#73839e]/20 bg-white">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#2d466e] to-[#3d5680] flex items-center justify-center text-white font-semibold text-sm">
+                      {selectedUserInfo.surname?.[0]}{selectedUserInfo.username?.[0]}
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-[#2d466e]">
+                        {selectedUserInfo.surname} {selectedUserInfo.username}
+                      </h3>
+                      <p className="text-xs text-[#73839e]">{selectedUserInfo.matricule}</p>
+                    </div>
+                  </div>
+                  <button className="p-2 hover:bg-[#f5ece3]/50 rounded-lg transition-colors">
+                    <MoreVertical className="w-5 h-5 text-[#73839e]" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Messages */}
+              <div
+                className="flex-1 p-6 overflow-y-auto bg-[#f5ece3]/30"
+                ref={chatContainerRef}
+                style={{
+                  backgroundImage: `radial-gradient(circle at 1px 1px, rgba(115, 131, 158, 0.08) 1px, transparent 0)`,
+                  backgroundSize: '40px 40px'
+                }}
+              >
+                {chatLoading ? (
+                  <div className="flex items-center justify-center h-full">
+                    <div className="text-center">
+                      <div className="w-10 h-10 border-4 border-[#2d466e] border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
+                      <p className="text-[#73839e] text-sm">Chargement des messages...</p>
+                    </div>
+                  </div>
+                ) : messages.length === 0 ? (
+                  <div className="flex items-center justify-center h-full">
+                    <div className="text-center">
+                      <MessageCircle className="w-16 h-16 mx-auto mb-4 text-[#73839e]/40" />
+                      <p className="text-[#73839e]">Aucun message</p>
+                      <p className="text-sm text-[#73839e]/70 mt-2">Commencez la conversation</p>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {messages
+                      .filter(
+                        (m) =>
+                          m.senderMatricule === selectedUser ||
+                          m.receiverMatricule === selectedUser
+                      )
+                      .map((m) => (
+                        <div
+                          key={m.id || Math.random()}
+                          className={`flex ${
+                            m.senderMatricule === currentUser ? "justify-end" : "justify-start"
+                          } group`}
+                        >
+                          <div className={`flex items-end gap-2 max-w-[70%] ${
+                            m.senderMatricule === currentUser ? "flex-row-reverse" : "flex-row"
+                          }`}>
+                            
+                            {/* Avatar */}
+                            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-semibold text-xs flex-shrink-0 ${
+                              m.senderMatricule === currentUser
+                                ? "bg-gradient-to-br from-[#2d466e] to-[#3d5680]"
+                                : "bg-gradient-to-br from-[#73839e] to-[#5a6a85]"
+                            }`}>
+                              {m.senderName?.split(" ").map(n => n[0]).join("") || "?"}
+                            </div>
+
+                            {/* Message bubble */}
+                            <div className="flex flex-col">
+                              <div
+                                className={`px-4 py-3 rounded-2xl shadow-sm ${
+                                  m.senderMatricule === currentUser
+                                    ? "bg-gradient-to-br from-[#2d466e] to-[#3d5680] text-white rounded-br-md"
+                                    : "bg-white text-[#2d466e] rounded-bl-md border border-[#73839e]/20"
+                                }`}
+                              >
+                                <p className="text-sm leading-relaxed break-words">{m.content}</p>
+                              </div>
+                              
+                              {/* Timestamp */}
+                              <div className={`flex items-center gap-1 mt-1 px-2 ${
+                                m.senderMatricule === currentUser ? "justify-end" : "justify-start"
+                              }`}>
+                                <Clock className="w-3 h-3 text-[#73839e]" />
+                                <span className="text-xs text-[#73839e]">
+                                  {new Date(m.sentAt).toLocaleTimeString([], {
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                  })}
+                                </span>
+                                
+                                {/* Delete button */}
+                                {m.senderMatricule === currentUser && (
+                                  <button
+                                    onClick={() => deleteMessage(m.id)}
+                                    className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-red-50 rounded"
+                                    title="Supprimer"
+                                  >
+                                    <Trash2 className="w-3 h-3 text-red-500" />
+                                  </button>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Input message */}
+              <div className="p-4 bg-white border-t border-[#73839e]/20">
+                <div className="flex gap-3 items-end">
+                  <div className="flex-1 relative">
+                    <textarea
+                      value={input}
+                      onChange={(e) => setInput(e.target.value)}
+                      onKeyPress={(e) => {
+                        if (e.key === "Enter" && !e.shiftKey) {
+                          e.preventDefault();
+                          sendMessage();
+                        }
+                      }}
+                      placeholder="Tapez votre message..."
+                      rows="1"
+                      className="w-full resize-none border border-[#73839e]/30 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#2d466e] focus:border-transparent transition-all text-sm text-[#2d466e] placeholder-[#73839e]/60"
+                      style={{ minHeight: '44px', maxHeight: '120px' }}
+                    />
+                  </div>
+                  <button
+                    onClick={sendMessage}
+                    disabled={!input.trim()}
+                    className="bg-gradient-to-br from-[#2d466e] to-[#3d5680] text-white p-3 rounded-xl hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex-shrink-0"
+                  >
+                    <Send className="w-5 h-5" />
+                  </button>
+                </div>
+                <p className="text-xs text-[#73839e]/70 mt-2">Appuyez sur Entrée pour envoyer, Shift+Entrée pour une nouvelle ligne</p>
+              </div>
+            </>
+          ) : (
+            <div className="flex-1 flex items-center justify-center bg-[#f5ece3]/30">
+              <div className="text-center">
+                <div className="w-20 h-20 bg-gradient-to-br from-[#f5ece3] to-[#e8ddd0] rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-[#73839e]/20">
+                  <MessageCircle className="w-10 h-10 text-[#2d466e]" />
+                </div>
+                <h3 className="text-lg font-semibold text-[#2d466e] mb-2">Bienvenue sur la messagerie</h3>
+                <p className="text-[#73839e]">Sélectionnez un utilisateur pour commencer une conversation</p>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
