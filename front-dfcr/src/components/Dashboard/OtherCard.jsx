@@ -46,7 +46,7 @@ export const DocumentsStatus = ({ docsStats }) => {
     <div className="md:col-span-2 bg-white rounded-3xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 border-2 border-[#2d466e]/10">
       <div className="flex items-center justify-between mb-8">
         <h3 className="text-xl font-bold text-[#2d466e] flex items-center">
-          <div className="p-3 bg-gradient-to-br from-[#2d466e] to-[#3d5680] rounded-xl mr-3">
+          <div className="p-3 bg-linear-to-br from-[#2d466e] to-[#3d5680] rounded-xl mr-3">
             <FileText className="w-6 h-6 text-white" />
           </div>
           Statut des Documents
@@ -57,7 +57,7 @@ export const DocumentsStatus = ({ docsStats }) => {
       </div>
       
       <div className="grid grid-cols-2 gap-5">
-        <div className="bg-gradient-to-br from-amber-50 to-amber-100/50 rounded-2xl p-6 border-2 border-amber-200/50 hover:border-amber-300 transition-all">
+        <div className="bg-linear-to-br from-amber-50 to-amber-100/50 rounded-2xl p-6 border-2 border-amber-200/50 hover:border-amber-300 transition-all">
           <div className="flex items-center justify-between">
             <Clock className="w-6 h-6 text-amber-600" />
             <span className="text-3xl font-bold text-amber-700">{docsStats.pending}</span>
@@ -65,7 +65,7 @@ export const DocumentsStatus = ({ docsStats }) => {
           <p className="text-sm text-amber-800 mt-3 font-semibold">En attente</p>
         </div>
         
-        <div className="bg-gradient-to-br from-green-50 to-green-100/50 rounded-2xl p-6 border-2 border-green-200/50 hover:border-green-300 transition-all">
+        <div className="bg-linear-to-br from-green-50 to-green-100/50 rounded-2xl p-6 border-2 border-green-200/50 hover:border-green-300 transition-all">
           <div className="flex items-center justify-between">
             <CheckCircle className="w-6 h-6 text-green-600" />
             <span className="text-3xl font-bold text-green-700">{docsStats.approved}</span>
@@ -73,7 +73,7 @@ export const DocumentsStatus = ({ docsStats }) => {
           <p className="text-sm text-green-800 mt-3 font-semibold">Approuvés</p>
         </div>
         
-        <div className="bg-gradient-to-br from-red-50 to-red-100/50 rounded-2xl p-6 border-2 border-red-200/50 hover:border-red-300 transition-all">
+        <div className="bg-linear-to-br from-red-50 to-red-100/50 rounded-2xl p-6 border-2 border-red-200/50 hover:border-red-300 transition-all">
           <div className="flex items-center justify-between">
             <AlertCircle className="w-6 h-6 text-red-600" />
             <span className="text-3xl font-bold text-red-700">{docsStats.late}</span>
@@ -81,7 +81,7 @@ export const DocumentsStatus = ({ docsStats }) => {
           <p className="text-sm text-red-800 mt-3 font-semibold">En retard</p>
         </div>
         
-        <div className="bg-gradient-to-br from-[#f5ece3] to-[#e8dfd0] rounded-2xl p-6 border-2 border-[#2d466e]/10 hover:border-[#2d466e]/20 transition-all">
+        <div className="bg-linear-to-br from-[#f5ece3] to-[#e8dfd0] rounded-2xl p-6 border-2 border-[#2d466e]/10 hover:border-[#2d466e]/20 transition-all">
           <div className="flex items-center justify-between">
             <XCircle className="w-6 h-6 text-[#73839e]" />
             <span className="text-3xl font-bold text-[#2d466e]">{docsStats.rejected}</span>
@@ -96,9 +96,9 @@ export const DocumentsStatus = ({ docsStats }) => {
 // ✅ Priority Actions
 export const PriorityActions = ({ priorities }) => {
   return (
-    <div className="md:col-span-2 lg:col-span-1 bg-gradient-to-br from-red-50 via-orange-50 to-amber-50 rounded-3xl p-7 shadow-lg hover:shadow-xl transition-all duration-300 border-2 border-red-200/50">
+    <div className="md:col-span-2 lg:col-span-1 bg-linear-to-br from-red-50 via-orange-50 to-amber-50 rounded-3xl p-7 shadow-lg hover:shadow-xl transition-all duration-300 border-2 border-red-200/50">
       <div className="flex items-center mb-7">
-        <div className="p-3 bg-gradient-to-br from-red-500 to-orange-500 rounded-xl mr-3 shadow-md">
+        <div className="p-3 bg-linear-to-br from-red-500 to-orange-500 rounded-xl mr-3 shadow-md">
           <Zap className="w-6 h-6 text-white" />
         </div>
         <h3 className="text-xl font-bold text-[#2d466e]">Actions Prioritaires</h3>
@@ -110,7 +110,7 @@ export const PriorityActions = ({ priorities }) => {
             <div className="flex items-center justify-between mb-3">
               <p className="text-sm font-semibold text-[#2d466e]">{item.title}</p>
               {item.urgent && (
-                <span className="px-3 py-1 bg-gradient-to-r from-red-500 to-orange-500 text-white text-xs font-bold rounded-full shadow-sm">
+                <span className="px-3 py-1 bg-linear-to-r from-red-500 to-orange-500 text-white text-xs font-bold rounded-full shadow-sm">
                   Urgent
                 </span>
               )}
@@ -187,7 +187,7 @@ export const UpcomingEvents = ({ upcomingEvents, todayEvents }) => {
     <div className="md:col-span-2 bg-white rounded-3xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 border-2 border-[#2d466e]/10">
       <div className="flex items-center justify-between mb-7">
         <h3 className="text-xl font-bold text-[#2d466e] flex items-center">
-          <div className="p-3 bg-gradient-to-br from-[#73839e] to-[#5a6b8a] rounded-xl mr-3">
+          <div className="p-3 bg-linear-to-br from-[#73839e] to-[#5a6b8a] rounded-xl mr-3">
             <Calendar className="w-6 h-6 text-white" />
           </div>
           Événements à venir
@@ -210,9 +210,9 @@ export const UpcomingEvents = ({ upcomingEvents, todayEvents }) => {
               <div key={event.idEvent} className="flex items-center justify-between p-4 rounded-2xl hover:bg-[#f5ece3]/50 transition-all border-2 border-transparent hover:border-[#2d466e]/10">
                 <div className="flex items-center space-x-5">
                   <div className={`w-1.5 h-14 rounded-full shadow-sm ${
-                    isToday ? 'bg-gradient-to-b from-red-500 to-red-600' : 
-                    isTomorrow ? 'bg-gradient-to-b from-orange-500 to-orange-600' : 
-                    'bg-gradient-to-b from-[#2d466e] to-[#73839e]'
+                    isToday ? 'bg-linear-to-b from-red-500 to-red-600' : 
+                    isTomorrow ? 'bg-linear-to-b from-orange-500 to-orange-600' : 
+                    'bg-linear-to-b from-[#2d466e] to-[#73839e]'
                   }`} />
                   <div>
                     <p className="font-semibold text-[#2d466e] text-base">{event.title}</p>
@@ -222,9 +222,9 @@ export const UpcomingEvents = ({ upcomingEvents, todayEvents }) => {
                   </div>
                 </div>
                 <span className={`px-4 py-2 rounded-full text-xs font-bold shadow-sm ${
-                  isToday ? 'bg-gradient-to-r from-red-500 to-red-600 text-white' :
-                  isTomorrow ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white' :
-                  'bg-gradient-to-r from-[#2d466e] to-[#73839e] text-white'
+                  isToday ? 'bg-linear-to-r from-red-500 to-red-600 text-white' :
+                  isTomorrow ? 'bg-linear-to-r from-orange-500 to-orange-600 text-white' :
+                  'bg-linear-to-r from-[#2d466e] to-[#73839e] text-white'
                 }`}>
                   {isToday ? "Aujourd'hui" : isTomorrow ? 'Demain' : 'À venir'}
                 </span>
@@ -242,7 +242,7 @@ export const RecentActivity = ({ activities }) => {
   return (
     <div className="md:col-span-2 bg-white rounded-3xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 border-2 border-[#2d466e]/10">
       <div className="flex items-center mb-7">
-        <div className="p-3 bg-gradient-to-br from-[#2d466e] to-[#3d5680] rounded-xl mr-3">
+        <div className="p-3 bg-linear-to-br from-[#2d466e] to-[#3d5680] rounded-xl mr-3">
           <Activity className="w-6 h-6 text-white" />
         </div>
         <h3 className="text-xl font-bold text-[#2d466e]">Activité Récente</h3>
@@ -254,7 +254,7 @@ export const RecentActivity = ({ activities }) => {
         <div className="space-y-5">
           {activities.map((activity) => (
             <div key={activity.id} className="flex items-start space-x-4 pb-5 border-b-2 border-[#f5ece3] last:border-0">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#2d466e] to-[#73839e] flex items-center justify-center text-white font-bold text-xs flex-shrink-0 shadow-md">
+              <div className="w-10 h-10 rounded-full bg-linear-to-br from-[#2d466e] to-[#73839e] flex items-center justify-center text-white font-bold text-xs shrink-0 shadow-md">
                 {activity.user.split(' ').map(n => n[0]).join('').slice(0, 2)}
               </div>
               <div className="flex-1 min-w-0">
