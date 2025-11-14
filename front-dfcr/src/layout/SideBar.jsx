@@ -1,6 +1,6 @@
-import { MoreVertical, ChevronLast, ChevronFirst } from "lucide-react"
+import { MoreVertical, ChevronLast, ChevronFirst, LogOut} from "lucide-react"
 import { useContext, createContext, useState, useEffect } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { fectUserData } from "../api/User/currentUser";
 import { fetchUserPhoto } from "../api/User/profileinfo";
 
@@ -13,6 +13,7 @@ export default function Sidebar({ children, expanded, setExpanded }) {
     userEmail: "",
   });
   const [previewUrl, setPreviewUrl] = useState();
+  const navigate = useNavigate();
 
 
   useEffect(() => {
@@ -36,6 +37,14 @@ export default function Sidebar({ children, expanded, setExpanded }) {
     loadData()
   }, [])
 
+  const handleLogout = () => {
+    // Supprimer les données d'authentification
+    localStorage.removeItem("token");
+    localStorage.removeItem("token_expiration");
+    
+    // Rediriger vers la page de login
+    navigate("/");
+  };
 
 
   return (
@@ -56,6 +65,42 @@ export default function Sidebar({ children, expanded, setExpanded }) {
         <SidebarContext.Provider value={{ expanded }}>
           <ul className="flex-1 px-3">{children}</ul>
         </SidebarContext.Provider>
+
+        {/* Bouton de déconnexion */}
+        <div className="px-3 pb-3">
+          <button
+            onClick={handleLogout}
+            className={`
+              relative flex items-center w-full py-2 px-3 my-1
+              font-medium rounded-md cursor-pointer
+              transition-colors group
+              hover:bg-[#2D466E] text-[#2f486d] hover:text-white
+            `}
+          >
+            <LogOut size={20} />
+            <span
+              className={`overflow-hidden font-dropline transition-all truncate ${
+                expanded ? "ml-3" : "w-0"
+              } `}
+            >
+              Déconnexion
+            </span>
+
+            {!expanded && (
+              <div
+                className={`
+                  absolute left-full rounded-md px-2 py-1 ml-6
+                  bg-[#2D466E] text-white text-sm
+                  invisible opacity-20 -translate-x-3 transition-all
+                  group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
+                  whitespace-nowrap
+                `}
+              >
+                Déconnexion
+              </div>
+            )}
+          </button>
+        </div>
 
         <div className="border-t border-[#73839E] flex p-3">
           <div

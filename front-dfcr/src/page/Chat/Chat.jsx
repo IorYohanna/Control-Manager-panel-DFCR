@@ -186,7 +186,7 @@ export default function Chat() {
         <div className="w-80 border-r border-[#73839e]/20 flex flex-col bg-[#f5ece3]">
           
           {/* Header Sidebar */}
-          <div className="p-5 bg-gradient-to-br from-[#2d466e] to-[#3d5680] text-white">
+          <div className="p-5 bg-linear-to-br from-[#2d466e] to-[#3d5680] text-white">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-full bg-[#f5ece3]/20 backdrop-blur-sm flex items-center justify-center border border-[#f5ece3]/30">
                 <User className="w-5 h-5" />
@@ -230,10 +230,10 @@ export default function Chat() {
                     }`}
                 >
                   <div className="flex items-center gap-3">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm flex-shrink-0 ${
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm shrink-0 ${
                       selectedUser === user.matricule
                         ? "bg-[#f5ece3]/20 text-white border border-[#f5ece3]/30"
-                        : "bg-gradient-to-br from-[#2d466e] to-[#3d5680] text-white"
+                        : "bg-linear-to-br from-[#2d466e] to-[#3d5680] text-white"
                     }`}>
                       {user.surname?.[0]}{user.username?.[0]}
                     </div>
@@ -241,12 +241,12 @@ export default function Chat() {
                       <p className={`font-semibold text-sm truncate ${
                         selectedUser === user.matricule ? "text-white" : "text-[#2d466e]"
                       }`}>
-                        {user.surname} {user.username}
+                        {user.fonction}  ( {user.idService} )
                       </p>
                       <p className={`text-xs truncate ${
                         selectedUser === user.matricule ? "text-[#f5ece3]/80" : "text-[#73839e]"
                       }`}>
-                        {user.fonction}
+                        {user.surname} {user.username}
                       </p>
                     </div>
                   </div>
@@ -264,7 +264,7 @@ export default function Chat() {
               <div className="p-4 border-b border-[#73839e]/20 bg-white">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#2d466e] to-[#3d5680] flex items-center justify-center text-white font-semibold text-sm">
+                    <div className="w-10 h-10 rounded-full bg-linear-to-br from-[#2d466e] to-[#3d5680] flex items-center justify-center text-white font-semibold text-sm">
                       {selectedUserInfo.surname?.[0]}{selectedUserInfo.username?.[0]}
                     </div>
                     <div>
@@ -285,7 +285,7 @@ export default function Chat() {
                 className="flex-1 p-6 overflow-y-auto bg-[#f5ece3]/30"
                 ref={chatContainerRef}
                 style={{
-                  backgroundImage: `radial-gradient(circle at 1px 1px, rgba(115, 131, 158, 0.08) 1px, transparent 0)`,
+                  backgroundImage: `radial-linear(circle at 1px 1px, rgba(115, 131, 158, 0.08) 1px, transparent 0)`,
                   backgroundSize: '40px 40px'
                 }}
               >
@@ -324,10 +324,10 @@ export default function Chat() {
                           }`}>
                             
                             {/* Avatar */}
-                            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-semibold text-xs flex-shrink-0 ${
+                            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-semibold text-xs shrink-0 ${
                               m.senderMatricule === currentUser
-                                ? "bg-gradient-to-br from-[#2d466e] to-[#3d5680]"
-                                : "bg-gradient-to-br from-[#73839e] to-[#5a6a85]"
+                                ? "bg-linear-to-br from-[#2d466e] to-[#3d5680]"
+                                : "bg-linear-to-br from-[#73839e] to-[#5a6a85]"
                             }`}>
                               {m.senderName?.split(" ").map(n => n[0]).join("") || "?"}
                             </div>
@@ -337,11 +337,11 @@ export default function Chat() {
                               <div
                                 className={`px-4 py-3 rounded-2xl shadow-sm ${
                                   m.senderMatricule === currentUser
-                                    ? "bg-gradient-to-br from-[#2d466e] to-[#3d5680] text-white rounded-br-md"
+                                    ? "bg-linear-to-br from-[#2d466e] to-[#3d5680] text-white rounded-br-md"
                                     : "bg-white text-[#2d466e] rounded-bl-md border border-[#73839e]/20"
                                 }`}
                               >
-                                <p className="text-sm leading-relaxed break-words">{m.content}</p>
+                                <p className="text-sm leading-relaxed wrap-break-words">{m.content}</p>
                               </div>
                               
                               {/* Timestamp */}
@@ -397,7 +397,7 @@ export default function Chat() {
                   <button
                     onClick={sendMessage}
                     disabled={!input.trim()}
-                    className="bg-gradient-to-br from-[#2d466e] to-[#3d5680] text-white p-3 rounded-xl hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex-shrink-0"
+                    className="bg-linear-to-br from-[#2d466e] to-[#3d5680] text-white p-3 rounded-xl hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shrink-0"
                   >
                     <Send className="w-5 h-5" />
                   </button>
@@ -408,7 +408,7 @@ export default function Chat() {
           ) : (
             <div className="flex-1 flex items-center justify-center bg-[#f5ece3]/30">
               <div className="text-center">
-                <div className="w-20 h-20 bg-gradient-to-br from-[#f5ece3] to-[#e8ddd0] rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-[#73839e]/20">
+                <div className="w-20 h-20 bg-linear-to-br from-[#f5ece3] to-[#e8ddd0] rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-[#73839e]/20">
                   <MessageCircle className="w-10 h-10 text-[#2d466e]" />
                 </div>
                 <h3 className="text-lg font-semibold text-[#2d466e] mb-2">Bienvenue sur la messagerie</h3>

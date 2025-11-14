@@ -1,15 +1,14 @@
 import { Outlet } from "react-router-dom";
 import Sidebar, { SidebarItem } from "./SideBar";
-import { Boxes, LayoutDashboard, Package, Receipt , Calendar, MessageCircle} from "lucide-react";
+import { Boxes, LayoutDashboard, Package , Calendar, MessageCircle, Mail, BriefcaseBusiness, LogIn} from "lucide-react";
 import { useState } from "react";
-import { Email, Work } from "@mui/icons-material";
 
 export default function MainLayout() {
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
   return (
     <div className="flex h-screen bg-linear-to-br from-[#73839E] to-[#5a729b]">
       <Sidebar expanded={sidebarExpanded} setExpanded={setSidebarExpanded}>
-        <SidebarItem icon={<LayoutDashboard size={20} />}
+        <SidebarItem icon={<LogIn size={20} />}
           text="Login"
           to="/"
           active
@@ -22,7 +21,7 @@ export default function MainLayout() {
           text="Docs en Ligne"
           to="/home/online-drive"
         />
-        <SidebarItem icon={<Email size={20} />}
+        <SidebarItem icon={<Mail size={20} />}
           text="Gmail"
           to="/home/email"
         />
@@ -31,12 +30,12 @@ export default function MainLayout() {
           to="/home"
         />
 
-        <SidebarItem icon={<Receipt size={20} />}
+        <SidebarItem icon={<LayoutDashboard size={20} />}
           text="Dashboard"
           to="/home/dashboard"
         />
 
-        <SidebarItem icon={<Work/>} size={20} 
+        <SidebarItem icon={<BriefcaseBusiness/>} size={20} 
           text="Documents"
           to="/home/workflow"
         /> 
