@@ -2,7 +2,7 @@ export const Button = ({ children, variant = 'primary', size = 'md', icon: Icon,
   const variants = {
     primary: 'bg-blue-600 hover:bg-blue-700 text-white shadow-md',
     secondary: 'bg-white hover:bg-gray-50 text-gray-700 border border-gray-200',
-    outline: 'bg-transparent hover:bg-blue-50 text-blue-600 border border-blue-600',
+    outline: 'bg-transparent hover:bg-blue-zodiac hover:text-white text-blue-zodiac border border-blue-zodiac',
     ghost: 'bg-transparent hover:bg-gray-100 text-gray-700'
   };
 
@@ -34,7 +34,7 @@ export const  SearchInput = ({ placeholder, value, onChange, onKeyPress }) => (
       value={value}
       onChange={onChange}
       onKeyPress={onKeyPress}
-      className="w-full text-gray-500 pl-4 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+      className="w-full text-gray-500 font-eirene pl-4 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
     />
   </div>
 );
@@ -42,9 +42,9 @@ export const  SearchInput = ({ placeholder, value, onChange, onKeyPress }) => (
  export const TabButton = ({ active, children, onClick }) => (
   <button
     onClick={onClick}
-    className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm ${
+    className={`px-4 py-2 rounded-lg font-medium font-dropline transition-all duration-200 text-sm ${
       active 
-        ? 'bg-blue-600 text-white shadow-md' 
+        ? 'bg-blue-zodiac text-white shadow-md' 
         : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
     }`}
   >
@@ -77,7 +77,7 @@ export const StatusBadge = ({ status }) => {
 export const Select = ({ label, required, children, ...props }) => (
   <div className="space-y-2">
     {label && (
-      <label className="block text-sm font-semibold text-gray-700">
+      <label className="block text-sm font-semibold text-gray-700 font-necoMedium">
         {label} {required && <span className="text-red-500">*</span>}
       </label>
     )}

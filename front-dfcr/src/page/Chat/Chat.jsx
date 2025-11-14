@@ -159,9 +159,9 @@ export default function Chat() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen bg-[#f5ece3]">
+      <div className="flex items-center justify-center w-full bg-[#f5ece3]">
         <div className="text-center">
-          <div className="w-12 h-12 border-4 border-[#2d466e] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <div className="h-12 border-4 border-[#2d466e] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-[#73839e] font-medium">Chargement...</p>
         </div>
       </div>
@@ -170,7 +170,7 @@ export default function Chat() {
 
   if (!currentUser) {
     return (
-      <div className="flex items-center justify-center h-screen bg-[#f5ece3]">
+      <div className="flex items-center justify-center w-full bg-[#f5ece3]">
         <div className="text-center p-8 bg-white rounded-2xl shadow-lg border border-[#73839e]/20">
           <p className="text-red-600 font-semibold">Utilisateur non connecté</p>
         </div>
@@ -179,8 +179,8 @@ export default function Chat() {
   }
 
   return (
-    <div className="flex h-screen p-4 sm:p-6">
-      <div className="flex w-full max-w-7xl mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden border border-[#73839e]/20">
+    <div className="flex w-full p-4 sm:p-6">
+      <div className="flex w-full  mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden border border-transparent">
         
         {/* Sidebar utilisateurs */}
         <div className="w-80 border-r border-[#73839e]/20 flex flex-col bg-[#f5ece3]">

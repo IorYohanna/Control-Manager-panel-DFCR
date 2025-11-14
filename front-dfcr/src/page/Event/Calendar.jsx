@@ -80,7 +80,7 @@ const Calendar = () => {
   };
 
   return (
-    <div className="w-full min-h-screen">
+    <div className="w-full">
       <div className="w-full flex justify-center items-start">
         <EventCalendar
           sidebarExpanded={sidebarExpanded}

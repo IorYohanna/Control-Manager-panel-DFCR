@@ -25,7 +25,7 @@ const HomePage = () => {
   }, []);
 
   return (
-    <div className="w-full min-h-screen p-4 sm:p-6">
+    <div className="w-full p-4 sm:p-6">
       <div className="grid grid-cols-1 xl:grid-cols-5 gap-4 sm:gap-6 max-w-[1920px] mx-auto">
         
         {/* Section Calendrier */}

@@ -3,6 +3,9 @@ import { FilterBar, Header, SearchBar } from './Header';
 import { DocumentsTable, Pagination } from './Documents';
 import { DocumentModal } from './Modal';
 import { fetchCompleteUserProfile } from '../../api/User/profileinfo';
+import { Button } from './Base';
+import { Plus } from 'lucide-react';
+import FormDocument from '../Docs/FormDocument';
 
 const API_BASE_URL = 'http://localhost:8080';
 
@@ -45,6 +48,7 @@ const WorkflowManagement = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [showModal, setShowModal] = useState(false);
   const [photo, setPhoto] = useState();
+  const [showForm, setShowForm] = useState(false);
 
   const ITEMS_PER_PAGE = 10;
 
@@ -173,31 +177,43 @@ const WorkflowManagement = () => {
   const paginatedDocuments = filteredDocuments.slice(startIndex, endIndex);
 
   return (
-    <div className="h-[95%] rounded-2xl m-6 bg-linear-to-br from-gray-50 to-blue-50 p-8">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
+    <div className="w-full rounded-2xl m-6 bg-linear-to-br from-gray-100 to-beige-creme p-8">
+      <div className="mx-auto">
+
         <Header currentUser={currentUser} photo={photo} onRefresh={handleRefresh} />
 
-        {/* Filtres */}
         <FilterBar activeFilter={activeFilter} setActiveFilter={setActiveFilter} />
 
-        {/* Barre de recherche */}
-        <SearchBar
-          referenceSearch={referenceSearch}
-          setReferenceSearch={setReferenceSearch}
-          objetSearch={objetSearch}
-          setObjetSearch={setObjetSearch}
-          onSearch={handleSearch}
-        />
+        <div className='grid grid-cols-3 gap-4' >
+          <SearchBar
+            className="col-span-2"
+            referenceSearch={referenceSearch}
+            setReferenceSearch={setReferenceSearch}
+            objetSearch={objetSearch}
+            setObjetSearch={setObjetSearch}
+            onSearch={handleSearch}
+            onClose={handleCloseModal}
+          />
+          <div className='col-span-1'>
+            <Button className='bg-linear-to-r from-gray-100 to-blue-zodiac' icon={Plus} onClick={() => setShowForm(true)}>
+              Importer
+            </Button>
+          </div>
+        </div>
 
-        {/* Tableau des documents */}
+
+
         <DocumentsTable
           documents={paginatedDocuments}
           onSelectDocument={handleSelectDocument}
           loading={loading}
         />
+        {showForm && (
+          <div className="mb-6">
+            <FormDocument onClose={() => setShowForm(false)} />
+          </div>
+        )}
 
-        {/* Pagination */}
         {totalPages > 1 && (
           <Pagination
             currentPage={currentPage}
@@ -206,7 +222,6 @@ const WorkflowManagement = () => {
           />
         )}
 
-        {/* Modal */}
         {showModal && selectedDocument && (
           <DocumentModal
             document={selectedDocument}

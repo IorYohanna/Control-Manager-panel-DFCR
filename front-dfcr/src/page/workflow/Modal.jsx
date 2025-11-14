@@ -202,7 +202,7 @@ export const DocumentModal = ({ document, onClose, currentUser, serviceUsers, on
         {/* Header Modal */}
         <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between bg-linear-to-r from-blue-50 to-indigo-50">
           <div>
-            <h2 className="text-xl font-bold text-gray-800">Document: {document.reference}</h2>
+            <h2 className="text-xl font-bold text-gray-800 font-necoBlack">Document: {document.reference}</h2>
             <p className="text-sm text-gray-600 mt-1">{document.objet}</p>
           </div>
           <button 
@@ -233,39 +233,39 @@ export const DocumentModal = ({ document, onClose, currentUser, serviceUsers, on
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-xs font-semibold text-gray-500 uppercase">Référence</label>
-                  <div className="text-gray-800 font-medium mt-1">{document.reference}</div>
+                  <label className="text-xs font-semibold text-gray-500 uppercase font-necoMedium">Référence</label>
+                  <div className="text-gray-800 font-medium mt-1 font-eirene capitalize">{document.reference}</div>
                 </div>
                 <div>
-                  <label className="text-xs font-semibold text-gray-500 uppercase">Statut</label>
-                  <div className="mt-2">
+                  <label className="text-xs font-semibold text-gray-500 uppercase font-necoMedium">Statut</label>
+                  <div className="mt-2 font-eirene capitalize">
                     <StatusBadge status={document.status} />
                   </div>
                 </div>
               </div>
               
               <div>
-                <label className="text-xs font-semibold text-gray-500 uppercase">Objet</label>
-                <div className="text-gray-800 mt-1">{document.objet}</div>
+                <label className="text-xs font-semibold text-gray-500 uppercase font-necoMedium">Objet</label>
+                <div className="text-gray-800 mt-1 font-eirene capitalize">{document.objet ? document.objet : "Vide"}</div>
               </div>
               
               <div>
-                <label className="text-xs font-semibold text-gray-500 uppercase">Description</label>
-                <div className="text-gray-700 mt-2 p-4 bg-gray-50 rounded-lg border border-gray-200 text-sm">
-                  {document.corps}
+                <label className="text-xs font-semibold text-gray-500 font-necoMedium uppercase">Description</label>
+                <div className="text-gray-700 mt-2 p-4 rounded-lg border border-gray-200 text-sm font-eirene capitalize">
+                  {document.corps ? document.corps: "Vide"}
                 </div>
               </div>
               
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-xs font-semibold text-gray-500 uppercase">Type</label>
-                  <div className="text-gray-800 mt-1">{document.type}</div>
+                  <label className="text-xs font-semibold text-gray-500 font-necoMedium uppercase">Type</label>
+                  <div className="text-gray-800 mt-1 font-eirene capitalize">{document.type}</div>
                 </div>
                 {document.creatorName && (
                   <div>
-                    <label className="text-xs font-semibold text-gray-500 uppercase">Créateur</label>
-                    <div className="text-gray-800 mt-1 text-sm flex items-center gap-2">
-                      <User size={14} className="text-blue-600" />
+                    <label className="text-xs font-semibold text-gray-500 font-necoMedium uppercase">Créateur</label>
+                    <div className="text-gray-800 mt-1 text-sm flex items-center gap-2 font-eirene capitalize ">
+                      <User size={14} className="text-blue-zodiac" />
                       {document.creatorName} ({document.creatorMatricule})
                     </div>
                   </div>

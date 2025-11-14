@@ -22,7 +22,7 @@ export const DocumentsTable = ({ documents, onSelectDocument, loading }) => {
 
     return (
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div className="grid grid-cols-12 gap-4 px-6 py-3 bg-gray-50 border-b border-gray-200 text-xs font-semibold text-gray-600 uppercase tracking-wide">
+            <div className="grid grid-cols-12 gap-4 px-6 py-3 bg-gray-50 border-b font-necoMedium border-gray-200 text-xs font-semibold text-gray-600 uppercase tracking-wide">
                 <div className="col-span-2">Référence</div>
                 <div className="col-span-3">Objet</div>
                 <div className="col-span-2">Date de mise à jour</div>
@@ -36,7 +36,7 @@ export const DocumentsTable = ({ documents, onSelectDocument, loading }) => {
                     className="grid grid-cols-12 gap-4 px-6 py-4 border-b border-gray-100 hover:bg-gray-50 transition-colors items-center"
                 >
                     <div className="col-span-2 font-medium text-gray-800 text-sm">{doc.reference}</div>
-                    <div className="col-span-3 text-gray-600 text-sm truncate">{doc.objet}</div>
+                    <div className="col-span-3 text-gray-600 text-sm truncate">{doc.objet ? doc.objet : "Vide"}</div>
                     <div className="col-span-2 text-gray-600 text-sm">{doc.updateTime || 'N/A'}</div>
                     <div className="col-span-2">
                         <StatusBadge status={doc.status} />
