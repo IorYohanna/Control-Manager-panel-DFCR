@@ -7,14 +7,15 @@ const idServices = ['SAGA', 'SF', 'SRFP', 'SCRI', 'SPSE'];
 
 const Dashboard = () => {
   const [activeService, setActiveService] = useState(idServices[0]);
+  // eslint-disable-next-line no-unused-vars
   const { sidebarExpanded } = useOutletContext();
 
   return (
-    <div className="min-h-screen">
+    <div className="overflow-y-auto w-full thin-scrollbar">
       
       {/* HEADER HERO - Sticky & Elegant */}
       <div className="sticky top-0 z-40 mx-3 sm:mx-5 mt-3 sm:mt-5 mb-5">
-        <div className="bg-gradient-to-r from-[#2d466e] via-[#34547a] to-[#2d466e] rounded-xl sm:rounded-2xl shadow-lg border border-white/10 backdrop-blur-sm">
+        <div className="bg-linear-to-r from-[#2d466e] via-[#34547a] to-[#2d466e] rounded-2xl sm:rounded-2xl shadow-lg border border-white/10 backdrop-blur-sm">
           <div className="px-4 sm:px-5 lg:px-6 py-3 sm:py-3.5 lg:py-4">
             
             {/* Single Row Layout - More compact */}
@@ -22,7 +23,7 @@ const Dashboard = () => {
               
               {/* LEFT : LOGO + TITRE */}
               <div className="flex items-center gap-2.5 min-w-0 flex-1">
-                <div className="p-1.5 sm:p-2 bg-white/10 rounded-lg backdrop-blur-sm border border-white/20 hover:bg-white/15 transition-all duration-300 flex-shrink-0">
+                <div className="p-1.5 sm:p-2 bg-white/10 rounded-lg backdrop-blur-sm border border-white/20 hover:bg-white/15 transition-all duration-300 shrink-0">
                   <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                 </div>
 
@@ -70,7 +71,7 @@ const Dashboard = () => {
       </div>
 
       {/* SERVICE CONTENT */}
-      <div className="px-3 sm:px-5 pb-5">
+      <div className="px-3 sm:px-5 pb-5 rounded-2xl">
         <Service activeService={activeService} />
       </div>
       
