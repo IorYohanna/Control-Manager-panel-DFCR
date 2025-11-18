@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.example.Auth.model.User.User;
+import com.example.Auth.model.workflow.Workflow;
+
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -37,8 +39,6 @@ public class Document {
 
     @OneToMany(mappedBy = "document", cascade = CascadeType.ALL)
     private List<Workflow> workflows;
-
-
 
     @ManyToOne
     @JoinColumn(name="matricule")

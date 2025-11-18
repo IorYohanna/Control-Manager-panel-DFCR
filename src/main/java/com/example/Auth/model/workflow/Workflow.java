@@ -1,4 +1,4 @@
-package com.example.Auth.model.Document;
+package com.example.Auth.model.workflow;
 
 import java.time.LocalDateTime;
 
@@ -7,6 +7,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.example.Auth.model.User.User;
+import com.example.Auth.model.Document.Document;
 import com.example.Auth.model.User.ServiceDfcr;
 
 import jakarta.persistence.*;

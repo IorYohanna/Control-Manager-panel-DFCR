@@ -3,6 +3,18 @@ import { Upload, FileText, Plus, Loader2, X } from 'lucide-react';
 import { createDocument } from '../../api/Document/document';
 import Input from '../../components/input/Input';
 import DefaultButton from '../../components/Button/DefaultButton';
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
+
+const type = {
+  values: ["jpg", "png", "gif", "pdf", "txt", "docx", "doc", "xlsx", "xls"]
+};
+const typeOptions = Array.isArray(type?.values) ? type.values : [];
+
+const status = {
+  values: ["en_attente", "au_service", "termine"]
+}
+const statusOptions = Array.isArray(status?.values) ? status.values : []
 
 const FormDocument = ({ onClose }) => {
   const [formData, setFormData] = useState({
@@ -76,7 +88,6 @@ const FormDocument = ({ onClose }) => {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.35 }}
       >
-        {/* Bouton fermer */}
         <button
           type="button"
           onClick={onClose}
@@ -85,7 +96,6 @@ const FormDocument = ({ onClose }) => {
           <X className="w-5 h-5" />
         </button>
 
-        {/* En-tête */}
         <div className="mb-8 text-center">
           <div className="inline-flex items-center justify-center w-12 h-12 bg-blue-50 rounded-xl mb-4">
             <FileText className="w-6 h-6 text-blue-600" />
@@ -94,7 +104,6 @@ const FormDocument = ({ onClose }) => {
           <p className="text-gray-500 text-sm">Remplissez les informations du document</p>
         </div>
 
-        {/* Form */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
           <div className="space-y-2">
             <Input
@@ -113,7 +122,7 @@ const FormDocument = ({ onClose }) => {
             <Input
               id="objet"
               label="Objet"
-              placeholder="Entrez l'objet du doc"
+              placeholder="Entrez l'objet du document"
               type="text"
               value={formData.objet}
               sx={{ width: "100%", background: "#e0e0e0" }}
@@ -121,33 +130,40 @@ const FormDocument = ({ onClose }) => {
             />
           </div>
 
-          <div className="space-y-2">
-            <Input
-              id="type"
-              label="Type"
-              placeholder="Entrez le type"
-              type="text"
+          <div className="flex flex-col">
+            <Autocomplete
+              sx={{ width: "100%", background: "#e0e0e0" }}
+              disablePortal
+              options={typeOptions}
+              getOptionLabel={(option) => option}
+              renderInput={(params) => <TextField {...params} placeholder="Type" className='text-gray-500' />}
               value={formData.type}
-              required={true}
-              sx={{ width: "100%", background: "#e0e0e0" }}
-              onChange={handleInputChange("type")}
+              onChange={(event, newValue) => {
+                setFormData(prev => ({
+                  ...prev,
+                  type: newValue
+                }));
+              }}
             />
           </div>
 
-          <div className="space-y-2">
-            <Input
-              id="status"
-              label="Status"
-              placeholder="en_attente / au_service / termine"
-              type="text"
+          <div className="flex flex-col">
+            <Autocomplete
+              sx={{ width: "100%", background: "#e0e0e0" }}
+              disablePortal
+              options={statusOptions}
+              getOptionLabel={(option) => option}
+              renderInput={(params) => <TextField {...params} placeholder="Status" className='text-gray-500' />}
               value={formData.status}
-              required={true}
-              sx={{ width: "100%", background: "#e0e0e0" }}
-             onChange={handleInputChange("status")}
+              onChange={(event, newValue) => {
+                setFormData(prev => ({
+                  ...prev,
+                  status: newValue
+                }));
+              }}
             />
           </div>
 
-          {/* Corps */}
           <div className="sm:col-span-2 space-y-2">
             <label className="text-sm font-medium text-gray-700">Contenu / Corps de Lettre</label>
             <textarea
@@ -158,7 +174,6 @@ const FormDocument = ({ onClose }) => {
             />
           </div>
 
-          {/* Upload */}
           <div className="sm:col-span-2 space-y-2">
             <label className="text-sm font-medium text-gray-700">Pièce jointe</label>
 

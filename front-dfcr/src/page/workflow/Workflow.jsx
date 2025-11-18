@@ -177,7 +177,7 @@ const WorkflowManagement = () => {
   const paginatedDocuments = filteredDocuments.slice(startIndex, endIndex);
 
   return (
-    <div className="w-full rounded-2xl m-6 bg-linear-to-br from-gray-100 to-beige-creme p-8">
+    <div className="w-full rounded-2xl m-6 bg-white/90 p-8">
       <div className="mx-auto">
 
         <Header currentUser={currentUser} photo={photo} onRefresh={handleRefresh} />

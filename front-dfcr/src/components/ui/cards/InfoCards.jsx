@@ -64,7 +64,7 @@ export default function InfoCards() {
     ];
 
     return (
-        <div className="flex flex-col gap-4 h-full">
+        <div className="flex flex-col gap-4 overflow-auto">
             <div className="bg-white rounded-2xl shadow-lg p-4 border border-[#73839e]/10">
                 <h2 className="text-lg font-necoBlack font-bold text-[#2d466e] text-center">
                 Statistiques

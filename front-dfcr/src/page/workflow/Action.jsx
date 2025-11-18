@@ -17,7 +17,7 @@ export const ActionForm = ({ action, formData, setFormData, serviceUsers }) => {
   return (
     <div className="space-y-4 p-5 bg-linear-to-br from-gray-50 to-blue-50 rounded-lg border border-gray-200">
       <h3 className="font-semibold text-gray-700 text-sm flex items-center gap-2">
-        <FileText size={16} className="text-blue-600" />
+        <FileText size={16} className="text-blue-zodiac" />
         Paramètres de l'action
       </h3>
 
@@ -57,7 +57,7 @@ export const ActionForm = ({ action, formData, setFormData, serviceUsers }) => {
               type="text"
               value={formData.employeMatricule || ''}
               onChange={(e) => updateField('employeMatricule', e.target.value)}
-              placeholder="Matricule de l'employé"
+              placeholder="ex: 001"
             />
           )
         )}

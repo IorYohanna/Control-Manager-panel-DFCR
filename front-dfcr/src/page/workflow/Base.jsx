@@ -1,3 +1,5 @@
+import { Search } from "lucide-react";
+
 export const Button = ({ children, variant = 'primary', size = 'md', icon: Icon, onClick, disabled, loading, className = '' }) => {
   const variants = {
     primary: 'bg-blue-600 hover:bg-blue-700 text-white shadow-md',
@@ -27,14 +29,14 @@ export const Button = ({ children, variant = 'primary', size = 'md', icon: Icon,
 };
 
 export const  SearchInput = ({ placeholder, value, onChange, onKeyPress }) => (
-  <div className="relative flex-1">
+  <div className="relative flex-1 ">
     <input
       type="text"
       placeholder={placeholder}
       value={value}
       onChange={onChange}
       onKeyPress={onKeyPress}
-      className="w-full text-gray-500 font-eirene pl-4 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+      className="w-full bg-white text-gray-500 font-eirene pl-4 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-zodiac focus:border-transparent text-md"
     />
   </div>
 );
@@ -42,10 +44,10 @@ export const  SearchInput = ({ placeholder, value, onChange, onKeyPress }) => (
  export const TabButton = ({ active, children, onClick }) => (
   <button
     onClick={onClick}
-    className={`px-4 py-2 rounded-lg font-medium font-dropline transition-all duration-200 text-sm ${
+    className={`px-4 py-2 rounded-lg font-medium font-dropline transition-all duration-200 text-md ${
       active 
         ? 'bg-blue-zodiac text-white shadow-md' 
-        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+        : 'text-dark-blue hover:bg-gray-100'
     }`}
   >
     {children}

@@ -4,7 +4,7 @@ import { SearchInput, TabButton } from "./Base";
 export const Header = ({ currentUser, onRefresh, photo }) => (
   <div className="flex items-center justify-between mb-6">
     <div>
-      <h1 className="text-2xl font-bold text-gray-800 font-necoBlack uppercase ">Suivi des Documents</h1>
+      <h1 className="text-2xl font-bold text-blue-zodiac font-necoBlack uppercase ">Documents</h1>
       <p className="text-sm text-gray-500 mt-1 font-necoMedium capitalize">Correction et gestion du cycle de vie des documents</p>
     </div>
     <div className="flex items-center gap-3">
@@ -16,13 +16,13 @@ export const Header = ({ currentUser, onRefresh, photo }) => (
       </button>
 
       {currentUser && (
-        <div className="flex items-center gap-2 pl-3 border-l border-gray-200">
+        <div className="flex items-center gap-2 pl-3 border-l border-black">
           <div className="rounded-full flex items-center justify-center">
             <img src={photo} alt="" className="rounded-4xl w-10 h-10" />
           </div>
           <div className="text-left">
-            <div className="font-medium text-gray-700 text-sm capitalize font-necoMedium ">{currentUser.username} {currentUser.surname}</div>
-            <div className="text-xs text-gray-500 uppercase font-necoMedium">{currentUser.fonction}</div>
+            <div className="font-medium text-gray-700 text-md capitalize font-necoMedium ">{currentUser.username} {currentUser.surname}</div>
+            <div className="text-sm text-gray-500 uppercase font-necoMedium">{currentUser.fonction}</div>
           </div>
         </div>
       )}

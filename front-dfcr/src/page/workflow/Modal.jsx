@@ -1,55 +1,55 @@
-import { BaggageClaim, Calendar, CheckCircle, Clock, History, Send, User, Workflow, WorkflowIcon, XCircle, Zap } from "lucide-react";
+import { BaggageClaim, Calendar, CheckCircle, Clock, History, Printer, Send, User, Workflow, WorkflowIcon, XCircle, Zap } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button, Select, StatusBadge, TabButton } from "./Base";
 import { ActionForm } from "./Action";
-import { Work } from "@mui/icons-material";
+import { Print, Work } from "@mui/icons-material";
 
 const safeJsonParse = async (response) => {
-    const text = await response.text();
-    try {
-        return JSON.parse(text);
-    } catch (err) {
-        console.error('Erreur parsing JSON:', text.substring(0, 200));
-        throw new Error('Réponse invalide du serveur : ', err);
-    }
+  const text = await response.text();
+  try {
+    return JSON.parse(text);
+  } catch (err) {
+    console.error('Erreur parsing JSON:', text.substring(0, 200));
+    throw new Error('Réponse invalide du serveur : ', err);
+  }
 };
 
 const getAuthHeader = () => ({
-    'Authorization': `Bearer ${localStorage.getItem('token')}`,
-    'Content-Type': 'application/json'
+  'Authorization': `Bearer ${localStorage.getItem('token')}`,
+  'Content-Type': 'application/json'
 });
 
 const API_BASE_URL = 'http://localhost:8080';
 
 
 const workflowAPI = {
-    sendToService: (data) => fetch(`${API_BASE_URL}/workflow/send-to-service`, {
-        method: 'POST', headers: getAuthHeader(), body: JSON.stringify(data)
-    }),
-    assignToEmploye: (data) => fetch(`${API_BASE_URL}/workflow/assign-to-employe`, {
-        method: 'POST', headers: getAuthHeader(), body: JSON.stringify(data)
-    }),
-    startWork: (data) => fetch(`${API_BASE_URL}/workflow/start-work`, {
-        method: 'POST', headers: getAuthHeader(), body: JSON.stringify(data)
-    }),
-    finishWork: (data) => fetch(`${API_BASE_URL}/workflow/finish-work`, {
-        method: 'POST', headers: getAuthHeader(), body: JSON.stringify(data)
-    }),
-    chefValidate: (data) => fetch(`${API_BASE_URL}/workflow/chef-validate`, {
-        method: 'POST', headers: getAuthHeader(), body: JSON.stringify(data)
-    }),
-    chefReject: (data) => fetch(`${API_BASE_URL}/workflow/chef-reject`, {
-        method: 'POST', headers: getAuthHeader(), body: JSON.stringify(data)
-    }),
-    directeurValidate: (data) => fetch(`${API_BASE_URL}/workflow/directeur-validate`, {
-        method: 'POST', headers: getAuthHeader(), body: JSON.stringify(data)
-    }),
-    directeurReject: (data) => fetch(`${API_BASE_URL}/workflow/directeur-reject`, {
-        method: 'POST', headers: getAuthHeader(), body: JSON.stringify(data)
-    }),
-    getHistory: (reference) => fetch(`${API_BASE_URL}/workflow/history/${reference}`, {
-        method: 'GET', headers: getAuthHeader()
-    })
+  sendToService: (data) => fetch(`${API_BASE_URL}/workflow/send-to-service`, {
+    method: 'POST', headers: getAuthHeader(), body: JSON.stringify(data)
+  }),
+  assignToEmploye: (data) => fetch(`${API_BASE_URL}/workflow/assign-to-employe`, {
+    method: 'POST', headers: getAuthHeader(), body: JSON.stringify(data)
+  }),
+  startWork: (data) => fetch(`${API_BASE_URL}/workflow/start-work`, {
+    method: 'POST', headers: getAuthHeader(), body: JSON.stringify(data)
+  }),
+  finishWork: (data) => fetch(`${API_BASE_URL}/workflow/finish-work`, {
+    method: 'POST', headers: getAuthHeader(), body: JSON.stringify(data)
+  }),
+  chefValidate: (data) => fetch(`${API_BASE_URL}/workflow/chef-validate`, {
+    method: 'POST', headers: getAuthHeader(), body: JSON.stringify(data)
+  }),
+  chefReject: (data) => fetch(`${API_BASE_URL}/workflow/chef-reject`, {
+    method: 'POST', headers: getAuthHeader(), body: JSON.stringify(data)
+  }),
+  directeurValidate: (data) => fetch(`${API_BASE_URL}/workflow/directeur-validate`, {
+    method: 'POST', headers: getAuthHeader(), body: JSON.stringify(data)
+  }),
+  directeurReject: (data) => fetch(`${API_BASE_URL}/workflow/directeur-reject`, {
+    method: 'POST', headers: getAuthHeader(), body: JSON.stringify(data)
+  }),
+  getHistory: (reference) => fetch(`${API_BASE_URL}/workflow/history/${reference}`, {
+    method: 'GET', headers: getAuthHeader()
+  })
 };
 
 export const DocumentModal = ({ document, onClose, currentUser, serviceUsers, onActionComplete, initialTab = 'details' }) => {
@@ -64,7 +64,7 @@ export const DocumentModal = ({ document, onClose, currentUser, serviceUsers, on
     if (activeTab === 'history' && document) {
       loadHistory();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab, document]);
 
   const loadHistory = async () => {
@@ -116,6 +116,27 @@ export const DocumentModal = ({ document, onClose, currentUser, serviceUsers, on
     }
 
     return [];
+  };
+
+  const handlePrint = async (reference) => {
+    const token = localStorage.getItem('token');
+    try {
+      const response = await fetch(`http://localhost:8080/documents/print/${reference}`, {
+        method: "POST",
+        headers: {
+          "Authorization": "Bearer " + token,
+        },
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText);
+      } 
+
+    } catch (error) {
+      console.error("Erreur lors de l'impression :", error);
+      alert(error.message);
+    }
   };
 
   const handleActionSubmit = async () => {
@@ -205,7 +226,7 @@ export const DocumentModal = ({ document, onClose, currentUser, serviceUsers, on
             <h2 className="text-xl font-bold text-gray-800 font-necoBlack">Document: {document.reference}</h2>
             <p className="text-sm text-gray-600 mt-1">{document.objet}</p>
           </div>
-          <button 
+          <button
             onClick={onClose}
             className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
           >
@@ -243,33 +264,42 @@ export const DocumentModal = ({ document, onClose, currentUser, serviceUsers, on
                   </div>
                 </div>
               </div>
-              
+
               <div>
                 <label className="text-xs font-semibold text-gray-500 uppercase font-necoMedium">Objet</label>
                 <div className="text-gray-800 mt-1 font-eirene capitalize">{document.objet ? document.objet : "Vide"}</div>
               </div>
-              
+
               <div>
                 <label className="text-xs font-semibold text-gray-500 font-necoMedium uppercase">Description</label>
                 <div className="text-gray-700 mt-2 p-4 rounded-lg border border-gray-200 text-sm font-eirene capitalize">
-                  {document.corps ? document.corps: "Vide"}
+                  {document.corps ? document.corps : "Vide"}
                 </div>
               </div>
-              
+
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="text-xs font-semibold text-gray-500 font-necoMedium uppercase">Type</label>
-                  <div className="text-gray-800 mt-1 font-eirene capitalize">{document.type}</div>
+                  <div className="text-gray-800 mt-1 font-eirene uppercase">{document.type}</div>
                 </div>
                 {document.creatorName && (
                   <div>
                     <label className="text-xs font-semibold text-gray-500 font-necoMedium uppercase">Créateur</label>
                     <div className="text-gray-800 mt-1 text-sm flex items-center gap-2 font-eirene capitalize ">
                       <User size={14} className="text-blue-zodiac" />
-                      {document.creatorName} ({document.creatorMatricule})
+                      {document.creatorName}
                     </div>
                   </div>
                 )}
+              </div>
+              <div className="flex justify-end">
+                <button
+                  onClick={() => handlePrint(document.reference)}
+                  className="px-4 py-2 bg-transparent text-gray-500 flex gap-2 items-center font-necoMedium rounded border border-blue-zodiac hover:bg-blue-zodiac hover:text-white hover:border-transparent transition"
+                >
+                <Printer size={16}/>
+                  Imprimer
+                </button>
               </div>
             </div>
           )}
@@ -314,11 +344,10 @@ export const DocumentModal = ({ document, onClose, currentUser, serviceUsers, on
                   )}
 
                   {message && (
-                    <div className={`p-4 rounded-lg text-sm ${
-                      message.type === 'success' 
-                        ? 'bg-green-50 text-green-800 border border-green-200' 
-                        : 'bg-red-50 text-red-800 border border-red-200'
-                    }`}>
+                    <div className={`p-4 rounded-lg text-sm ${message.type === 'success'
+                      ? 'bg-green-50 text-green-800 border border-green-200'
+                      : 'bg-red-50 text-red-800 border border-red-200'
+                      }`}>
                       <div className="flex items-center gap-2">
                         {message.type === 'success' ? <CheckCircle size={18} /> : <XCircle size={18} />}
                         {message.text}
@@ -374,17 +403,17 @@ export const DocumentModal = ({ document, onClose, currentUser, serviceUsers, on
                             {item.timestamp || new Date().toLocaleString()}
                           </div>
                         </div>
-                        
+
                         {item.typeWorkflow && (
-                          <div className="text-xs text-blue-600 font-medium mb-2">
+                          <div className="text-sm  font-medium text-blue-zodiac mb-2">
                             Type: {item.typeWorkflow}
                           </div>
                         )}
-                        
+
                         <div className="text-sm text-gray-600 flex items-center gap-1 mb-2">
                           <User size={12} className="text-blue-600" />
                           Par: <strong>{item.matriculeActeur || item.acteur?.name || 'N/A'}
-                         </strong>
+                          </strong>
                           {item.acteur?.matricule && (
                             <span className="text-gray-400">({item.acteur.matricule})</span>
                           )}
@@ -394,14 +423,14 @@ export const DocumentModal = ({ document, onClose, currentUser, serviceUsers, on
                           <User size={12} />
                           <p> Fonction: <strong>{item.acteurFonction}</strong></p>
                         </div>
-                        
+
                         {item.remarque && (
                           <div className="mt-3 p-3 bg-white rounded border border-gray-200">
                             <div className="text-xs font-semibold text-gray-500 uppercase mb-1">Remarque</div>
                             <div className="text-sm text-gray-700">{item.remarque}</div>
                           </div>
                         )}
-                        
+
                         {item.statut && (
                           <div className="mt-2">
                             <StatusBadge status={item.statut} />

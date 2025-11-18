@@ -1,7 +1,67 @@
-import { ChevronLeft, ChevronRight, FileText } from "lucide-react";
+import { useState } from "react";
+import { ChevronLeft, ChevronRight, Download, FileText } from "lucide-react";
 import { Button, StatusBadge } from "./Base";
 
 export const DocumentsTable = ({ documents, onSelectDocument, loading }) => {
+    const [downloadingRef, setDownloadingRef] = useState(null);
+
+    const handleDownloadFile = async (reference) => {
+        setDownloadingRef(reference);
+
+        try {
+            const response = await fetch(`http://localhost:8080/documents/download/${reference}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.status === 404) {
+                alert('Document non trouvé');
+                return;
+            }
+
+            if (response.status === 204) {
+                alert('Aucun contenu disponible pour ce document');
+                return;
+            }
+
+            if (!response.ok) {
+                throw new Error(`Erreur ${response.status}`);
+            }
+
+            const blob = await response.blob();
+            console.log(blob)
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+
+            const contentDisposition = response.headers.get('Content-Disposition');
+            let filename = `${reference}`;
+
+            if (contentDisposition) {
+                const filenameMatch = contentDisposition.match(/filename="(.+)"/);
+                if (filenameMatch) {
+                    filename = filenameMatch[1];
+                }
+            }
+
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+
+        } catch (error) {
+            console.error('Erreur de téléchargement:', error);
+            alert('Erreur lors du téléchargement du document');
+        } finally {
+            setDownloadingRef(null);
+        }
+    };
+
     if (loading) {
         return (
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-12 text-center">
@@ -33,7 +93,7 @@ export const DocumentsTable = ({ documents, onSelectDocument, loading }) => {
             {documents.map((doc) => (
                 <div
                     key={doc.reference}
-                    className="grid grid-cols-12 gap-4 px-6 py-4 border-b border-gray-100 hover:bg-gray-50 transition-colors items-center"
+                    className="grid grid-cols-12 gap-4 px-6 py-4 border-b font-eirene border-gray-100 hover:bg-gray-50 transition-colors items-center"
                 >
                     <div className="col-span-2 font-medium text-gray-800 text-sm">{doc.reference}</div>
                     <div className="col-span-3 text-gray-600 text-sm truncate">{doc.objet ? doc.objet : "Vide"}</div>
@@ -45,14 +105,31 @@ export const DocumentsTable = ({ documents, onSelectDocument, loading }) => {
                         <Button
                             variant="outline"
                             size="sm"
-                            onClick={() => onSelectDocument(doc, 'view')}
+                            onClick={() => handleDownloadFile(doc.reference)}
+                            disabled={downloadingRef === doc.reference}
+                        >
+                            {downloadingRef === doc.reference ? (
+                                <>
+                                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-blue-200 border-t-blue-600 mr-2"></div>
+                                    ...
+                                </>
+                            ) : (
+                                <>
+                                    <Download size={16} />
+                                </>
+                            )}
+                        </Button>
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => onSelectDocument(doc, 'details')}
                         >
                             Détails
                         </Button>
                         <Button
                             variant="outline"
                             size="sm"
-                            onClick={() => onSelectDocument(doc, 'action')}
+                            onClick={() => onSelectDocument(doc, 'actions')}
                         >
                             Actions
                         </Button>
@@ -118,8 +195,8 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }) => {
                         key={page}
                         onClick={() => onPageChange(page)}
                         className={`w-8 h-8 rounded-lg font-medium transition-colors text-sm ${currentPage === page
-                                ? 'bg-blue-600 text-white shadow-md'
-                                : 'text-gray-600 hover:bg-gray-100'
+                            ? 'bg-blue-600 text-white shadow-md'
+                            : 'text-gray-600 hover:bg-gray-100'
                             }`}
                     >
                         {page}

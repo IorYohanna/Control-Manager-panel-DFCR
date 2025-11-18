@@ -33,6 +33,7 @@ function GoogleDriveViewer() {
 
   useEffect(() => {
     if (accessToken) loadFiles(currentFolder.id);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accessToken, currentFolder]);
 
   const loadFiles = async (folderId) => {
@@ -159,13 +160,13 @@ function GoogleDriveViewer() {
 
   if (!accessToken) {
     return (
-      <div className="w-full min-h-screen bg-linear-to-br from-light-blue to-blue-zodiac flex items-center justify-center">
-        <div className="bg-linear-to-tr from-beige-creme to-white-gray rounded-2xl shadow-2xl p-12 max-w-md w-full text-center flex flex-col items-center">
+      <div className="w-full rounded-2xl m-6 bg-linear-to-br from-light-blue to-blue-zodiac flex items-center justify-center">
+        <div className="bg-linear-to-r from-gray-100 to-beige-creme/80 rounded-2xl shadow-2xl p-12 max-w-md w-full text-center flex flex-col items-center">
           <div className="text-6xl mb-6"><img src="/img/drive.png" alt="" className='w-20 h-20' /></div>
-          <h1 className="text-3xl font-necoBlack font-bold text-gray-800 mb-4">
+          <h1 className="text-3xl font-necoBlack font-bold text-light-blue mb-4">
             Google Drive Viewer
           </h1>
-          <p className="text-gray-600 mb-8 font-necoMedium">
+          <p className="text-gray-800 mb-8 font-necoMedium">
             Connectez-vous pour accéder à vos fichiers Google Drive
           </p>
           <button
@@ -180,7 +181,7 @@ function GoogleDriveViewer() {
   }
 
   return (
-    <div className="w-full m-6 rounded-2xl flex flex-col bg-gray-100">
+    <div className="w-full max-w-[1920px] m-6 rounded-2xl flex flex-col bg-gray-100">
       <DriveHeader
         currentFolder={currentFolder}
         onSearch={handleSearch}
@@ -192,13 +193,13 @@ function GoogleDriveViewer() {
       <div className="flex-1 flex overflow-hidden">
         <div className="flex-1 flex flex-col overflow-hidden">
           
-          <div className="p-5 border-b border-gray-200 flex items-center gap-2 text-sm overflow-x-auto">
+          <div className="p-5 border-b bg-white border-beige-creme flex items-center gap-2 text-sm overflow-x-auto">
             {breadcrumb.map((crumb, i) => (
               <div key={crumb.id} className="flex items-center gap-2">
-                {i > 0 && <span className="text-gray-400">/</span>}
+                {i > 0 && <span className="text-blue-zodiac hover:text-white">/</span>}
                 <button
                   onClick={() => navigateToBreadcrumb(i)}
-                  className="font-dropline text-lg hover:text-blue-zodiac font-medium whitespace-nowrap"
+                  className="font-dropline text-lg text-blue-zodiac cursor-pointer font-medium whitespace-nowrap"
                 >
                   {crumb.name}
                 </button>
@@ -216,7 +217,7 @@ function GoogleDriveViewer() {
               <>
                 {filteredFolders.length > 0 && (
                   <div className="mb-8">
-                    <h2 className="text-sm font-semibold uppercase mb-4">Dossiers</h2>
+                    <h2 className="text-lg font-semibold capitalize mb-4 font-dropline text-light-blue">Dossiers</h2>
                     <div className={viewMode === 'grid'
                       ? 'grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4'
                       : 'space-y-1 '
@@ -235,7 +236,7 @@ function GoogleDriveViewer() {
 
                 {filteredFiles.length > 0 && (
                   <div>
-                    <h2 className="text-sm font-semibold uppercase mb-4">Fichiers</h2>
+                    <h2 className="text-lg font-semibold capitalize text-light-blue font-dropline mb-4">Fichiers</h2>
                     <div className={viewMode === 'grid'
                       ? 'grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4'
                       : 'bg-white rounded-lg border border-gray-200 overflow-hidden'
@@ -256,8 +257,8 @@ function GoogleDriveViewer() {
                 {filteredFolders.length === 0 && filteredFiles.length === 0 && (
                   <div className="flex items-center justify-center h-full">
                     <div className="text-center flex flex-col items-center justify-center">
-                      <div className="text-6xl mb-4"><Folder className='w-10 h-10' /></div>
-                      <p className="text-gray-500 text-xl">Fichier Introuvable</p>
+                      <div className="text-6xl mb-4"><Folder className='w-20 h-20 text-gray-500' /></div>
+                      <p className="text-gray-500 text-2xl">Fichier Introuvable</p>
                     </div>
                   </div>
                 )}

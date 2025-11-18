@@ -20,7 +20,7 @@ export default function EmailHeader({
         </span>
          {/* Badge du displayLimit */}
 
-        <div className="px-2 py-0.5 bg-[#73839e]/20 text-[#2d466e] text-sm font-medium rounded-full shadow-sm">
+        <div className="px-4 py-0.5 bg-white text-light-blue text-sm font-medium rounded-full shadow-sm">
           {displayLimit} emails
         </div>
       </div>
@@ -33,7 +33,7 @@ export default function EmailHeader({
           placeholder="Rechercher..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full pl-10 py-2 bg-white rounded-xl border border-[#73839e]/30 focus:ring-2 focus:ring-[#2d466e]/40 transition-all text-sm md:text-base"
+          className="w-full pl-10 py-2 bg-white text-gray-400 rounded-xl transition-all text-sm md:text-base"
         />
       </div>
 

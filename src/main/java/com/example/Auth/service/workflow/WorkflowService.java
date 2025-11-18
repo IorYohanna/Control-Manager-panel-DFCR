@@ -1,12 +1,14 @@
-package com.example.Auth.service.Document;
+package com.example.Auth.service.workflow;
 
-import com.example.Auth.dto.Workflow.WorkflowHistorique;
+import com.example.Auth.dto.Workflow.WorkflowHistoriqueDTO;
 import com.example.Auth.model.Document.Document;
-import com.example.Auth.model.Document.Workflow;
 import com.example.Auth.model.User.User;
+import com.example.Auth.model.workflow.Workflow;
+import com.example.Auth.model.workflow.WorkflowHistorique;
 import com.example.Auth.model.User.ServiceDfcr;
 import com.example.Auth.repository.Document.DocumentRepository;
-import com.example.Auth.repository.Document.WorkflowRepository;
+import com.example.Auth.repository.workflow.WorkflowRepository;
+import com.example.Auth.repository.workflow.WorkflowHistoriqueRepository;
 
 import java.util.List;
 
@@ -21,6 +23,9 @@ public class WorkflowService {
     private WorkflowRepository workflowRepository;
 
     @Autowired
+    private WorkflowHistoriqueRepository workflowHistoriqueRepository;
+
+    @Autowired
     private DocumentRepository documentRepository;
 
     private Workflow getOrCreateWorkflow(Document document) {
@@ -29,6 +34,13 @@ public class WorkflowService {
                 .orElseGet(Workflow::new);
     }
 
+    /**
+     * Méthode pour créer une entrée d'historique à partir d'un workflow
+     */
+    private void createHistorique(Workflow workflow) {
+        WorkflowHistorique historique = new WorkflowHistorique(workflow);
+        workflowHistoriqueRepository.save(historique);
+    }
 
     private Workflow updateDocumentAndWorkflow(Document document, String documentStatus,
             Workflow workflow, String workflowType,
@@ -47,7 +59,12 @@ public class WorkflowService {
         workflow.setService(service);
         workflow.setRemarque(remarque);
 
-        return workflowRepository.save(workflow);
+        Workflow savedWorkflow = workflowRepository.save(workflow);
+        
+        // Créer une entrée d'historique
+        createHistorique(savedWorkflow);
+        
+        return savedWorkflow;
     }
 
     /**
@@ -186,27 +203,34 @@ public class WorkflowService {
                 directeur, null, service, remarque);
     }
 
-    public List<WorkflowHistorique> getWorkflowHistory(String reference) {
-        List<Workflow> workflows = workflowRepository.findByDocumentReference(reference);
+    /**
+     * Récupérer l'historique complet d'un document
+     */
+    public List<WorkflowHistoriqueDTO> getWorkflowHistory(String reference) {
+        List<WorkflowHistorique> historiques = workflowHistoriqueRepository
+                .findByDocument_ReferenceOrderByCreatedAtAsc(reference);
 
-        return workflows.stream().map(this::toHistoriqueDto).toList();
+        return historiques.stream().map(this::toHistoriqueDto).toList();
     }
 
-    private WorkflowHistorique toHistoriqueDto(Workflow workflow) {
-        WorkflowHistorique dto = new WorkflowHistorique();
-        dto.setReference(workflow.getDocument().getReference());
-        dto.setTypeWorkflow(workflow.getTypeWorkflow());
-        dto.setAction(workflow.getAction());
-        dto.setStatus(workflow.getStatus());
-        dto.setMatriculeActeur(workflow.getActeur().getMatricule());
-        dto.setActeurFonction(workflow.getActeur().getFonction());
-        dto.setRemarque(workflow.getRemarque());
-        dto.setEstComplet(workflow.getEstComplet());
-        dto.setCreatedAt(workflow.getCreatedAt());
+    private WorkflowHistoriqueDTO toHistoriqueDto(WorkflowHistorique historique) {
+        WorkflowHistoriqueDTO dto = new WorkflowHistoriqueDTO();
+        dto.setReference(historique.getDocument().getReference());
+        dto.setTypeWorkflow(historique.getTypeWorkflow());
+        dto.setAction(historique.getAction());
+        dto.setStatus(historique.getStatus());
+        
+        if (historique.getActeur() != null) {
+            dto.setMatriculeActeur(historique.getActeur().getMatricule());
+            dto.setActeurFonction(historique.getActeur().getFonction());
+        }
+        
+        dto.setRemarque(historique.getRemarque());
+        dto.setEstComplet(historique.getEstComplet());
+        dto.setCreatedAt(historique.getCreatedAt());
+        
         return dto;
     }
-
-
 
     public List<Workflow> getDocumentsEnAttente(String matricule) {
         return workflowRepository.findByDestinataire_MatriculeAndStatus(matricule, "en_attente");

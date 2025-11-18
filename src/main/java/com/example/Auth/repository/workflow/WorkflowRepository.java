@@ -1,10 +1,10 @@
-package com.example.Auth.repository.Document;
+package com.example.Auth.repository.workflow;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.example.Auth.model.Document.Workflow;
 import com.example.Auth.model.Document.Document;
+import com.example.Auth.model.workflow.Workflow;
 
 import java.util.List;
 import java.util.Optional;

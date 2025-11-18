@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class WorkflowHistorique {
+public class WorkflowHistoriqueDTO {
     private String reference;
     private String typeWorkflow;
     private String action;

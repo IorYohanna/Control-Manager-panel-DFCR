@@ -7,14 +7,17 @@ import com.example.Auth.model.Document.Document;
 import com.example.Auth.service.Document.DocumentService;
 
 import jakarta.annotation.security.PermitAll;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
+import javax.print.PrintException;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/documents")
@@ -38,8 +41,7 @@ public class DocumentController {
                         doc.getStatus(),
                         doc.getCreator().getMatricule(),
                         doc.getCreator().getUsername(),
-                        doc.getCreator().getSurname()
-                ))
+                        doc.getCreator().getSurname()))
                 .toList();
         return ResponseEntity.ok(documents);
     }
@@ -64,8 +66,7 @@ public class DocumentController {
                     doc.getStatus(),
                     doc.getCreator().getMatricule(),
                     doc.getCreator().getName(),
-                    doc.getCreator().getUsername()
-            );
+                    doc.getCreator().getUsername());
 
             return ResponseEntity.ok(responseDto);
         } catch (Exception e) {
@@ -85,8 +86,7 @@ public class DocumentController {
                         doc.getStatus(),
                         doc.getCreator().getMatricule(),
                         doc.getCreator().getName(),
-                        doc.getCreator().getUsername()
-                ))
+                        doc.getCreator().getUsername()))
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -104,8 +104,7 @@ public class DocumentController {
                 updatedDocument.getStatus(),
                 updatedDocument.getCreator().getMatricule(),
                 updatedDocument.getCreator().getName(),
-                updatedDocument.getCreator().getUsername()
-        );
+                updatedDocument.getCreator().getUsername());
         return ResponseEntity.ok(responseDto);
     }
 
@@ -118,6 +117,30 @@ public class DocumentController {
     @GetMapping("/search")
     public List<Document> search(String keyword) {
         return documentService.searchByKeyword(keyword);
+    }
+
+    @PostMapping("/print/{reference}")
+    public ResponseEntity<String> printDocument(@PathVariable String reference) {
+        try {
+            documentService.printDocument(reference);
+            return ResponseEntity.ok("Document envoyé à l'imprimante avec succès");
+
+        } catch (RuntimeException e) {
+            if (e.getMessage().contains("Document non trouvé")) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Document non trouvé");
+            } else if (e.getMessage().contains("Aucune pièce jointe")) {
+                return ResponseEntity.badRequest().body("Aucune pièce jointe à imprimer");
+            } else if (e.getMessage().contains("Aucune imprimante")) {
+                return ResponseEntity.badRequest().body("Aucune imprimante par défaut trouvée");
+            }
+            return ResponseEntity.internalServerError().body("Erreur lors de l'impression: " + e.getMessage());
+
+        } catch (PrintException e) {
+            return ResponseEntity.internalServerError().body("Erreur d'impression: " + e.getMessage());
+
+        } catch (IOException e) {
+            return ResponseEntity.internalServerError().body("Erreur de lecture du fichier: " + e.getMessage());
+        }
     }
 
     @DeleteMapping("/{reference}")
@@ -140,8 +163,7 @@ public class DocumentController {
                         doc.getCreator().getMatricule(),
                         doc.getCreator().getUsername(),
                         doc.getCreator().getSurname(),
-                        doc.getCreatedAt()
-                ))
+                        doc.getCreatedAt()))
                 .toList();
         return ResponseEntity.ok(documents);
     }
