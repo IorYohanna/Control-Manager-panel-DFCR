@@ -2,18 +2,23 @@ package com.example.Auth.service.Dashboard;
 
 import com.example.Auth.dto.Dashboard.ServiceStatisticsDto;
 import com.example.Auth.dto.Dashboard.UserInfoDto;
+import com.example.Auth.model.Document.Workflow;
 import com.example.Auth.model.User.ServiceDfcr;
 import com.example.Auth.repository.User.ServiceRepository;
+import com.example.Auth.service.Document.WorkflowService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class DashboardService {
     private final ServiceRepository serviceRepository;
+    private final WorkflowService workflowService;
 
-    public DashboardService(ServiceRepository serviceRepository) {
+    public DashboardService(ServiceRepository serviceRepository, WorkflowService workflowService) {
         this.serviceRepository = serviceRepository;
+        this.workflowService = workflowService;
     }
 
     public ServiceStatisticsDto getServiceStatistics(String idService) {
@@ -34,5 +39,9 @@ public class DashboardService {
                 service.getEventCount(),
                 users
         );  
+    }
+
+    public List<Workflow> getWorkflowService (String idService, String status){
+        return workflowService.getDocumentsService(idService, status);
     }
 }

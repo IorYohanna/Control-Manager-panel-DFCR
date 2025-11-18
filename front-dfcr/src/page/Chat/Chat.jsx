@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
 import { Send, Search, MoreVertical, Trash2, User, MessageCircle, Clock } from "lucide-react";
+import { getCurrentUser, getMessages, getUsers } from "../../api/Chat/chat";
 
 export default function Chat() {
   const [users, setUsers] = useState([]);
@@ -17,53 +18,42 @@ export default function Chat() {
   const chatContainerRef = useRef(null);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) return;
-
-    try {
-      const payload = JSON.parse(atob(token.split(".")[1]));
-      setCurrentUser(payload.sub);
-    } catch {
-      fetch("http://localhost:8080/auth/me", {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-        .then((res) => res.json())
-        .then((user) => setCurrentUser(user.matricule))
-        .catch(console.error);
+    async function loadUser() {
+      const user = await getCurrentUser()
+      setCurrentUser(user)
     }
+    loadUser()
   }, []);
 
   useEffect(() => {
-    if (!currentUser) return;
-    const token = localStorage.getItem("token");
-
-    fetch("http://localhost:8080/users", {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((res) => res.json())
-      .then((data) => setUsers(data.filter((u) => u.matricule !== currentUser)))
-      .finally(() => setLoading(false));
+    if (!currentUser) return
+    async function loadUsers() {
+      setLoading(true)
+      const data = await getUsers()
+      setUsers(data.filter(u => u.matricule !== currentUser))
+      setLoading(false);
+    }
+    loadUsers()
   }, [currentUser]);
 
   useEffect(() => {
     if (!selectedUser || !currentUser) {
-      setMessages([]);
-      return;
+      setMessages([])
+      return
     }
-
-    const token = localStorage.getItem("token");
-    setChatLoading(true);
-
-    fetch(`http://localhost:8080/messages/${currentUser}/${selectedUser}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((res) => res.json())
-      .then((data) => setMessages(data))
-      .catch((error) => {
-        console.error("Error fetching messages:", error);
+    
+    async function loadMessages() {
+      setChatLoading(true)
+      try {
+        const data = await getMessages(currentUser, selectedUser)
+        setMessages(data)
+      } catch (err) {
+        console.error("Error fetching messages:", err);
         setMessages([]);
-      })
-      .finally(() => setChatLoading(false));
+      }
+      setChatLoading(false);
+    }
+    loadMessages()
   }, [selectedUser, currentUser]);
 
   useEffect(() => {
@@ -126,22 +116,6 @@ export default function Chat() {
     setInput("");
   };
 
-  const deleteMessage = (id) => {
-    const confirmed = window.confirm("Voulez-vous vraiment supprimer ce message ?");
-    if (!confirmed) return;
-
-    const token = localStorage.getItem("token");
-    fetch(`http://localhost:8080/messages/${id}`, {
-      method: "DELETE",
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error("Impossible de supprimer le message");
-        setMessages((prev) => prev.filter((m) => m.id !== id));
-      })
-      .catch(console.error);
-  };
-
   useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
@@ -161,7 +135,7 @@ export default function Chat() {
     return (
       <div className="flex items-center justify-center w-full bg-[#f5ece3]">
         <div className="text-center">
-          <div className="h-12 border-4 border-[#2d466e] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <div className="h-15 w-15 border-3 border-[#2d466e] border-t-transparent rounded-[50%] animate-spin  m-4"></div>
           <p className="text-[#73839e] font-medium">Chargement...</p>
         </div>
       </div>
@@ -356,7 +330,7 @@ export default function Chat() {
                                   })}
                                 </span>
                                 
-                                {/* Delete button */}
+                                {/* Delete button
                                 {m.senderMatricule === currentUser && (
                                   <button
                                     onClick={() => deleteMessage(m.id)}
@@ -365,7 +339,7 @@ export default function Chat() {
                                   >
                                     <Trash2 className="w-3 h-3 text-red-500" />
                                   </button>
-                                )}
+                                )} */}
                               </div>
                             </div>
                           </div>

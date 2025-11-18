@@ -50,6 +50,10 @@ public class WorkflowService {
         return workflowRepository.save(workflow);
     }
 
+    //en_attente assigne en_traitement termine validation_directeur au_service complet
+    //type : RECEPTION , ENVOYER , ASSIGNATION, TRAITEMENT, SOUMISSION, VALIDATION_CHEF, VALIDATION_DIRECTEUR
+
+
     /**
      * 1. Document arrive au Directeur - Status: EN_ATTENTE
      */
@@ -106,6 +110,7 @@ public class WorkflowService {
                 "TRAITEMENT", "TRAITER", "en_traitement",
                 employe, null, null, "Document en cours de traitement");
     }
+    
 
     /**
      * 5. Employé termine et envoie au chef
@@ -215,4 +220,13 @@ public class WorkflowService {
     public List<Workflow> getDocumentsAFaire(String matricule) {
         return workflowRepository.findByDestinataire_MatriculeAndStatus(matricule, "au_service");
     }
+
+    public List<Workflow> getDocumentsService(String idService, String status) {
+        if (status == null || status.isEmpty()) {
+            // Si status est null ou vide, retourne tous les workflows du service
+            return workflowRepository.findByService_IdService(idService);
+        }
+        return workflowRepository.findByService_IdServiceAndStatus(idService, status);
+    }
+
 }

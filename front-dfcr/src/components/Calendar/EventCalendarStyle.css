@@ -169,6 +169,7 @@
   font-weight: 500;
   font-size: 0.7rem;
   border: 1px solid var(--secondary);
+  border-radius: none;
 }
 
 @media (min-width: 640px) {

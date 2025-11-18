@@ -46,6 +46,7 @@ public class SecurityConfiguration {
                                 .requestMatchers("/users/**").permitAll()
                                 .requestMatchers("/documents/**").permitAll()
                                 .requestMatchers("/ws-message/**").permitAll()
+                                .requestMatchers("/dashboard/**").authenticated()
                                 .requestMatchers("/messages/**").authenticated()
                                 .anyRequest().authenticated())
                 .sessionManagement(session -> session
