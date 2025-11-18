@@ -45,3 +45,52 @@ export async function getEventsService(idService) {
     throw error;
   }
 }
+
+export async function getWorkflowsService(idService, status) {
+  const token = localStorage.getItem("token");
+
+  try {
+    const response = await fetch(
+      `${API}/dashboard/workflows/${idService}/${status}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (!response.ok) {
+      throw new Error(`Erreur HTTP: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Erreur lors de la récupération des données:", error);
+    throw error;
+  }
+}
+
+export async function getDashboardStats(idService) {
+  const token = localStorage.getItem("token");
+
+  try {
+    const response = await fetch(`${API}/dashboard/service/${idService}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Erreur HTTP: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Erreur lors de la récupération des stats:", error);
+    throw error;
+  }
+}
