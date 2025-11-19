@@ -36,7 +36,7 @@ public class WorkflowService {
 
     /**
      * Méthode pour créer une entrée d'historique à partir d'un workflow
-     */
+     */ 
     private void createHistorique(Workflow workflow) {
         WorkflowHistorique historique = new WorkflowHistorique(workflow);
         workflowHistoriqueRepository.save(historique);

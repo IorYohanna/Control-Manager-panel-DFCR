@@ -4,9 +4,10 @@ import { useNavigate } from "react-router-dom";
 export const DossierCard = ({ dossier }) => {
     const navigate = useNavigate();
 
-    const handleDossierClick = (dossier) => {
+    const handleDossierClick = () => {
         navigate(`/home/dossiers/${dossier.idDossier}`);
     };
+
     const formatDate = (dateString) => {
         return new Date(dateString).toLocaleDateString('fr-FR', {
             day: '2-digit',
@@ -17,7 +18,7 @@ export const DossierCard = ({ dossier }) => {
 
     return (
         <div
-            onClick={() => handleDossierClick(dossier)}
+            onClick={handleDossierClick}
             className="bg-white rounded-xl p-4 shadow-sm border-2 border-[#c4beaf]/20 hover:border-[#2d466e]/30 transition-all duration-300 cursor-pointer group"
         >
             <div className="flex items-start gap-4">

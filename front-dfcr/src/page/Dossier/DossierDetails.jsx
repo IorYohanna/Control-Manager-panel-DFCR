@@ -12,6 +12,7 @@ const getAuthHeader = () => ({
 
 export default function DossierDetails() {
   const { id } = useParams();
+  console.log("Dossier ID :", id);
   const [dossier, setDossier] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -77,7 +78,7 @@ export default function DossierDetails() {
               <div className="flex items-center gap-3">
                 <FileText className="text-[#73839e]" size={24} />
                 <div>
-                  <h4 className="font-semibold text-[#24344d]">{doc.reference}</h4>
+                  <h4 className="font-semibold text-[#24344d]">{doc.name}</h4>
                   <p className="text-sm text-[#73839e]">{doc.reference}</p>
                 </div>
               </div>

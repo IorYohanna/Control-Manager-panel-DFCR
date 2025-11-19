@@ -60,7 +60,6 @@ const DossierManagement = () => {
 
   const handleDossierClick = (dossier) => {
     console.log('Dossier sélectionné:', dossier);
-    // Navigation vers les documents du dossier
   };
 
   return (
@@ -131,7 +130,7 @@ const DossierManagement = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {filteredDossiers.map((dossier) => (
             <DossierCard
-              key={dossier.id}
+              key={dossier.idDossier}
               dossier={dossier}
               onClick={handleDossierClick}
             />
