@@ -77,31 +77,26 @@ const FormDocument = ({ onClose }) => {
 
   return (
     <div
-      className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-start justify-center p-2 z-50 overflow-y-auto"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
+      className="fixed inset-0 bg-[#24344d]/60 backdrop-blur-sm flex items-start justify-center p-4 z-50 overflow-auto thin-scrollbar"
     >
       <form
         onSubmit={handleCreateDocSubmit}
-        className="w-full max-w-3xl bg-white p-6 sm:p-8 rounded-2xl shadow-lg border border-gray-200 relative mt-10 mb-10"
-        initial={{ y: 30, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.35 }}
+        className="w-full max-w-4xl bg-[#f5ece3] p-8 sm:p-10 rounded-3xl shadow-2xl border border-[#c4beaf]/30 relative mt-10 mb-10 "
       >
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-4 right-4 p-2 rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200 transition"
+          className="absolute top-6 right-6 p-2.5 rounded-xl bg-white/80 text-[#2d466e] hover:bg-white hover:shadow-md"
         >
           <X className="w-5 h-5" />
         </button>
 
-        <div className="mb-8 text-center">
-          <div className="inline-flex items-center justify-center w-12 h-12 bg-blue-50 rounded-xl mb-4">
-            <FileText className="w-6 h-6 text-blue-600" />
+        <div className="mb-10 text-center">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-linear-to-br from-[#2d466e] to-[#24344d] rounded-2xl mb-5 shadow-lg">
+            <FileText className="w-8 h-8 text-[#f5ece3]" />
           </div>
-          <h2 className="text-2xl font-semibold text-gray-900 mb-1">Nouveau Document</h2>
-          <p className="text-gray-500 text-sm">Remplissez les informations du document</p>
+          <h2 className="text-3xl font-bold text-[#24344d] mb-2 font-necoBlack">Nouveau Document</h2>
+          <p className="text-[#73839e] text-base font-necoMedium">Remplissez les informations du document</p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
@@ -109,11 +104,24 @@ const FormDocument = ({ onClose }) => {
             <Input
               id="reference"
               label="Reference"
-              placeholder="Entrez La reference"
+              placeholder="Ex: DOC-2024-001"
               type="text"
               value={formData.reference}
               required={true}
-              sx={{ width: "100%", background: "#e0e0e0" }}
+              sx={{ 
+                width: "100%", 
+                backgroundColor: "white",
+                borderRadius: "12px",
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: '12px',
+                  '&:hover fieldset': {
+                    borderColor: '#2d466e',
+                  },
+                  '&.Mui-focused fieldset': {
+                    borderColor: '#2d466e',
+                  },
+                }
+              }}
               onChange={handleInputChange("reference")}
             />
           </div>
@@ -122,21 +130,48 @@ const FormDocument = ({ onClose }) => {
             <Input
               id="objet"
               label="Objet"
-              placeholder="Entrez l'objet du document"
+              placeholder="Objet du document"
               type="text"
               value={formData.objet}
-              sx={{ width: "100%", background: "#e0e0e0" }}
+              sx={{ 
+                width: "100%", 
+                backgroundColor: "white",
+                borderRadius: "12px",
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: '12px',
+                  '&:hover fieldset': {
+                    borderColor: '#2d466e',
+                  },
+                  '&.Mui-focused fieldset': {
+                    borderColor: '#2d466e',
+                  },
+                }
+              }}
               onChange={handleInputChange("objet")}
             />
           </div>
 
-          <div className="flex flex-col">
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-[#24344d] block font-dropline">Type de fichier</label>
             <Autocomplete
-              sx={{ width: "100%", background: "#e0e0e0" }}
+              sx={{ 
+                width: "100%", 
+                backgroundColor: "white",
+                borderRadius: "12px",
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: '12px',
+                  '&:hover fieldset': {
+                    borderColor: '#2d466e',
+                  },
+                  '&.Mui-focused fieldset': {
+                    borderColor: '#2d466e',
+                  },
+                }
+              }}
               disablePortal
               options={typeOptions}
               getOptionLabel={(option) => option}
-              renderInput={(params) => <TextField {...params} placeholder="Type" className='text-gray-500' />}
+              renderInput={(params) => <TextField {...params} placeholder="Sélectionner le type" />}
               value={formData.type}
               onChange={(event, newValue) => {
                 setFormData(prev => ({
@@ -147,13 +182,27 @@ const FormDocument = ({ onClose }) => {
             />
           </div>
 
-          <div className="flex flex-col">
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-[#24344d] block font-dropline">Statut</label>
             <Autocomplete
-              sx={{ width: "100%", background: "#e0e0e0" }}
+              sx={{ 
+                width: "100%", 
+                backgroundColor: "white",
+                borderRadius: "12px",
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: '12px',
+                  '&:hover fieldset': {
+                    borderColor: '#2d466e',
+                  },
+                  '&.Mui-focused fieldset': {
+                    borderColor: '#2d466e',
+                  },
+                }
+              }}
               disablePortal
               options={statusOptions}
               getOptionLabel={(option) => option}
-              renderInput={(params) => <TextField {...params} placeholder="Status" className='text-gray-500' />}
+              renderInput={(params) => <TextField {...params} placeholder="Sélectionner le statut" />}
               value={formData.status}
               onChange={(event, newValue) => {
                 setFormData(prev => ({
@@ -165,62 +214,90 @@ const FormDocument = ({ onClose }) => {
           </div>
 
           <div className="sm:col-span-2 space-y-2">
-            <label className="text-sm font-medium text-gray-700">Contenu / Corps de Lettre</label>
+            <label className="text-sm font-semibold text-[#24344d] block font-dropline">Contenu du document</label>
             <textarea
-              rows={4}
+              rows={5}
               value={formData.corps}
               onChange={handleInputChange("corps")}
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 focus:ring-2 focus:ring-blue-500 resize-none"
+              placeholder="Saisissez le contenu ou la description du document..."
+              className="w-full px-5 py-4 font-eirene border border-[#c4beaf] rounded-2xl bg-white text-[#24344d] placeholder-[#73839e] focus:ring-2 focus:ring-[#2d466e] focus:border-transparent resize-none transition-all duration-200 shadow-sm"
             />
           </div>
 
           <div className="sm:col-span-2 space-y-2">
-            <label className="text-sm font-medium text-gray-700">Pièce jointe</label>
+            <label className="text-sm font-semibold text-[#24344d] block font-dropline">Pièce jointe</label>
 
             <div
-              className={`relative border-2 border-dashed rounded-xl p-6 text-center transition 
-                ${dragActive ? "border-blue-400 bg-blue-50" : "border-gray-300 bg-gray-50"}`}
+              className={`relative border-2 border-dashed rounded-2xl p-8 text-center shadow-sm
+                ${dragActive 
+                  ? "border-[#2d466e] bg-[#2d466e]/5 shadow-md" 
+                  : "border-[#c4beaf] bg-white"}`}
               onDragEnter={handleDrag}
               onDragLeave={handleDrag}
               onDragOver={handleDrag}
               onDrop={handleDrop}
             >
-              <input type="file" onChange={handleFileChange} className="absolute inset-0 opacity-0 cursor-pointer" />
+              <input 
+                type="file" 
+                onChange={handleFileChange} 
+                className="absolute inset-0 opacity-0 cursor-pointer" 
+              />
 
-              {!pieceJointe && (
-                <>
-                  <Upload className="mx-auto w-8 h-8 text-blue-500 mb-2" />
-                  <p className="text-gray-600 text-sm">Glissez-déposez ou cliquez pour importer</p>
-                </>
-              )}
-
-              {pieceJointe && (
-                <div className="flex items-center justify-center gap-2 text-green-600">
-                  <FileText className="w-4 h-4" />
-                  {pieceJointe.name}
+              {!pieceJointe ? (
+                <div className="space-y-3">
+                  <div className="inline-flex items-center justify-center w-14 h-14 bg-linear-to-br from-[#2d466e] to-[#73839e] rounded-xl mb-2">
+                    <Upload className="w-7 h-7 text-[#f5ece3]" />
+                  </div>
+                  <div>
+                    <p className="text-[#24344d] font-medium text-base mb-1 font-necoMedium">
+                      Glissez-déposez votre fichier ici
+                    </p>
+                    <p className="text-[#73839e] text-sm font-necoMedium">
+                      ou cliquez pour parcourir vos fichiers
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex items-center justify-center gap-3 text-[#2d466e] bg-[#2d466e]/5 py-4 px-6 rounded-xl">
+                  <div className="p-2 bg-[#2d466e] rounded-lg">
+                    <FileText className="w-5 h-5 text-[#f5ece3]" />
+                  </div>
+                  <span className="font-medium text-base">{pieceJointe.name}</span>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setPieceJointe(null);
+                    }}
+                    className="ml-2 p-1.5 rounded-lg bg-white hover:bg-red-50 text-red-500 transition-colors"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
                 </div>
               )}
             </div>
           </div>
         </div>
 
-        <div className="flex justify-center">
-          <DefaultButton
-            bgColor="#24344D"
-            text="#F5ECE3"
-            label={loading ? (
+
+        <div className="flex justify-center pt-4">
+          <button
+            type="submit"
+            disabled={loading}
+            className="px-8 py-4 font-dropline uppercase bg-linear-to-r from-[#2d466e] to-[#24344d] text-[#f5ece3] rounded-xl text-base shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-3"
+          >
+            {loading ? (
               <>
-                <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                Création...
+                <Loader2 className="w-5 h-5 animate-spin " />
+                Création en cours...
               </>
             ) : (
               <>
-                <Plus className=" w-4 h-4 mr-2" />
+                <Plus className="w-5 h-5" />
                 Créer
               </>
             )}
-
-          />
+          </button>
         </div>
       </form>
     </div>

@@ -2,15 +2,15 @@ import { Search } from "lucide-react";
 
 export const Button = ({ children, variant = 'primary', size = 'md', icon: Icon, onClick, disabled, loading, className = '' }) => {
   const variants = {
-    primary: 'bg-blue-600 hover:bg-blue-700 text-white shadow-md',
-    secondary: 'bg-white hover:bg-gray-50 text-gray-700 border border-gray-200',
-    outline: 'bg-transparent hover:bg-blue-zodiac hover:text-white text-blue-zodiac border border-blue-zodiac',
-    ghost: 'bg-transparent hover:bg-gray-100 text-gray-700'
+    primary: 'bg-gradient-to-r from-[#2d466e] to-[#24344d] hover:from-[#24344d] hover:to-[#2d466e] text-[#f5ece3] shadow-lg hover:shadow-xl',
+    secondary: 'bg-white hover:bg-[#f5ece3] text-[#24344d] border-2 border-[#c4beaf]/30 shadow-md',
+    outline: 'bg-transparent hover:bg-[#2d466e] hover:text-[#f5ece3] text-[#2d466e] border border-[#2d466e]',
+    ghost: 'bg-transparent hover:bg-[#f5ece3]/50 text-[#24344d]'
   };
 
   const sizes = {
     sm: 'px-3 py-1.5 text-xs',
-    md: 'px-4 py-2 text-sm',
+    md: 'px-5 py-2.5 text-sm',
     lg: 'px-6 py-3 text-base'
   };
 
@@ -18,37 +18,36 @@ export const Button = ({ children, variant = 'primary', size = 'md', icon: Icon,
     <button
       onClick={onClick}
       disabled={disabled || loading}
-      className={`inline-flex items-center gap-2 rounded-lg font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed ${variants[variant]} ${sizes[size]} ${className}`}
+      className={`inline-flex items-center gap-2 rounded-xl font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 active:scale-95 ${variants[variant]} ${sizes[size]} ${className}`}
     >
       {loading ? (
-        <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />
-      ) : Icon && <Icon size={16} />}
+        <div className="animate-spin rounded-full h-4 w-4 border-2 border-[#f5ece3] border-t-transparent" />
+      ) : Icon && <Icon size={18} />}
       {children}
     </button>
   );
 };
 
-export const  SearchInput = ({ placeholder, value, onChange, onKeyPress }) => (
-  <div className="relative flex-1 ">
+export const SearchInput = ({ placeholder, value, onChange, onKeyPress }) => (
+  <div className="relative flex-1">
     <input
       type="text"
       placeholder={placeholder}
       value={value}
       onChange={onChange}
       onKeyPress={onKeyPress}
-      className="w-full bg-white text-gray-500 font-eirene pl-4 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-zodiac focus:border-transparent text-md"
+      className="w-full bg-white text-[#24344d] font-medium pl-4 pr-4 py-3 border-2 border-[#c4beaf]/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2d466e] focus:border-transparent transition-all placeholder-[#73839e]"
     />
   </div>
 );
 
- export const TabButton = ({ active, children, onClick }) => (
+export const TabButton = ({ active, children, onClick }) => (
   <button
     onClick={onClick}
-    className={`px-4 py-2 rounded-lg font-medium font-dropline transition-all duration-200 text-md ${
-      active 
-        ? 'bg-blue-zodiac text-white shadow-md' 
-        : 'text-dark-blue hover:bg-gray-100'
-    }`}
+    className={`px-5 py-2.5 rounded-xl font-semibold font-dropline transition-all duration-300 text-sm ${active
+        ? 'bg-linear-to-r from-[#2d466e] to-[#24344d] text-[#f5ece3] shadow-lg scale-105'
+        : 'text-[#24344d] hover:bg-[#f5ece3] bg-white border border-[#c4beaf]/30'
+      }`}
   >
     {children}
   </button>
@@ -79,13 +78,13 @@ export const StatusBadge = ({ status }) => {
 export const Select = ({ label, required, children, ...props }) => (
   <div className="space-y-2">
     {label && (
-      <label className="block text-sm font-semibold text-gray-700 font-necoMedium">
+      <label className="block text-sm font-semibold text-[#24344d] font-necoMedium">
         {label} {required && <span className="text-red-500">*</span>}
       </label>
     )}
     <select
       {...props}
-      className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none bg-white text-sm"
+      className="w-full px-4 py-3 border-2 border-[#c4beaf]/30 rounded-xl focus:ring-2 focus:ring-[#2d466e] focus:border-transparent transition-all outline-none bg-white text-[#24344d] font-medium"
     >
       {children}
     </select>
@@ -95,13 +94,13 @@ export const Select = ({ label, required, children, ...props }) => (
 export const Input = ({ label, required, ...props }) => (
   <div className="space-y-2">
     {label && (
-      <label className="block text-sm font-semibold text-gray-700">
+      <label className="block text-sm font-semibold text-[#24344d]">
         {label} {required && <span className="text-red-500">*</span>}
       </label>
     )}
     <input
       {...props}
-      className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none text-sm"
+      className="w-full px-4 py-3 border-2 border-[#c4beaf]/30 rounded-xl focus:ring-2 focus:ring-[#2d466e] focus:border-transparent transition-all outline-none text-[#24344d] font-medium placeholder-[#73839e] bg-white"
     />
   </div>
 );
@@ -109,13 +108,13 @@ export const Input = ({ label, required, ...props }) => (
 export const Textarea = ({ label, required, ...props }) => (
   <div className="space-y-2">
     {label && (
-      <label className="block text-sm font-semibold text-gray-700">
+      <label className="block text-sm font-semibold text-[#24344d]">
         {label} {required && <span className="text-red-500">*</span>}
       </label>
     )}
     <textarea
       {...props}
-      className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none resize-none text-sm"
+      className="w-full px-4 py-3 border-2 border-[#c4beaf]/30 rounded-xl focus:ring-2 focus:ring-[#2d466e] focus:border-transparent transition-all outline-none resize-none text-[#24344d] font-medium placeholder-[#73839e] bg-white"
     />
   </div>
 );

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { FilterBar, Header, SearchBar } from './Header';
+import { FilterBar, Header, ObjectSearch, SearchBar, ViewSwitcher } from './Header';
 import { DocumentsTable, Pagination } from './Documents';
 import { DocumentModal } from './Modal';
 import { fetchCompleteUserProfile } from '../../api/User/profileinfo';
 import { Button } from './Base';
-import { Plus } from 'lucide-react';
+import { Plus, RefreshCw, Upload } from 'lucide-react';
 import FormDocument from '../Docs/FormDocument';
+import DossierManagement from '../Dossier/Dossier';
 
 const API_BASE_URL = 'http://localhost:8080';
 
@@ -33,8 +34,8 @@ const documentAPI = {
   })
 };
 
-
 const WorkflowManagement = () => {
+  const [currentView, setCurrentView] = useState('documents'); // 'documents' ou 'dossiers'
   const [currentUser, setCurrentUser] = useState(null);
   const [documents, setDocuments] = useState([]);
   const [filteredDocuments, setFilteredDocuments] = useState([]);
@@ -54,13 +55,18 @@ const WorkflowManagement = () => {
 
   useEffect(() => {
     loadUserProfile();
-    loadDocuments();
-  }, []);
+    if (currentView === 'documents') {
+      loadDocuments();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentView]);
 
   useEffect(() => {
-    filterDocuments();
+    if (currentView === 'documents') {
+      filterDocuments();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [documents, activeFilter, referenceSearch, objetSearch]);
+  }, [documents, activeFilter, referenceSearch, objetSearch, currentView]);
 
   const loadUserProfile = async () => {
     try {
@@ -122,19 +128,16 @@ const WorkflowManagement = () => {
   const filterDocuments = () => {
     let filtered = [...documents];
 
-    // Filtre par statut
     if (activeFilter !== 'all') {
       filtered = filtered.filter(doc => doc.status === activeFilter);
     }
 
-    // Filtre par référence
     if (referenceSearch.trim()) {
       filtered = filtered.filter(doc =>
         doc.reference.toLowerCase().includes(referenceSearch.toLowerCase())
       );
     }
 
-    // Filtre par objet
     if (objetSearch.trim()) {
       filtered = filtered.filter(doc =>
         doc.objet.toLowerCase().includes(objetSearch.toLowerCase())
@@ -146,12 +149,17 @@ const WorkflowManagement = () => {
   };
 
   const handleSearch = () => {
-    filterDocuments();
+    if (currentView === 'documents') {
+      filterDocuments();
+    }
+    // Pour les dossiers, la recherche est gérée dans DossierManagement
   };
 
   const handleRefresh = () => {
     loadUserProfile();
-    loadDocuments();
+    if (currentView === 'documents') {
+      loadDocuments();
+    }
   };
 
   const handleSelectDocument = (doc, tab = 'details') => {
@@ -167,72 +175,113 @@ const WorkflowManagement = () => {
   };
 
   const handleActionComplete = () => {
-    loadDocuments();
+    if (currentView === 'documents') {
+      loadDocuments();
+    }
   };
 
-  // Pagination
   const totalPages = Math.ceil(filteredDocuments.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
   const paginatedDocuments = filteredDocuments.slice(startIndex, endIndex);
 
   return (
-    <div className="w-full rounded-2xl m-6 bg-white/90 p-8">
-      <div className="mx-auto">
-
-        <Header currentUser={currentUser} photo={photo} onRefresh={handleRefresh} />
-
-        <FilterBar activeFilter={activeFilter} setActiveFilter={setActiveFilter} />
-
-        <div className='grid grid-cols-3 gap-4' >
-          <SearchBar
-            className="col-span-2"
-            referenceSearch={referenceSearch}
-            setReferenceSearch={setReferenceSearch}
-            objetSearch={objetSearch}
-            setObjetSearch={setObjetSearch}
-            onSearch={handleSearch}
-            onClose={handleCloseModal}
-          />
-          <div className='col-span-1'>
-            <Button className='bg-linear-to-r from-gray-100 to-blue-zodiac' icon={Plus} onClick={() => setShowForm(true)}>
-              Importer
-            </Button>
+    <div className="w-full bg-white m-6 rounded-2xl">
+      <div className="relative bg-linear-to-r from-[#2d466e] to-[#24344d] rounded-t-2xl px-8 py-6">
+        <Header currentUser={currentUser} photo={photo}>
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex-1">
+              <ObjectSearch
+                objetSearch={objetSearch}
+                setObjetSearch={setObjetSearch}
+                onSearch={handleSearch}
+                currentView={currentView}
+              />
+            </div>
+            <ViewSwitcher 
+              currentView={currentView} 
+              onViewChange={setCurrentView} 
+            />
           </div>
-        </div>
-
-
-
-        <DocumentsTable
-          documents={paginatedDocuments}
-          onSelectDocument={handleSelectDocument}
-          loading={loading}
-        />
-        {showForm && (
-          <div className="mb-6">
-            <FormDocument onClose={() => setShowForm(false)} />
-          </div>
-        )}
-
-        {totalPages > 1 && (
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={setCurrentPage}
-          />
-        )}
-
-        {showModal && selectedDocument && (
-          <DocumentModal
-            document={selectedDocument}
-            onClose={handleCloseModal}
-            currentUser={currentUser}
-            serviceUsers={serviceUsers}
-            onActionComplete={handleActionComplete}
-            initialTab={modalTab}
-          />
-        )}
+        </Header>
       </div>
+
+      {currentView === 'documents' ? (
+        <>
+          <div className="px-8 py-6 bg-beige-creme/50 border-b flex items-center justify-between border-[#c4beaf]/20">
+            <FilterBar 
+              activeFilter={activeFilter} 
+              setActiveFilter={setActiveFilter} 
+              currentView={currentView}
+            />
+            <button
+              onClick={handleRefresh}
+              className="p-3 bg-white hover:bg-blue-zodiac/10 text-blue-zodiac rounded-xl transition-all duration-200 backdrop-blur-sm"
+              title="Actualiser"
+            >
+              <RefreshCw size={20} />
+            </button>
+          </div>
+
+          <div className="px-8 py-6">
+            <div className="flex items-center gap-4">
+              <div className="flex-1">
+                <SearchBar
+                  referenceSearch={referenceSearch}
+                  setReferenceSearch={setReferenceSearch}
+                  onSearch={handleSearch}
+                  currentView={currentView}
+                />
+              </div>
+
+              <Button
+                variant="primary"
+                size="lg"
+                icon={Plus}
+                onClick={() => setShowForm(true)}
+                className="bg-linear-to-r font-necoMedium from-[#2d466e] to-[#24344d] hover:from-[#24344d] hover:to-[#2d466e] text-[#f5ece3] shadow-lg hover:shadow-lg transition-all duration-300 px-6 py-3 rounded-xl font-semibold"
+              >
+                Importer
+              </Button>
+            </div>
+          </div>
+
+          <div className="px-8 pb-8">
+            <DocumentsTable
+              documents={paginatedDocuments}
+              onSelectDocument={handleSelectDocument}
+              loading={loading}
+            />
+
+            {totalPages > 1 && (
+              <div className="mt-6">
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={setCurrentPage}
+                />
+              </div>
+            )}
+          </div>
+
+          {showForm && (
+            <FormDocument onClose={() => setShowForm(false)} />
+          )}
+
+          {showModal && selectedDocument && (
+            <DocumentModal
+              document={selectedDocument}
+              onClose={handleCloseModal}
+              currentUser={currentUser}
+              serviceUsers={serviceUsers}
+              onActionComplete={handleActionComplete}
+              initialTab={modalTab}
+            />
+          )}
+        </>
+      ) : (
+        <DossierManagement />
+      )}
     </div>
   );
 };

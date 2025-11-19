@@ -81,13 +81,13 @@ export const DocumentsTable = ({ documents, onSelectDocument, loading }) => {
     }
 
     return (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div className="grid grid-cols-12 gap-4 px-6 py-3 bg-gray-50 border-b font-necoMedium border-gray-200 text-xs font-semibold text-gray-600 uppercase tracking-wide">
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+            <div className="grid grid-cols-12 gap-4 px-6 py-6 bg-beige-creme/40 border-b font-necoMedium border-beige-creme text-xs font-semibold text-gray-600 uppercase tracking-wide">
                 <div className="col-span-2">Référence</div>
                 <div className="col-span-3">Objet</div>
                 <div className="col-span-2">Date de mise à jour</div>
                 <div className="col-span-2">Statut</div>
-                <div className="col-span-3 text-right">Actions</div>
+                <div className="col-span-3 text-center">Actions</div>
             </div>
 
             {documents.map((doc) => (
