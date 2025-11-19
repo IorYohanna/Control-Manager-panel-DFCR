@@ -21,7 +21,7 @@ const chartData = [
 
 export default function Example() {
   return (
-    <div className="md:col-span-3  backdrop-blur-xl bg-white/10 rounded-3xl p-6 md:p-8 shadow-2xl shadow-[#2d466e]/10 border border-white/20 hover:border-white/40 transition-all duration-500 overflow-hidden min-w-0">
+    <div className="md:col-span-4  backdrop-blur-xl bg-[#f5ece3]/50 rounded-3xl p-6 md:p-8 shadow-2xl shadow-[#2d466e]/10 border border-white/20 hover:border-white/40 transition-all duration-500 overflow-hidden min-w-0">
 
       <div className="mb-4">
         <h3 className="text-lg md:text-xl font-dropline text-[#2d466e]">

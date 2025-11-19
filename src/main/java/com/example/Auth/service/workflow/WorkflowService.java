@@ -109,9 +109,10 @@ public class WorkflowService {
                 .orElseThrow(() -> new RuntimeException("Document non trouvé"));
 
         Workflow workflow = getOrCreateWorkflow(document);
+        ServiceDfcr service = workflow.getService();
         return updateDocumentAndWorkflow(document, "assigne", workflow,
                 "ASSIGNATION", "ASSIGNER", "assigne",
-                chefService, employe, null, remarque);
+                chefService, employe, service, remarque);
     }
 
     /**
@@ -123,9 +124,10 @@ public class WorkflowService {
                 .orElseThrow(() -> new RuntimeException("Document non trouvé"));
 
         Workflow workflow = getOrCreateWorkflow(document);
+        ServiceDfcr service = workflow.getService();
         return updateDocumentAndWorkflow(document, "en_traitement", workflow,
                 "TRAITEMENT", "TRAITER", "en_traitement",
-                employe, null, null, "Document en cours de traitement");
+                employe, null, service, "Document en cours de traitement");
     }
     
 
@@ -139,9 +141,10 @@ public class WorkflowService {
                 .orElseThrow(() -> new RuntimeException("Document non trouvé"));
 
         Workflow workflow = getOrCreateWorkflow(document);
+        ServiceDfcr service = workflow.getService();
         return updateDocumentAndWorkflow(document, "termine", workflow,
                 "SOUMISSION", "SOUMETTRE", "termine",
-                employe, chefService, null, remarque);
+                employe, chefService, service, remarque);
     }
 
     /**
@@ -154,9 +157,10 @@ public class WorkflowService {
                 .orElseThrow(() -> new RuntimeException("Document non trouvé"));
 
         Workflow workflow = getOrCreateWorkflow(document);
+        ServiceDfcr service = workflow.getService();
         return updateDocumentAndWorkflow(document, "validation_directeur", workflow,
                 "VALIDATION_CHEF", "VALIDER", "validation_directeur",
-                chefService, directeur, null, remarque);
+                chefService, directeur, service, remarque);
     }
 
     /**
@@ -169,9 +173,10 @@ public class WorkflowService {
                 .orElseThrow(() -> new RuntimeException("Document non trouvé"));
 
         Workflow workflow = getOrCreateWorkflow(document);
+        ServiceDfcr service = workflow.getService();
         return updateDocumentAndWorkflow(document, "au_service", workflow,
                 "VALIDATION_CHEF", "REFUSER", "au_service",
-                chefService, employe, null, remarque);
+                chefService, employe, service, remarque);
     }
 
     /**
@@ -185,10 +190,11 @@ public class WorkflowService {
 
         Workflow workflow = getOrCreateWorkflow(document);
         workflow.setEstComplet(true);
+        ServiceDfcr service = workflow.getService();
 
         return updateDocumentAndWorkflow(document, "complet", workflow,
                 "VALIDATION_DIRECTEUR", "VALIDER", "complet",
-                directeur, null, null, remarque);
+                directeur, null, service, remarque);
     }
 
     /**

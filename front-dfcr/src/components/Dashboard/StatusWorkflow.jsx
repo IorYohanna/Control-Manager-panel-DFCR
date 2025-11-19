@@ -40,7 +40,7 @@ export const StatusWorkflow = ({ idService }) => {
   };
 
   return (
-    <div className="col-span-1 md:col-span-2 lg:col-span-2 bg-[#141f31] rounded-4xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 border-2 border-[#2d466e]/10">
+    <div className="col-span-1 md:col-span-2 lg:col-span-2 bg-[#2d466e] rounded-4xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 border-2 border-[#2d466e]/10">
       <div className="flex items-center justify-between ">
 
         <h3 className="text-xl font-eirene text-white flex items-center">
@@ -81,7 +81,7 @@ export const StatusWorkflow = ({ idService }) => {
         </div>
         <div className="flex flex-col items-center bg-linear-to-br from-[#f5ece3] to-white p-2 w-full rounded-2xl">
           <XCircle className="w-6 h-6 text-black mt-2" />
-          <h1 className="text-[35px] font-necomedium">{docsStats.enTraitement}</h1>
+          <h1 className="text-[35px] font-necomedium">{docsStats.enTraitement + docsStats.assigne}</h1>
           <p className="text-[12px] font-eirene ">En Traitement</p>
         </div>
         

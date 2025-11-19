@@ -8,7 +8,7 @@ const TeamMembers = ({ users }) => {
     <>
       {/* Card principale */}
       <div className="col-span-1 md:col-span-2 relative group">
-        <div className="backdrop-blur-xl bg-white/30 rounded-3xl p-8 shadow-2xl shadow-[#2d466e]/5 border border-white/50 hover:border-white/60 transition-all duration-500 hover:shadow-[#2d466e]/10 overflow-hidden">
+        <div className="backdrop-blur-xl bg-[#f5ece3]/50 rounded-3xl p-8 shadow-2xl shadow-[#2d466e]/5 border border-white/50 hover:border-white/60 transition-all duration-500 hover:shadow-[#2d466e]/10 overflow-hidden">
           <div className="relative">
             {/* Header */}
             <div className="flex items-center justify-between mb-8">

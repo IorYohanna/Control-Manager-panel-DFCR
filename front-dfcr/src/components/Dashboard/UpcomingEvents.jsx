@@ -36,7 +36,7 @@ export const UpcomingEvents = ({ upcomingEvents, todayEvents }) => {
     <>
       {/* Card principale */}
       <div className="col-span-1 md:col-span-2 relative group">
-        <div className="backdrop-blur-xl bg-white/30 rounded-3xl p-8 shadow-2xl shadow-[#2d466e]/5 border border-white/50 hover:border-white/60 transition-all duration-500 hover:shadow-[#2d466e]/10 overflow-hidden">
+        <div className="backdrop-blur-xl bg-[#f5ece3]/50 rounded-3xl p-8 shadow-2xl shadow-[#2d466e]/5 border border-white/50 hover:border-white/60 transition-all duration-500 hover:shadow-[#2d466e]/10 overflow-hidden">
           <div className="relative">
             {/* Header */}
             <div className="flex items-center justify-between mb-8">
@@ -66,7 +66,7 @@ export const UpcomingEvents = ({ upcomingEvents, todayEvents }) => {
                       >
                         <div className="flex items-center gap-4">
                           {/* Icône Calendar */}
-                          <div className="w-14 h-14 rounded-2xl backdrop-blur-sm bg-gradient-to-br from-[#f5ece3]/80 to-white/80 border-2 border-white/60 shadow-lg flex items-center justify-center">
+                          <div className="w-14 h-14 rounded-2xl backdrop-blur-sm bg-linear-to-br from-[#f5ece3]/80 to-white/80 border-2 border-white/60 shadow-lg flex items-center justify-center">
                             <Calendar className="w-7 h-7 text-[#2d466e]" />
                           </div>
 
@@ -149,7 +149,7 @@ export const UpcomingEvents = ({ upcomingEvents, todayEvents }) => {
                     key={event.idEvent}
                     className="flex items-center gap-4 px-2 py-2 hover:bg-white/20 rounded-2xl transition-all"
                   >
-                    <div className="w-12 h-12 rounded-2xl backdrop-blur-sm bg-gradient-to-br from-[#f5ece3]/80 to-white/80 border-2 border-white/60 shadow-lg flex items-center justify-center">
+                    <div className="w-12 h-12 rounded-2xl backdrop-blur-sm bg-linear-to-br from-[#f5ece3]/80 to-white/80 border-2 border-white/60 shadow-lg flex items-center justify-center">
                       <Calendar className="w-6 h-6 text-[#2d466e]" />
                     </div>
                     <div className="flex flex-col flex-1">
