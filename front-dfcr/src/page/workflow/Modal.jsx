@@ -288,11 +288,6 @@ export const DocumentModal = ({ document, onClose, currentUser, serviceUsers, on
                 )}
               </div>
               <div className="flex justify-end gap-4">
-                <Button
-                  size="sm"
-                >
-                  <Download size={12}/>
-                </Button>
                 <button
                   onClick={() => handlePrint(document.reference)}
                   className="px-4 py-2 bg-transparent text-gray-500 flex gap-2 items-center font-necoMedium rounded border border-blue-zodiac hover:bg-blue-zodiac hover:text-white hover:border-transparent transition"

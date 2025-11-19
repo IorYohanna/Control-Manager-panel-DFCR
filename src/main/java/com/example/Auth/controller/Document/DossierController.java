@@ -24,6 +24,14 @@ public class DossierController {
         return ResponseEntity.ok(dossierService.createDossier(dto));
     }
 
+    @PostMapping("/{id}/add-document/{reference}")
+    public ResponseEntity<String> addDocumentToDossier(
+            @PathVariable Long id,
+            @PathVariable String reference) {
+        dossierService.addDocumentToDossier(id, reference);
+        return ResponseEntity.ok("Document ajouté au dossier");
+    }
+
     @GetMapping
     public ResponseEntity<List<Dossier>> getAllDossiers() {
         return ResponseEntity.ok(dossierService.getAllDossiers());
