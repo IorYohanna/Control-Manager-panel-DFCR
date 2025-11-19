@@ -9,7 +9,7 @@ const Dashboard = () => {
   const { sidebarExpanded } = useOutletContext();
 
   return (
-    <div className=" bg-linear-to-b from-white/90 to-white/70 overflow-y-auto w-full thin-scrollbar ">
+    <div className=" bg-linear-to-b from-white/50 to-white/30 overflow-y-auto w-full thin-scrollbar ">
       
       {/* HEADER HERO - Sticky & Elegant */}
       <div className="sticky top-0 z-40 mx-3 sm:mx-5 mt-3 sm:mt-5 mb-5">

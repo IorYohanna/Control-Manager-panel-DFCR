@@ -46,9 +46,6 @@ export const StatusWorkflow = ({ idService }) => {
         <h3 className="text-xl font-eirene text-white flex items-center">
           Statut des Workflows
         </h3>
-        <span className="text-3xl font-bold text-white ">
-          {docsStats.total}
-        </span>
       </div>
 
       <div className="flex items-center justify-between px-5 text-white mb-8">

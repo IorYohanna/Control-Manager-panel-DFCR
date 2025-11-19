@@ -21,7 +21,7 @@ const chartData = [
 
 export default function Example() {
   return (
-    <div className="md:col-span-4 backdrop-blur-xl bg-white/10 rounded-3xl p-6 md:p-8 shadow-2xl shadow-[#2d466e]/10 border border-white/20 hover:border-white/40 transition-all duration-500 overflow-hidden">
+    <div className="md:col-span-3  backdrop-blur-xl bg-white/10 rounded-3xl p-6 md:p-8 shadow-2xl shadow-[#2d466e]/10 border border-white/20 hover:border-white/40 transition-all duration-500 overflow-hidden min-w-0">
 
       <div className="mb-4">
         <h3 className="text-lg md:text-xl font-dropline text-[#2d466e]">
@@ -33,8 +33,8 @@ export default function Example() {
       </div>
 
       {/* Chart responsive */}
-      <div className="w-full h-[220px] md:h-[300px] font-necomedium">
-        <ResponsiveContainer width="100%" height="100%">
+      <div className=" h-[200px] md:h-[100px] min-h-0 min-w-0 font-necomedium">
+        <ResponsiveContainer width="100%" height={200}>
           <LineChart
             data={chartData}
             margin={{ top: 10, right: 20, left: 0, bottom: 10 }}
@@ -92,14 +92,14 @@ export default function Example() {
         </ResponsiveContainer>
       </div>
 
-      <div className="mt-4 flex flex-col gap-1 text-xs md:text-sm text-[#73839e]">
+      {/* <div className="mt-4 flex flex-col gap-1 text-xs md:text-sm text-[#73839e]">
         <div className="flex items-center gap-2 font-medium text-[#2d466e]">
           Améliorons ensemble notre travail <TrendingUp className="h-4 w-4" />
         </div>
         <div className="text-[#73839e]">
           Montre le nombre de documents terminés au cours des 6 mois
         </div>
-      </div>
+      </div> */}
 
     </div>
   );
