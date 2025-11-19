@@ -1,8 +1,7 @@
-import { BaggageClaim, Calendar, CheckCircle, Clock, History, Printer, Send, User, Workflow, WorkflowIcon, XCircle, Zap } from "lucide-react";
+import { BaggageClaim, Calendar, CheckCircle, Clock, Download, History, Printer, Send, User, Workflow, WorkflowIcon, XCircle, Zap } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button, Select, StatusBadge, TabButton } from "./Base";
 import { ActionForm } from "./Action";
-import { Print, Work } from "@mui/icons-material";
 
 const safeJsonParse = async (response) => {
   const text = await response.text();
@@ -131,7 +130,7 @@ export const DocumentModal = ({ document, onClose, currentUser, serviceUsers, on
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(errorText);
-      } 
+      }
 
     } catch (error) {
       console.error("Erreur lors de l'impression :", error);
@@ -218,13 +217,12 @@ export const DocumentModal = ({ document, onClose, currentUser, serviceUsers, on
   const availableActions = getAvailableActions();
 
   return (
-    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm animate-in fade-in duration-75 bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm animate-in fade-in duration-75 bg-opacity-50 flex items-center justify-center z-50 p-6">
       <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
-        {/* Header Modal */}
         <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between bg-linear-to-r from-blue-50 to-indigo-50">
           <div>
             <h2 className="text-xl font-bold text-gray-800 font-necoBlack">Document: {document.reference}</h2>
-            <p className="text-sm text-gray-600 mt-1">{document.objet}</p>
+            <p className="text-sm text-gray-600 mt-1 capitalize">{document.objet}</p>
           </div>
           <button
             onClick={onClose}
@@ -234,7 +232,6 @@ export const DocumentModal = ({ document, onClose, currentUser, serviceUsers, on
           </button>
         </div>
 
-        {/* Tabs */}
         <div className="px-6 py-3 border-b border-gray-200 flex gap-2 bg-gray-50">
           <TabButton active={activeTab === 'details'} onClick={() => setActiveTab('details')}>
             Détails
@@ -247,9 +244,7 @@ export const DocumentModal = ({ document, onClose, currentUser, serviceUsers, on
           </TabButton>
         </div>
 
-        {/* Contenu */}
         <div className="p-6 overflow-y-auto" style={{ maxHeight: 'calc(90vh - 180px)' }}>
-          {/* Détails */}
           {activeTab === 'details' && (
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
@@ -292,19 +287,23 @@ export const DocumentModal = ({ document, onClose, currentUser, serviceUsers, on
                   </div>
                 )}
               </div>
-              <div className="flex justify-end">
+              <div className="flex justify-end gap-4">
+                <Button
+                  size="sm"
+                >
+                  <Download size={12}/>
+                </Button>
                 <button
                   onClick={() => handlePrint(document.reference)}
                   className="px-4 py-2 bg-transparent text-gray-500 flex gap-2 items-center font-necoMedium rounded border border-blue-zodiac hover:bg-blue-zodiac hover:text-white hover:border-transparent transition"
                 >
-                <Printer size={16}/>
+                  <Printer size={16} />
                   Imprimer
                 </button>
               </div>
             </div>
           )}
 
-          {/* Actions */}
           {activeTab === 'actions' && (
             <div className="space-y-4">
               {availableActions.length === 0 ? (
@@ -371,8 +370,6 @@ export const DocumentModal = ({ document, onClose, currentUser, serviceUsers, on
               )}
             </div>
           )}
-
-          {/* Historique */}
           {activeTab === 'history' && (
             <div className="space-y-4">
               {loading ? (

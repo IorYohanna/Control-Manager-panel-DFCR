@@ -3,26 +3,23 @@ package com.example.Auth.model.Document;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 @Table(name = "concerner")
 @Getter
 @Setter
 public class Concerner {
 
-    @EmbeddedId
-    private ConcernerId id = new ConcernerId();
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @ManyToOne
-    @MapsId("idDossier")
-    @JoinColumn(name = "id_dossier")
+    @JoinColumn(name = "id_dossier", referencedColumnName = "id_dossier")
     private Dossier dossier;
 
     @ManyToOne
-    @MapsId("reference")
-    @JoinColumn(name = "reference")
+    @JoinColumn(name = "reference_document", referencedColumnName = "reference")
     private Document document;
 
     public Concerner() {
@@ -31,7 +28,5 @@ public class Concerner {
     public Concerner(Dossier dossier, Document document) {
         this.dossier = dossier;
         this.document = document;
-        this.id.setIdDossier(dossier.getIdDossier());
-        this.id.setReference(document.getReference());
     }
 }

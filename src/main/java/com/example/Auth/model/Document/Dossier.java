@@ -19,6 +19,7 @@ import lombok.Setter;
 public class Dossier {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_dossier")
     private Long idDossier;
 
     @Column(nullable = false)
