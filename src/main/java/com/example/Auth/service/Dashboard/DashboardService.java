@@ -2,10 +2,10 @@ package com.example.Auth.service.Dashboard;
 
 import com.example.Auth.dto.Dashboard.ServiceStatisticsDto;
 import com.example.Auth.dto.Dashboard.UserInfoDto;
-import com.example.Auth.model.Document.Workflow;
+import com.example.Auth.model.workflow.Workflow;
 import com.example.Auth.model.User.ServiceDfcr;
 import com.example.Auth.repository.User.ServiceRepository;
-import com.example.Auth.service.Document.WorkflowService;
+import com.example.Auth.service.workflow.WorkflowService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

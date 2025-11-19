@@ -2,8 +2,8 @@ package com.example.Auth.controller.Dashboard;
 
 import com.example.Auth.dto.Dashboard.ServiceStatisticsDto;
 import com.example.Auth.dto.Dashboard.WorkflowStatisticsDto;
-import com.example.Auth.dto.Workflow.WorkflowHistorique;
-import com.example.Auth.model.Document.Workflow;
+import com.example.Auth.dto.Workflow.WorkflowHistoriqueDTO;
+import com.example.Auth.model.workflow.Workflow;
 import com.example.Auth.service.Dashboard.DashboardService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -46,14 +46,14 @@ public class DashboardController {
     }
 
     @GetMapping("/workflows/{idService}/{status}")
-    public ResponseEntity<List<WorkflowHistorique>> getWorkflowService(
+    public ResponseEntity<List<WorkflowHistoriqueDTO>> getWorkflowService(
             @PathVariable String idService,
             @PathVariable String status
     ) {
         System.out.println("ID SERVICE = " + idService + " | STATUS = " + status);
         List<Workflow> workflows = dashboardService.getWorkflowService(idService.toUpperCase(), status);
-        List<WorkflowHistorique> workflowHistoriques = workflows.stream().map(workflow -> {
-            WorkflowHistorique dto = new WorkflowHistorique();
+        List<WorkflowHistoriqueDTO> workflowHistoriques = workflows.stream().map(workflow -> {
+            WorkflowHistoriqueDTO dto = new WorkflowHistoriqueDTO();
             dto.setReference(workflow.getDocument().getReference());
             dto.setTypeWorkflow(workflow.getTypeWorkflow());
             dto.setAction(workflow.getAction());
