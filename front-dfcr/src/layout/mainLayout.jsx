@@ -12,7 +12,7 @@ export default function MainLayout() {
       
       <button 
         onClick={() => setMobileOpen(!mobileOpen)}
-        className="md:hidden fixed top-6 right-6 z-50 p-2 bg-[#2D466E] text-white rounded-lg shadow-lg hover:bg-[#1a2b44] transition-colors"
+        className="md:hidden fixed top-6 right-6 z-50 p-2 bg-[#1a2b44] text-white rounded-lg shadow-lg transition-colors"
       >
         <Menu size={24} />
       </button>
