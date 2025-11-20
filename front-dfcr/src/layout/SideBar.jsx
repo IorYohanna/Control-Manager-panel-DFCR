@@ -1,4 +1,4 @@
-import { MoreVertical, ChevronLast, ChevronFirst, LogOut} from "lucide-react"
+import { MoreVertical, ChevronLast, ChevronFirst, LogOut, X } from "lucide-react" // Ajout de X pour fermer
 import { useContext, createContext, useState, useEffect } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { fectUserData } from "../api/User/currentUser";
@@ -6,7 +6,8 @@ import { fetchUserPhoto } from "../api/User/profileinfo";
 
 const SidebarContext = createContext()
 
-export default function Sidebar({ children, expanded, setExpanded }) {
+// On récupère mobileOpen et setMobileOpen
+export default function Sidebar({ children, expanded, setExpanded, mobileOpen, setMobileOpen }) {
 
   const [userData, setUserData] = useState({
     user: "",
@@ -15,158 +16,131 @@ export default function Sidebar({ children, expanded, setExpanded }) {
   const [previewUrl, setPreviewUrl] = useState();
   const navigate = useNavigate();
 
-
   useEffect(() => {
     const loadData = async () => {
       try {
         const data = await fectUserData();
-        console.log(data)
         setUserData({
           user: data.fullName,
           userEmail: data.email,
         })
-
         const imgUrl = await fetchUserPhoto(data.matricule)
         setPreviewUrl(imgUrl);
-
       } catch (error) {
         console.error(error)
       }
     }
-
     loadData()
   }, [])
 
   const handleLogout = () => {
-    // Supprimer les données d'authentification
     localStorage.removeItem("token");
     localStorage.removeItem("token_expiration");
-    
-    // Rediriger vers la page de login
     navigate("/");
   };
 
-
   return (
-    <aside className="h-screen p-4">
-      <nav className="h-full w-fit flex flex-col bg-[#F5ECE3] rounded-2xl shadow-[4px_0_15px_rgba(0,0,0,0.05)]">
-        <div className="p-4 pb-2 flex justify-between items-center">
-          <span className={`uppercase font-necoBlack text-2xl text-[#2D466E] overflow-hidden transition-all ${expanded ? "w-auto" : "w-0"}`}>
-            dfcr
-          </span>
-          <button
-            onClick={() => setExpanded((curr) => !curr)}
-            className="p-1.5 rounded-lg bg-[#24344D] "
-          >
-            {expanded ? <ChevronFirst color="white" /> : <ChevronLast color="white" />}
-          </button>
-        </div>
+    <>
+      {mobileOpen && (
+        <div 
+          onClick={() => setMobileOpen(false)}
+          className="fixed inset-0 z-40 bg-black/50 md:hidden backdrop-blur-sm"
+        />
+      )}
 
-        <SidebarContext.Provider value={{ expanded }}>
-          <ul className="flex-1 px-3">{children}</ul>
-        </SidebarContext.Provider>
-
-        {/* Bouton de déconnexion */}
-        <div className="px-3 pb-3">
-          <button
-            onClick={handleLogout}
-            className={`
-              relative flex items-center w-full py-2 px-3 my-1
-              font-medium rounded-md cursor-pointer
-              transition-colors group
-              hover:bg-[#2D466E] text-[#2f486d] hover:text-white
-            `}
-          >
-            <LogOut size={20} />
-            <span
-              className={`overflow-hidden font-dropline transition-all truncate ${
-                expanded ? "ml-3" : "w-0"
-              } `}
-            >
-              Déconnexion
+      {/* SIDEBAR */}
+      <aside className={`
+        h-screen p-4 
+        fixed md:relative z-50  /* Fixe sur mobile, Relatif sur Desktop */
+        transition-transform duration-300 ease-in-out
+        ${mobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
+      `}>
+        <nav className="h-full w-fit flex flex-col bg-[#F5ECE3] rounded-2xl shadow-[4px_0_15px_rgba(0,0,0,0.05)]">
+          
+          <div className="p-4 pb-2 flex justify-between items-center">
+            <span className={`uppercase font-necoBlack text-2xl text-[#2D466E] overflow-hidden transition-all ${expanded ? "w-auto" : "w-0"}`}>
+              dfcr
             </span>
 
-            {!expanded && (
-              <div
-                className={`
-                  absolute left-full rounded-md px-2 py-1 ml-6
-                  bg-[#2D466E] text-white text-sm
-                  invisible opacity-20 -translate-x-3 transition-all
-                  group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
-                  whitespace-nowrap
-                `}
-              >
-                Déconnexion
+            <button
+              onClick={() => {
+                // Sur mobile, ce bouton sert à fermer le menu complètement
+                if (window.innerWidth < 768) {
+                    setMobileOpen(false);
+                } else {
+                    setExpanded((curr) => !curr);
+                }
+              }}
+              className="p-1.5 rounded-lg bg-[#24344D]"
+            >
+              {/* Sur mobile on affiche une croix, sur desktop les chevrons */}
+              <div className="md:hidden"><X color="white" size={20}/></div>
+              <div className="hidden md:block">
+                 {expanded ? <ChevronFirst color="white" /> : <ChevronLast color="white" />}
               </div>
-            )}
-          </button>
-        </div>
-
-        <div className="border-t border-[#73839E] flex p-3">
-          <div
-            className={`
-              flex justify-between items-center gap-2
-              overflow-hidden transition-all ${expanded ? "w-52 ml-3" : "w-0"}
-          `}
-          >
-            <div className="leading-4 flex gap-2 items-center min-w-0 flex-1">
-              <img
-                src={previewUrl}
-                alt=" "
-                className="w-10 h-10 rounded-full shrink-0"
-              />
-              <div className="flex flex-col min-w-0 flex-1">
-                <h4 className="font-stardom capitalize font-bold text-[#2D466E] truncate">
-                  {userData.user}
-                </h4>
-                <span className="text-sm text-[#2f486d] font-eirene truncate">
-                  {userData.userEmail}
-                </span>
-              </div>
-            </div>
-            <Link to="/home/user-settings" className="shrink-0">
-              <MoreVertical size={20} className="text-[#2D466E]" />
-            </Link>
+            </button>
           </div>
-        </div>
-      </nav>
-    </aside>
+
+          <SidebarContext.Provider value={{ expanded }}>
+            <ul className="flex-1 px-3">{children}</ul>
+          </SidebarContext.Provider>
+
+          {/* ... (Le reste du code Logout et User Profile reste identique) ... */}
+          <div className="px-3 pb-3">
+            <button
+              onClick={handleLogout}
+              className={`
+                relative flex items-center w-full py-2 px-3 my-1
+                font-medium rounded-md cursor-pointer
+                transition-colors group
+                hover:bg-[#2D466E] text-[#2f486d] hover:text-white
+              `}
+            >
+              <LogOut size={20} />
+              <span className={`overflow-hidden font-dropline transition-all truncate ${expanded ? "ml-3" : "w-0"}`}>
+                Déconnexion
+              </span>
+               {!expanded && (
+                 <div className="absolute left-full rounded-md px-2 py-1 ml-6 bg-[#2D466E] text-white text-sm invisible opacity-20 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0 whitespace-nowrap">
+                   Déconnexion
+                 </div>
+               )}
+            </button>
+          </div>
+
+          <div className="border-t border-[#73839E] flex p-3">
+            <div className={`flex justify-between items-center gap-2 overflow-hidden transition-all ${expanded ? "w-52 ml-3" : "w-0"}`}>
+              <div className="leading-4 flex gap-2 items-center min-w-0 flex-1">
+                <img src={previewUrl} alt=" " className="w-10 h-10 rounded-full shrink-0" />
+                <div className="flex flex-col min-w-0 flex-1">
+                  <h4 className="font-stardom capitalize font-bold text-[#2D466E] truncate">{userData.user}</h4>
+                  <span className="text-sm text-[#2f486d] font-eirene truncate">{userData.userEmail}</span>
+                </div>
+              </div>
+              <Link to="/home/user-settings" className="shrink-0">
+                <MoreVertical size={20} className="text-[#2D466E]" />
+              </Link>
+            </div>
+          </div>
+
+        </nav>
+      </aside>
+    </>
   );
 }
 
+// SidebarItem reste inchangé, pas besoin de le modifier
 export function SidebarItem({ icon, text, active, to = "#" }) {
   const { expanded } = useContext(SidebarContext)
-
   return (
     <Link to={to} className="flex">
-      <li
-        className={`
-          relative flex items-center py-2 px-3 my-1
-          font-medium rounded-md cursor-pointer
-          transition-colors group
-          ${active
-            ? "bg-linear-to-r from-[#F5ECE3] to-[#24344D] text-white"
-            : "hover:bg-[#73839E] text-[#2f486d] hover:text-white "
-          }
-        `}
-      >
+      <li className={`relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group ${active ? "bg-linear-to-r from-[#F5ECE3] to-[#24344D] text-white" : "hover:bg-[#73839E] text-[#2f486d] hover:text-white "}`}>
         {icon}
-        <span
-          className={`overflow-hidden font-dropline transition-all truncate ${expanded ? "w-52 ml-3" : "w-0"
-            }`}
-        >
+        <span className={`overflow-hidden font-dropline transition-all truncate ${expanded ? "w-52 ml-3" : "w-0"}`}>
           {text}
         </span>
-
         {!expanded && (
-          <div
-            className={`
-              absolute left-full rounded-md px-2 py-1 ml-6
-              bg-[#2D466E] text-white text-sm
-              invisible opacity-20 -translate-x-3 transition-all
-              group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
-            `}
-          >
+          <div className={`absolute left-full rounded-md px-2 py-1 ml-6 bg-[#2D466E] text-white text-sm invisible opacity-20 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0`}>
             {text}
           </div>
         )}
