@@ -14,11 +14,13 @@ export default function DossierDetails() {
   const { id } = useParams();
   console.log("Dossier ID :", id);
   const [dossier, setDossier] = useState(null);
+  const [documents, setDocuments] = useState([])
   const [loading, setLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
 
   useEffect(() => {
     loadDossier();
+    loadDocuments();
   }, []);
 
   const loadDossier = async () => {
@@ -32,6 +34,25 @@ export default function DossierDetails() {
       if (response.ok) {
         const data = await response.json();
         setDossier(data);
+      }
+    } catch (err) {
+      console.error("Erreur chargement dossier :", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const loadDocuments = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(`${API_BASE_URL}/dossiers/${id}/documents`, {
+        method: "GET",
+        headers: getAuthHeader(),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data)
+        setDocuments(data);
       }
     } catch (err) {
       console.error("Erreur chargement dossier :", err);
@@ -69,8 +90,8 @@ export default function DossierDetails() {
 
       {/* DOCUMENT LIST */}
       <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {dossier.documents?.length > 0 ? (
-          dossier.documents.map((doc) => (
+        {documents?.length > 0 ? (
+          documents.map((doc) => (
             <div
               key={doc.reference}
               className="bg-white border border-gray-200 rounded-xl p-4 shadow hover:shadow-md transition"

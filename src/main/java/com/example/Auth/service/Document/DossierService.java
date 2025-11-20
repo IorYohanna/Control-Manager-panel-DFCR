@@ -61,6 +61,16 @@ public class DossierService {
         return dossierRepository.findAll();
     }
 
+    public List<Document> getDocumentsByDossier(Long idDossier) {
+        Dossier dossier = dossierRepository.findById(idDossier)
+                .orElseThrow(() -> new RuntimeException("Dossier introuvable"));
+
+        return dossier.getDocuments()
+                .stream()
+                .map(Concerner::getDocument)
+                .toList();
+    }
+
     public Optional<Dossier> getDossierById(Long id) {
         return dossierRepository.findById(id);
     }
