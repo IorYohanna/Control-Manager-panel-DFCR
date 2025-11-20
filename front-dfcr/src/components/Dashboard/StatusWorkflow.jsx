@@ -87,7 +87,12 @@ export const StatusWorkflow = ({ idService }) => {
         
       </div>
 
-      {/* <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
+      
+    </div>
+  );
+};
+
+{/* <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
         <div className="bg-linear-to-br from-amber-50 to-amber-100/50 rounded-2xl p-6 border-2 border-amber-200/50 hover:border-amber-300 transition-all">
           <div className="flex items-center justify-between">
             <Clock className="w-6 h-6 text-amber-600" />
@@ -136,8 +141,4 @@ export const StatusWorkflow = ({ idService }) => {
           <p className="text-sm text-yellow-800 mt-3 font-semibold">Complet</p>
         </div>
       </div> */}
-    </div>
-  );
-};
-
 

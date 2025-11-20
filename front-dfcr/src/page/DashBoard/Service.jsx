@@ -6,6 +6,7 @@ import { StatusWorkflow } from '../../components/Dashboard/StatusWorkflow';
 import TeamMembers from '../../components/Dashboard/TeamMembers';
 import { UpcomingEvents } from '../../components/Dashboard/UpcomingEvents';
 import Example from '../../components/Dashboard/LineChartCard';
+import { CompletedDocuments } from '../../components/Dashboard/CompletedDocuments';
 
 const Service = ({ activeService }) => {
   const [serviceData, setServiceData] = useState(null);
@@ -119,8 +120,8 @@ const Service = ({ activeService }) => {
     ? Math.round(((monthEvents.length - lastMonthEvents.length) / lastMonthEvents.length) * 100)
     : 0;
 
-  const completedEvents = events.filter(ev => ev.end < now).length;
-  const completionRate = events.length > 0 ? Math.round((completedEvents / events.length) * 100) : 0;
+  // const completedEvents = events.filter(ev => ev.end < now).length;
+  // const completionRate = events.length > 0 ? Math.round((completedEvents / events.length) * 100) : 0;
 
   const recentActivity = [
     ...(serviceData.recentDocuments || []).map(doc => ({
@@ -148,6 +149,7 @@ const Service = ({ activeService }) => {
         <TeamMembers users={serviceData.users} />
         {/* 👇 Passer les événements bruts */}
         <UpcomingEvents upcomingEvents={upcomingRawEvents} todayEvents={todayRawEvents}/>
+        <CompletedDocuments idService={activeService}/>
         {/* <PriorityActions idService={activeService} /> */}
       </div>
     </div>

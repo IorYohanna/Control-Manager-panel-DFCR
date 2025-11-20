@@ -263,4 +263,14 @@ public class WorkflowController {
                 }
                 return ResponseEntity.ok(history);
         }
+
+        @GetMapping("/history")
+        public ResponseEntity<List<WorkflowHistoriqueDTO>> getAllWorkflowHistories() {
+                List<WorkflowHistoriqueDTO> history = workflowService.getAllWorkflowHistories();
+                if (history.isEmpty()) {
+                        return ResponseEntity.noContent().build();
+                }
+                return ResponseEntity.ok(history);
+        }
+
 }

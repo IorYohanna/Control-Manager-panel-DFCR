@@ -1,5 +1,6 @@
 package com.example.Auth.service.workflow;
 
+import com.example.Auth.dto.Dashboard.CompletedDocumentDto;
 import com.example.Auth.dto.Workflow.WorkflowHistoriqueDTO;
 import com.example.Auth.model.Document.Document;
 import com.example.Auth.model.User.User;
@@ -11,6 +12,7 @@ import com.example.Auth.repository.workflow.WorkflowRepository;
 import com.example.Auth.repository.workflow.WorkflowHistoriqueRepository;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -223,7 +225,6 @@ public class WorkflowService {
 
         return historiques.stream().map(this::toHistoriqueDto).toList();
     }
-
     private WorkflowHistoriqueDTO toHistoriqueDto(WorkflowHistorique historique) {
         WorkflowHistoriqueDTO dto = new WorkflowHistoriqueDTO();
         dto.setReference(historique.getDocument().getReference());
@@ -259,4 +260,56 @@ public class WorkflowService {
         return workflowRepository.findByService_IdServiceAndStatus(idService, status);
     }
 
+    public List<WorkflowHistoriqueDTO> getAllWorkflowHistories() {
+        List<WorkflowHistorique> historiques =
+                workflowHistoriqueRepository.findAllByOrderByCreatedAtDesc();
+
+        return historiques.stream()
+                .map(this::toHistoriqueDto)
+                .toList();
+    }
+
+    public List<WorkflowHistoriqueDTO> getWorkflowHistoryByService(String idService) {
+        List<WorkflowHistorique> historiques =
+                workflowHistoriqueRepository.findByService_IdServiceOrderByCreatedAtDesc(idService);
+
+        return historiques.stream()
+                .map(this::toHistoriqueDto)
+                .toList();
+    }
+
+    public List<CompletedDocumentDto> getCompletedDocumentsByService(
+            String idService, Integer month, Integer year) {
+
+        String service = idService.toUpperCase();
+        List<Workflow> workflows;
+
+        // Filtrage selon la présence des paramètres
+        if (month != null && year != null) {
+            workflows = workflowRepository.findCompletedByServiceAndMonthYear(service, month, year);
+        } else {
+            workflows = workflowRepository.findCompletedByService(service);
+        }
+
+        return workflows.stream()
+                .filter(Objects::nonNull)
+                .map(workflow -> {
+                    Document doc = workflow.getDocument();
+                    User creator = doc.getCreator();
+
+                    return new CompletedDocumentDto(
+                            doc.getReference(),
+                            doc.getObjet(),
+                            doc.getCorps(),
+                            doc.getType(),
+                            doc.getStatus(),
+                            creator.getMatricule(),
+                            creator.getUsername() + " " + creator.getSurname(),
+                            creator.getEmail(),
+                            doc.getCreatedAt(),
+                            doc.getUpdatedAt()
+                    );
+                })
+                .toList();
+    }
 }

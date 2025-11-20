@@ -1,12 +1,10 @@
 package com.example.Auth.controller.Document;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.example.Auth.dto.Document.DocumentResponseDto;
 import com.example.Auth.dto.Document.DossierResponseDto;
 import com.example.Auth.model.Document.Document;
-import lombok.Getter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
