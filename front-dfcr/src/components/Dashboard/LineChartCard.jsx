@@ -13,15 +13,15 @@ export default function Example() {
 
   useEffect(() => {
     async function loadStats() {
+      setLoading(true);
       try {
         const stats = await getWorkflowStats();
-        console.log("stats", stats);
-
-        // Crée un tableau avec tous les mois, par défaut à 0
+        
         const formatted = months.map((month) => {
           const monthData = stats.find(s => s.month === month);
           return {
-            month,
+            month: month.substring(0, 3),
+            fullMonth: month,
             completed: monthData?.completed || 0,
             refused: monthData?.refused || 0,
           };
@@ -38,40 +38,70 @@ export default function Example() {
     loadStats();
   }, []);
 
+  if (loading) {
+    return (
+      <div className="h-full min-h-[350px] backdrop-blur-xl bg-[#f5ece3]/50 rounded-[32px] p-8 shadow-lg border border-white/20 animate-pulse flex flex-col">
+         <div className="h-6 w-1/3 bg-[#2d466e]/10 rounded mb-2"></div>
+         <div className="h-4 w-1/4 bg-[#2d466e]/10 rounded mb-8"></div>
+         <div className="flex-1 bg-[#2d466e]/5 rounded-xl"></div>
+      </div>
+    );
+  }
+
   return (
-    <div className="md:col-span-4 backdrop-blur-xl bg-[#f5ece3]/50 rounded-3xl p-6 md:p-8 shadow-2xl shadow-[#2d466e]/10 border border-white/20 hover:border-white/40 transition-all duration-500 overflow-hidden min-w-0">
-      <div className="mb-4">
-        <h3 className="text-lg md:text-xl font-dropline text-[#2d466e]">
-          Documents
-        </h3>
-        <p className="text-xs md:text-sm text-[#73839e]">
-          Année 2025
-        </p>
+    <div className="h-full min-h-[350px] flex flex-col backdrop-blur-xl bg-[#f5ece3]/50 rounded-[32px] p-6 md:p-8 shadow-lg hover:shadow-xl transition-all duration-300 border border-white/20">
+      <div className="mb-6 flex justify-between items-end">
+        <div>
+            <h3 className="text-xl font-dropline text-[#2d466e] font-bold">
+            Activité Mensuelle
+            </h3>
+            <p className="text-sm text-[#73839e] font-eirene mt-1">
+            Comparatif validés vs refusés
+            </p>
+        </div>
+        <div className="flex gap-4 text-xs font-medium">
+            <div className="flex items-center gap-2">
+                <span className="w-3 h-3 rounded-full bg-[#2d466e]"></span>
+                <span className="text-[#2d466e]">Complétés</span>
+            </div>
+            <div className="flex items-center gap-2">
+                <span className="w-3 h-3 rounded-full bg-[#ef4444]"></span>
+                <span className="text-[#ef4444]">Refusés</span>
+            </div>
+        </div>
       </div>
 
-      {loading ? (
-        <div className="text-center text-[#2d466e] font-medium py-6">
-          Chargement...
-        </div>
-      ) : (
-        <div className="h-[200px] md:h-[100px] min-h-0 min-w-0 font-necomedium">
+      {/* FIX APPLIED HERE:
+          1. Added 'min-w-0' to the div className (Crucial for flex children)
+          2. Added 'minWidth={0}' prop to ResponsiveContainer 
+      */}
+      <div className="flex-1 w-full min-h-[250px] min-w-0">
           <ResponsiveContainer width="100%" height={200}>
-            <LineChart data={chartData} margin={{ top: 10, right: 20, left: 0, bottom: 10 }}>
-              <CartesianGrid vertical={false} stroke="#73839e20" />
+            <LineChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+              <CartesianGrid vertical={false} stroke="#73839e20" strokeDasharray="3 3" />
               <XAxis
                 dataKey="month"
                 tickLine={false}
                 axisLine={false}
-                tickMargin={10}
-                tick={{ fill: "#73839e", fontSize: 11, fontWeight: 500, fontFamily: "Eirene Sans" }}
+                tickMargin={15}
+                tick={{ fill: "#73839e", fontSize: 12, fontWeight: 500, fontFamily: "Eirene Sans" }}
               />
               <YAxis
-                tick={{ fill: "#73839e", fontSize: 11, fontWeight: 500, fontFamily: "Eirene Sans" }}
-                axisLine={{ stroke: "#73839e50" }}
+                tick={{ fill: "#73839e", fontSize: 12, fontWeight: 500, fontFamily: "Eirene Sans" }}
+                axisLine={false}
+                tickLine={false}
               />
               <Tooltip
-                contentStyle={{ backgroundColor: "white", borderRadius: "10px", border: "none", color: "#000", fontWeight: 500 }}
-                labelStyle={{ color: "#000", fontWeight: 600 }}
+                contentStyle={{ 
+                    backgroundColor: "rgba(255, 255, 255, 0.9)", 
+                    borderRadius: "12px", 
+                    border: "none", 
+                    boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                    fontFamily: "Eirene Sans"
+                }}
+                itemStyle={{ fontSize: "12px", fontWeight: 600 }}
+                labelStyle={{ color: "#73839e", marginBottom: "5px", fontSize: "12px" }}
+                cursor={{ stroke: '#2d466e', strokeWidth: 1, strokeDasharray: '4 4' }}
               />
 
               <Line
@@ -79,24 +109,25 @@ export default function Example() {
                 dataKey="completed"
                 name="Complétés"
                 stroke="#2d466e"
-                strokeWidth={2}
-                dot={{ r: 4, fill: "#f5ece3", stroke: "#2d466e", strokeWidth: 2 }}
-                activeDot={{ r: 6 }}
+                strokeWidth={3}
+                dot={false}
+                activeDot={{ r: 6, fill: "#2d466e", stroke: "#fff", strokeWidth: 2 }}
+                animationDuration={1500}
               />
 
               <Line
                 type="monotone"
                 dataKey="refused"
                 name="Refusés"
-                stroke="#b91c1c"
-                strokeWidth={2}
-                dot={{ r: 4, fill: "#f5ece3", stroke: "#b91c1c", strokeWidth: 2 }}
-                activeDot={{ r: 6 }}
+                stroke="#ef4444"
+                strokeWidth={3}
+                dot={false}
+                activeDot={{ r: 6, fill: "#ef4444", stroke: "#fff", strokeWidth: 2 }}
+                animationDuration={1500}
               />
             </LineChart>
           </ResponsiveContainer>
-        </div>
-      )}
+      </div>
     </div>
   );
 }

@@ -1,184 +1,158 @@
 import React, { useState } from "react";
-import { Calendar, X } from "lucide-react";
+import { Calendar, X, Clock } from "lucide-react";
 
-export const UpcomingEvents = ({ upcomingEvents, todayEvents }) => {
+export const UpcomingEvents = ({ upcomingEvents = [], todayEvents = [] }) => {
   const [isOpen, setIsOpen] = useState(false);
   const now = new Date();
 
+  // --- Fonctions Utilitaires ---
+
+  // Sécurise le parsing des dates pour éviter les erreurs "Invalid Date"
+  const parseDate = (dateString) => {
+    const d = new Date(dateString);
+    return isNaN(d.getTime()) ? new Date() : d; 
+  };
+
   const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("fr-FR", {
-      day: "numeric",
-      month: "long",
-    });
+    return parseDate(dateString).toLocaleDateString("fr-FR", { day: "numeric", month: "short" });
   };
 
   const formatTime = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleTimeString("fr-FR", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+    return parseDate(dateString).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
   };
 
   const getEventStatus = (event) => {
-    const eventDate = new Date(event.startTime);
+    if (!event?.startTime) return { isToday: false, isTomorrow: false };
+    
+    const eventDate = parseDate(event.startTime);
     const isToday = todayEvents.some((e) => e.idEvent === event.idEvent);
-
-    const isTomorrow =
-      eventDate.toDateString() ===
-      new Date(now.getTime() + 86400000).toDateString();
-
+    const isTomorrow = eventDate.toDateString() === new Date(now.getTime() + 86400000).toDateString();
     return { isToday, isTomorrow };
   };
 
+  // --- RENDER ---
+
   return (
     <>
-      {/* Card principale */}
-      <div className="col-span-1 md:col-span-2 relative group">
-        <div className="backdrop-blur-xl bg-[#f5ece3]/50 rounded-3xl p-8 shadow-2xl shadow-[#2d466e]/5 border border-white/50 hover:border-white/60 transition-all duration-500 hover:shadow-[#2d466e]/10 overflow-hidden">
-          <div className="relative">
-            {/* Header */}
-            <div className="flex items-center justify-between mb-8">
-              <h3 className="text-2xl text-[#2d466e] tracking-tight font-dropline">
-                Événements à venir
-              </h3>
-              <span className="text-sm font-necoblack text-[#2d466e]">
-                {upcomingEvents.length} événements
-              </span>
-            </div>
+      {/* Card Principale */}
+      <div className="col-span-1 h-full relative group">
+        <div className="h-full flex flex-col backdrop-blur-xl bg-[#f5ece3]/50 rounded-[32px] p-6 lg:p-8 shadow-lg border border-white/50 hover:border-white/60 transition-all duration-500 hover:shadow-xl">
+          
+          {/* Header */}
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-xl text-[#2d466e] font-bold font-dropline">
+              Agenda
+            </h3>
+            <span className="text-xs font-necoblack bg-white/40 px-2 py-1 rounded-full text-[#2d466e]">
+              {upcomingEvents.length}
+            </span>
+          </div>
 
-            {upcomingEvents.length === 0 ? (
-              <p className="text-[#73839e] text-center py-8 font-eirene">
-                Aucun événement à venir
-              </p>
+          {/* Liste des événements (Aperçu) */}
+          <div className="flex-1 space-y-3">
+            {!upcomingEvents || upcomingEvents.length === 0 ? (
+              <div className="flex flex-col items-center justify-center h-full min-h-[150px] text-[#73839e] opacity-60">
+                <Calendar className="w-10 h-10 mb-2 stroke-1" />
+                <p className="text-sm font-eirene">Rien de prévu</p>
+              </div>
             ) : (
-              <>
-                {/* Liste des 2 premiers événements */}
-                <div className="space-y-3">
-                  {upcomingEvents.slice(0, 2).map((event) => {
-                    const { isToday, isTomorrow } = getEventStatus(event);
+              upcomingEvents.slice(0, 3).map((event) => {
+                if (!event) return null;
 
-                    return (
-                      <div
-                        key={event.idEvent}
-                        className="relative hover:scale-[1.02] cursor-pointer hover:bg-white/20 rounded-2xl transition-all duration-100 p-2"
-                      >
-                        <div className="flex items-center gap-4">
-                          {/* Icône Calendar */}
-                          <div className="w-14 h-14 rounded-2xl backdrop-blur-sm bg-linear-to-br from-[#f5ece3]/80 to-white/80 border-2 border-white/60 shadow-lg flex items-center justify-center">
-                            <Calendar className="w-7 h-7 text-[#2d466e]" />
-                          </div>
+                const { isToday } = getEventStatus(event);
+                const dateObj = parseDate(event.startTime);
 
-                          {/* Infos événement */}
-                          <div className="flex flex-col flex-1">
-                            <p className="text-sm font-dropline text-[#2d466e]">
-                              {event.title}
+                return (
+                  <div key={event.idEvent || Math.random()} className="group/item relative bg-white/30 hover:bg-white/60 rounded-2xl p-3 transition-all duration-200 border border-white/20">
+                    <div className="flex justify-between items-start gap-3">
+                      
+                      {/* Date Box */}
+                      <div className="flex flex-col items-center justify-center bg-white/60 rounded-xl w-12 h-12 shrink-0 shadow-sm">
+                        <span className="text-[10px] uppercase font-bold text-[#73839e] leading-none">
+                            {dateObj.toLocaleDateString('fr-FR', { month: 'short' }).replace('.', '')}
+                        </span>
+                        <span className="text-lg font-bold text-[#2d466e] leading-none mt-0.5">
+                            {dateObj.getDate()}
+                        </span>
+                      </div>
+
+                      {/* Details */}
+                      <div className="flex flex-col flex-1 min-w-0">
+                        <p className="text-sm font-bold text-[#2d466e] truncate pr-2 leading-tight">
+                          {event.title || "Événement sans titre"}
+                        </p>
+                        <div className="flex items-center gap-1 mt-1 text-[#73839e]">
+                            <Clock className="w-3 h-3" />
+                            <p className="text-xs font-medium">
+                                {formatTime(event.startTime)}
                             </p>
-                            <p className="text-xs text-[#73839e] font-eirene mt-0.5">
-                              {formatDate(event.startTime)} à {formatTime(event.startTime)}
-                            </p>
-                          </div>
-
-                          {/* Badge statut */}
-                          <span
-                            className={`px-3 py-1 rounded-full text-xs font-necoblack shadow-sm ${
-                              isToday
-                                ? "bg-[#2d466e] text-white"
-                                : isTomorrow
-                                ? "bg-[#73839e] text-white"
-                                : "bg-[#f5ece3] text-[#2d466e]"
-                            }`}
-                          >
-                            {isToday
-                              ? "Aujourd'hui"
-                              : isTomorrow
-                              ? "Demain"
-                              : "À venir"}
-                          </span>
                         </div>
                       </div>
-                    );
-                  })}
-                </div>
 
-                {/* Bouton Voir plus */}
-                {upcomingEvents.length > 2 && (
-                  <button
-                    onClick={() => setIsOpen(true)}
-                    className="w-full mt-3 group/btn relative overflow-hidden backdrop-blur-md bg-white text-[#2d466e] py-2 rounded-2xl transition-all duration-100 border border-[#2d466e]/20 hover:border-[#2d466e]/30 shadow-md"
-                  >
-                    <span className="relative flex items-center justify-center gap-2">
-                      Voir tous les événements
-                      <span className="text-xs backdrop-blur-sm bg-white/40 px-2 py-1 rounded-full">
-                        {upcomingEvents.length}
-                      </span>
-                    </span>
-                  </button>
-                )}
-              </>
+                      {isToday && <div className="w-2 h-2 rounded-full bg-orange-400 animate-pulse" title="Aujourd'hui"></div>}
+                    </div>
+                  </div>
+                );
+              })
             )}
           </div>
+
+          {/* Bouton "Voir tout" */}
+          {upcomingEvents.length > 3 && (
+            <button
+              onClick={() => setIsOpen(true)}
+              className="w-full mt-4 text-xs font-medium text-[#2d466e] py-3 rounded-xl border border-[#2d466e]/10 hover:bg-white/40 transition-colors"
+            >
+              Voir tout l'agenda
+            </button>
+          )}
         </div>
       </div>
 
-      {/* Modal */}
+      {/* --- MODAL (Fenêtre qui s'ouvre) --- */}
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-6 md:p-8 w-11/12 max-w-2xl max-h-[80vh] overflow-y-auto shadow-2xl shadow-[#2d466e]/20 border border-white/20">
-            {/* Header modal */}
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl md:text-2xl text-white font-dropline">
-                Tous les événements
-              </h2>
-              <button
-                onClick={() => setIsOpen(false)}
-                className="text-white hover:text-[#f5ece3] transition-colors"
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#2d466e]/20 backdrop-blur-sm p-4">
+          {/* Container Modal */}
+          <div className="bg-white rounded-3xl p-6 md:p-8 w-full max-w-lg max-h-[80vh] overflow-y-auto shadow-2xl animate-in fade-in zoom-in duration-200">
+            
+            {/* Header Modal */}
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl text-[#2d466e] font-dropline">Agenda complet</h2>
+              <button 
+                onClick={() => setIsOpen(false)} 
+                className="p-2 bg-gray-100 rounded-full text-[#2d466e] hover:bg-gray-200 transition-colors"
               >
-                <X className="w-6 h-6" />
+                <X size={20} />
               </button>
             </div>
 
-            {/* Liste complète */}
-            <div className="space-y-3">
+            {/* Liste Complète */}
+            <div className="space-y-2">
               {upcomingEvents.map((event) => {
-                const { isToday, isTomorrow } = getEventStatus(event);
-
-                return (
-                  <div
-                    key={event.idEvent}
-                    className="flex items-center gap-4 px-2 py-2 hover:bg-white/20 rounded-2xl transition-all"
-                  >
-                    <div className="w-12 h-12 rounded-2xl backdrop-blur-sm bg-linear-to-br from-[#f5ece3]/80 to-white/80 border-2 border-white/60 shadow-lg flex items-center justify-center">
-                      <Calendar className="w-6 h-6 text-[#2d466e]" />
+                 const dateObj = parseDate(event.startTime);
+                 return (
+                    <div key={event.idEvent || Math.random()} className="flex gap-4 p-4 border border-gray-100 rounded-2xl hover:bg-gray-50 transition-colors overflow-hidden thin-scrollbar">
+                        <div className="flex flex-col items-center justify-center text-[#2d466e] font-bold w-12 h-12 bg-gray-50 rounded-xl">
+                          <span className="text-xl leading-none">{dateObj.getDate()}</span>
+                          <span className="text-[10px] uppercase text-gray-400 leading-none mt-1">
+                            {dateObj.toLocaleDateString('fr-FR', { month: 'short' }).replace('.', '')}
+                          </span>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-bold text-[#2d466e] truncate">{event.title}</p>
+                          <div className="flex items-center gap-2 mt-1 text-sm text-gray-500">
+                             <Clock size={14} />
+                             <span>{formatTime(event.startTime)} - {formatTime(event.endTime)}</span>
+                          </div>
+                          {event.description && (
+                              <p className="text-xs text-gray-400 mt-1 line-clamp-1">{event.description}</p>
+                          )}
+                        </div>
                     </div>
-                    <div className="flex flex-col flex-1">
-                      <p className="text-sm font-dropline text-white">
-                        {event.title}
-                      </p>
-                      <p className="text-xs text-white/80 font-eirene">
-                        {formatDate(event.startTime)} à {formatTime(event.startTime)}
-                      </p>
-                    </div>
-                    <span
-                      className={`px-3 py-1 rounded-full text-xs font-necoblack shadow-sm ${
-                        isToday
-                          ? "bg-white text-[#2d466e]"
-                          : isTomorrow
-                          ? "bg-white/80 text-[#2d466e]"
-                          : "bg-white/60 text-[#2d466e]"
-                      }`}
-                    >
-                      {isToday
-                        ? "Aujourd'hui"
-                        : isTomorrow
-                        ? "Demain"
-                        : "À venir"}
-                    </span>
-                  </div>
-                );
+                 );
               })}
             </div>
+
           </div>
         </div>
       )}

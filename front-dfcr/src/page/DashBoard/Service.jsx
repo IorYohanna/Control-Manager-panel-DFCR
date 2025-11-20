@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { getServiceStatistics, getEventsService } from "../../api/Dashboard/dashboard";
-import { KpiUser, KpiCompletionRate, KpiEventMonth, KpiTotalEvent } from '../../components/Dashboard/KpiCard';
-import { RecentActivity } from '../../components/Dashboard/OtherCard';
 import { StatusWorkflow } from '../../components/Dashboard/StatusWorkflow';
 import TeamMembers from '../../components/Dashboard/TeamMembers';
 import { UpcomingEvents } from '../../components/Dashboard/UpcomingEvents';
@@ -11,23 +9,19 @@ import { CompletedDocuments } from '../../components/Dashboard/CompletedDocument
 const Service = ({ activeService }) => {
   const [serviceData, setServiceData] = useState(null);
   const [events, setEvents] = useState([]);
-  const [rawEvents, setRawEvents] = useState([]); // 👈 Ajout pour stocker les événements bruts
+  const [rawEvents, setRawEvents] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function loadService() {
       setLoading(true);
-
       try {
         const serviceInfo = await getServiceStatistics(activeService);
         setServiceData(serviceInfo);
 
         const eventList = await getEventsService(activeService);
-        
-        // 👉 Stocker les événements bruts pour UpcomingEvents
         setRawEvents(eventList);
 
-        // 👉 Événements formatés pour les autres calculs
         const formattedEvents = eventList.map(ev => ({
           id: ev.idEvent,
           title: ev.title,
@@ -47,35 +41,39 @@ const Service = ({ activeService }) => {
         setLoading(false);
       }
     }
-
     loadService();
   }, [activeService]);
-
 
   if (loading) {
     return (
       <div className="min-h-screen bg-[#f5ece3] flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-[#2d466e] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-xl font-semibold text-[#2d466e]">Chargement...</p>
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 border-4 border-[#2d466e]/30 border-t-[#2d466e] rounded-full animate-spin"></div>
+          <p className="text-sm font-eirene text-[#2d466e] animate-pulse">Chargement...</p>
         </div>
       </div>
     );
   }
 
+
+  
   if (!serviceData) return null;
   const now = new Date();
 
-  const todayEvents = events.filter((ev) => {
-    const d = ev.start;
-    return (
-      d.getFullYear() === now.getFullYear() &&
-      d.getMonth() === now.getMonth() &&
-      d.getDate() === now.getDate()
-    );
-  });
+  // CORRECTION ICI : On définit "Maintenant" comme le début de la journée (Minuit)
+  const todayMidnight = new Date();
+  todayMidnight.setHours(0, 0, 0, 0);
 
-  // 👉 todayEvents bruts pour UpcomingEvents
+  // Filtrage : On garde tout ce qui commence après ou pendant aujourd'hui
+  const upcomingRawEvents = rawEvents
+    .filter(ev => {
+      if (!ev.startTime) return false; // Sécurité si pas de date
+      const eventDate = new Date(ev.startTime);
+      return eventDate >= todayMidnight;
+    })
+    .sort((a, b) => new Date(a.startTime) - new Date(b.startTime))
+    .slice(0, 5);
+
   const todayRawEvents = rawEvents.filter((ev) => {
     const d = new Date(ev.startTime);
     return (
@@ -85,72 +83,42 @@ const Service = ({ activeService }) => {
     );
   });
 
-  const startOfWeek = new Date(now);
-  startOfWeek.setDate(now.getDate() - now.getDay());
-  const endOfWeek = new Date(startOfWeek);
-  endOfWeek.setDate(startOfWeek.getDate() + 7);
-
-  const weekEvents = events.filter((ev) => {
-    const d = ev.start;
-    return d >= startOfWeek && d < endOfWeek;
-  });
-
-  const monthEvents = events.filter((ev) => {
-    const d = ev.start;
-    return (
-      d.getFullYear() === now.getFullYear() &&
-      d.getMonth() === now.getMonth()
-    );
-  });
-
-  // 👉 upcomingEvents bruts pour UpcomingEvents
-  const upcomingRawEvents = rawEvents
-    .filter(ev => new Date(ev.startTime) >= now)
-    .sort((a, b) => new Date(a.startTime) - new Date(b.startTime))
-    .slice(0, 5);
-
-  const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-  const lastMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0);
-  const lastMonthEvents = events.filter((ev) => {
-    const d = ev.start;
-    return d >= lastMonth && d <= lastMonthEnd;
-  });
-
-  const eventTrend = lastMonthEvents.length > 0 
-    ? Math.round(((monthEvents.length - lastMonthEvents.length) / lastMonthEvents.length) * 100)
-    : 0;
-
-  // const completedEvents = events.filter(ev => ev.end < now).length;
-  // const completionRate = events.length > 0 ? Math.round((completedEvents / events.length) * 100) : 0;
-
-  const recentActivity = [
-    ...(serviceData.recentDocuments || []).map(doc => ({
-      id: `doc-${doc.id}`,
-      user: doc.creatorName || 'Utilisateur',
-      action: doc.status === 'approved' ? 'a approuvé' : 'a modifié',
-      item: doc.title || doc.name,
-      time: doc.lastModified || 'Récemment'
-    })),
-    ...events.slice(0, 3).map(ev => ({
-      id: `event-${ev.id}`,
-      user: ev.user || 'Organisateur',
-      action: 'a créé l\'événement',
-      item: ev.title,
-      time: ev.createdAt || 'Récemment'
-    }))
-  ].slice(0, 5);
-  
   return (
-    <div className="p-4">
-      {/* Bento Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6 auto-rows-auto font-dropline">
-        <StatusWorkflow idService={activeService}/>
-        <Example />
-        <TeamMembers users={serviceData.users} />
-        {/* 👇 Passer les événements bruts */}
-        <UpcomingEvents upcomingEvents={upcomingRawEvents} todayEvents={todayRawEvents}/>
-        <CompletedDocuments idService={activeService}/>
-        {/* <PriorityActions idService={activeService} /> */}
+    <div className="p-6 lg:p-8 min-h-screen">
+
+      {/* Grille Principale */}
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+        
+        {/* --- LIGNE 1 : Indicateurs Clés (Hauteur uniforme) --- */}
+        
+        {/* Bloc 1 : Statuts (50% largeur sur grand écran) */}
+        <div className="col-span-1 md:col-span-2 xl:col-span-2 h-full">
+             <StatusWorkflow idService={activeService}/>
+        </div>
+        
+        {/* Bloc 2 : Graphique (50% largeur sur grand écran) */}
+        {/* Note: On le met en col-span-2 pour qu'il soit aussi large que les stats */}
+        <div className="col-span-1 md:col-span-2 xl:col-span-2 h-full">
+             <Example />
+        </div>
+
+        {/* --- LIGNE 2 : Opérationnel --- */}
+
+        {/* Bloc 3 : Events (1 colonne) */}
+        <div className="col-span-1 md:col-span-1 xl:col-span-1">
+            <UpcomingEvents upcomingEvents={upcomingRawEvents} todayEvents={todayRawEvents}/>
+        </div>
+        
+        {/* Bloc 4 : Équipe (1 colonne) */}
+        <div className="col-span-1 md:col-span-1 xl:col-span-1">
+             <TeamMembers users={serviceData.users} />
+        </div>
+
+        {/* Bloc 5 : Documents Récents (2 colonnes restantes) */}
+        <div className="col-span-1 md:col-span-2 xl:col-span-2">
+             <CompletedDocuments idService={activeService}/>
+        </div>
+
       </div>
     </div>
   );
