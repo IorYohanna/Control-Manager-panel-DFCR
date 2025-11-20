@@ -27,7 +27,7 @@ export default function ChatSidebar({ users, currentUserMatricule, selectedUserI
   return (
     <div className="flex flex-col h-full">
       {/* Header Sidebar */}
-      <div className="p-4 bg-gradient-to-br from-[#2d466e] to-[#3d5680] text-white shrink-0">
+      <div className="p-4 bg-linear-to-br from-[#2d466e] to-[#3d5680] text-white shrink-0">
         <div className="flex items-center gap-3 mb-4">
           <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center backdrop-blur-sm">
             <User className="w-5 h-5" />

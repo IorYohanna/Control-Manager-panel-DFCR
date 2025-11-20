@@ -38,7 +38,7 @@ export default function EmailHeader({
       </div>
 
       {/* Actions */}
-      <div className="flex items-center gap-2 md:gap-3 mt-2 md:mt-0 flex-shrink-0">
+      <div className="flex items-center gap-2 md:gap-3 mt-2 md:mt-0 shrink-0">
         <button
           onClick={loadEmails}
           className="p-2 rounded-full hover:bg-[#73839e]/20 transition"

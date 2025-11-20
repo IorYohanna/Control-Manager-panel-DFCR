@@ -48,7 +48,7 @@ export default function ChatWindow({ currentUser, selectedUser, messages, loadin
           </button>
           
           {/* Info User */}
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#2d466e] to-[#3d5680] text-white flex items-center justify-center font-bold text-sm">
+          <div className="w-10 h-10 rounded-full bg-linear-to-br from-[#2d466e] to-[#3d5680] text-white flex items-center justify-center font-bold text-sm">
             {selectedUser.surname?.[0]}{selectedUser.username?.[0]}
           </div>
           <div>
@@ -109,7 +109,7 @@ export default function ChatWindow({ currentUser, selectedUser, messages, loadin
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyPress}
             placeholder="Écrivez votre message..."
-            className="flex-1 bg-transparent border-none focus:ring-0 resize-none text-sm max-h-32 min-h-[24px] py-2 px-2 text-[#2d466e]"
+            className="flex-1 bg-transparent border-none focus:ring-0 resize-none text-sm max-h-32 min-h-6 py-2 px-2 text-[#2d466e]"
             rows={1}
             style={{ height: "auto" }} 
             onInput={(e) => { e.target.style.height = "auto"; e.target.style.height = e.target.scrollHeight + "px"; }}

@@ -8,7 +8,7 @@ export default function EmailViewer ({
   close,
 }) {
   return (
-    <div className="w-[100%] flex-1 bg-white rounded-tr-2xl rounded-br-2xl p-6 overflow-y-auto shadow-lg border-l border-[#73839e]/20">
+    <div className="w-full flex-1 bg-white rounded-tr-2xl rounded-br-2xl p-6 overflow-y-auto shadow-lg border-l border-[#73839e]/20">
 
         <div className="flex justify-between items-start mb-6">
             <h2 className="text-2xl font-bold text-[#2d466e]">{email.subject}</h2>
@@ -22,7 +22,7 @@ export default function EmailViewer ({
         </div>
 
         <div className="flex items-start gap-4 border-b border-[#73839e]/20 pb-6 mb-6">
-            <div className="w-12 h-12 bg-gradient-to-br from-[#2d466e] to-[#73839e] text-white rounded-full flex items-center justify-center font-semibold text-lg shadow-md">
+            <div className="w-12 h-12 bg-linear-to-br from-[#2d466e] to-[#73839e] text-white rounded-full flex items-center justify-center font-semibold text-lg shadow-md">
             {extractSenderName(email.from).charAt(0)}
             </div>
 
