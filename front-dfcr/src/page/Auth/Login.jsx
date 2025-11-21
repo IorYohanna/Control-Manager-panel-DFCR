@@ -54,7 +54,7 @@ const Login = () => {
       <div className="w-full h-10 shrink-0 z-10 relative">
         <CurvedLoop
           marqueeText=" • DFCR • BIENVENUE • Direction des Formations et Coordinations des Reformes  "
-          speed={1.5}
+          speed={0.5}
           curveAmount={0}
           direction="left"
           className="text-sm text-blue-50 capitalize "

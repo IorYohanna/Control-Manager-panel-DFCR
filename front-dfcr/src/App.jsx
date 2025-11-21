@@ -17,6 +17,7 @@ import Historique from "./page/Docs/Historique";
 import Chat from "./page/Chat/Chat";
 import DossierDetails from "./page/Dossier/DossierDetails";
 import DossierManagement from "./page/Dossier/Dossier";
+import NotificationWidget from "./components/Notification/NotificationWidget";
 
 function App() {
   const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
@@ -50,6 +51,7 @@ function App() {
           <Route path="/document" element={<FormDocument />} />
           <Route path="/historique" element={<Historique />} />
           <Route path="/chat" element={<Chat />} />
+          <Route path="/notification" element={<NotificationWidget/>} />
 
           <Route path="/home" element={<MainLayout />}>
             <Route index element={<HomePage />} />
@@ -61,6 +63,7 @@ function App() {
             <Route path="chat" element={<Chat />} />
             <Route path="dossier" element={<DossierManagement />} />
             <Route path="dossiers/:id" element={<DossierDetails />} />
+            <Route path="notification" element={<NotificationWidget/>} />
           </Route>
         </Routes>
       </Router>

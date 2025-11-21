@@ -237,7 +237,7 @@ export const DocumentModal = ({ document, onClose, currentUser, serviceUsers, on
             Détails
           </TabButton>
           <TabButton active={activeTab === 'actions'} onClick={() => setActiveTab('actions')}>
-            Actions Workflow
+            Actions à faire sur le document
           </TabButton>
           <TabButton active={activeTab === 'history'} onClick={() => setActiveTab('history')}>
             Historique

@@ -1,25 +1,31 @@
 package com.example.Auth.controller.Dashboard;
 
+import com.example.Auth.dto.Dashboard.CompletedDocumentDto;
 import com.example.Auth.dto.Dashboard.ServiceStatisticsDto;
 import com.example.Auth.dto.Dashboard.WorkflowStatisticsDto;
 import com.example.Auth.dto.Workflow.WorkflowHistoriqueDTO;
 import com.example.Auth.model.workflow.Workflow;
 import com.example.Auth.service.Dashboard.DashboardService;
+import com.example.Auth.service.workflow.WorkflowService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/dashboard")
 public class DashboardController {
     private final DashboardService dashboardService;
+    private final WorkflowService workflowService;
 
-    public DashboardController(DashboardService dashboardService) {
+    public DashboardController(DashboardService dashboardService, WorkflowService workflowService) {
         this.dashboardService = dashboardService;
+        this.workflowService = workflowService;
     }
 
     @GetMapping("/{idService}")
@@ -68,4 +74,36 @@ public class DashboardController {
 
         return ResponseEntity.ok(workflowHistoriques);
     }
+
+    @GetMapping("/history/service/{idService}")
+    public ResponseEntity<List<WorkflowHistoriqueDTO>> getWorkflowHistoryByService(
+            @PathVariable String idService
+    ) {
+        List<WorkflowHistoriqueDTO> history = workflowService.getWorkflowHistoryByService(idService);
+
+        if (history.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok(history);
+    }
+
+    @GetMapping("/workflow/stats")
+    public ResponseEntity<List<Map<String, Object>>> stats() {
+        return ResponseEntity.ok(dashboardService.getMonthlyStats(2025));
+    }
+
+    @GetMapping("/workflow/completed/{idService}")
+    public ResponseEntity<List<CompletedDocumentDto>> getCompletedDocuments(
+            @PathVariable String idService,
+            @RequestParam(required = false) Integer month,
+            @RequestParam(required = false) Integer year) {
+
+        List<CompletedDocumentDto> documents = workflowService.getCompletedDocumentsByService(
+                idService, month, year
+        );
+
+        return ResponseEntity.ok(documents);
+    }
+
 }

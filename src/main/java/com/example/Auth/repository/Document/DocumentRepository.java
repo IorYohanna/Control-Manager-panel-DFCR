@@ -26,4 +26,6 @@ public interface DocumentRepository extends ListCrudRepository<Document, String>
     List<Document> searchByKeyword(@Param("keyword") String keyword);
 
     List<Document> findAllByOrderByCreatedAtDesc();
+
+    List<Document> findByStatus(String status);
 }
