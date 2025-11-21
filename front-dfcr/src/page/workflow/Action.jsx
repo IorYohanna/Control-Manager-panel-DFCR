@@ -112,7 +112,7 @@ export const ActionForm = ({ action, formData, setFormData, serviceUsers }) => {
             <option value="">-- Sélectionner --</option>
             <option value="NORMAL">Normal</option>
             <option value="URGENT">Urgent</option>
-            <option value="PRIORITAIRE">Prioritaire</option>
+            <option value="TRES_URGENT">Très Urgent</option>
           </Select>
         )}
 
