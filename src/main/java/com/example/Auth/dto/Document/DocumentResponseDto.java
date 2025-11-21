@@ -16,4 +16,6 @@ public class DocumentResponseDto {
     private String creatorMatricule;
     private String creatorName;
     private String creatorEmail;
+    private String createdTime;
+    private String updatedTime;
 }

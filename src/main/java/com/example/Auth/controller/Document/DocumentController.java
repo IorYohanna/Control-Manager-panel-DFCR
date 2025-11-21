@@ -41,7 +41,9 @@ public class DocumentController {
                         doc.getStatus(),
                         doc.getCreator().getMatricule(),
                         doc.getCreator().getUsername(),
-                        doc.getCreator().getSurname()))
+                        doc.getCreator().getSurname(),
+                        doc.getCreatedAt().toString(),
+                        doc.getUpdatedAt().toString()))
                 .toList();
         return ResponseEntity.ok(documents);
     }
@@ -66,7 +68,9 @@ public class DocumentController {
                     doc.getStatus(),
                     doc.getCreator().getMatricule(),
                     doc.getCreator().getName(),
-                    doc.getCreator().getUsername());
+                    doc.getCreator().getUsername(),
+                    doc.getCreatedAt().toString(),
+                    doc.getUpdatedAt().toString());
 
             return ResponseEntity.ok(responseDto);
         } catch (Exception e) {
@@ -86,7 +90,9 @@ public class DocumentController {
                         doc.getStatus(),
                         doc.getCreator().getMatricule(),
                         doc.getCreator().getName(),
-                        doc.getCreator().getUsername()))
+                        doc.getCreator().getUsername(),
+                        doc.getCreatedAt().toString(),
+                        doc.getUpdatedAt().toString()))
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -104,7 +110,9 @@ public class DocumentController {
                 updatedDocument.getStatus(),
                 updatedDocument.getCreator().getMatricule(),
                 updatedDocument.getCreator().getName(),
-                updatedDocument.getCreator().getUsername());
+                updatedDocument.getCreator().getUsername(),
+                updatedDocument.getCreatedAt().toString(),
+                updatedDocument.getUpdatedAt().toString());
         return ResponseEntity.ok(responseDto);
     }
 

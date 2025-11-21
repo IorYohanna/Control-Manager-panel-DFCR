@@ -42,21 +42,21 @@ export default function Sidebar({ children, expanded, setExpanded, mobileOpen, s
   return (
     <>
       {mobileOpen && (
-        <div 
+        <div
           onClick={() => setMobileOpen(false)}
           className="fixed inset-0 z-40 bg-black/50 md:hidden backdrop-blur-sm"
         />
       )}
 
-      {/* SIDEBAR */}
       <aside className={`
-        h-screen p-4 
-        fixed md:relative z-50  /* Fixe sur mobile, Relatif sur Desktop */
+        h-screen p-4  
+        fixed md:relative z-50
         transition-transform duration-300 ease-in-out
-        ${mobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
+        ${mobileOpen ? "translate-x-0 " : "-translate-x-full md:translate-x-0"}
       `}>
-        <nav className="h-full w-fit flex flex-col bg-[#F5ECE3] rounded-2xl shadow-[4px_0_15px_rgba(0,0,0,0.05)]">
-          
+
+        <nav className="h-full w-fit flex flex-col bg-[#F5ECE3] overflow-auto thin-scrollbar rounded-2xl shadow-[4px_0_15px_rgba(0,0,0,0.05)]">
+
           <div className="p-4 pb-2 flex justify-between items-center">
             <span className={`uppercase font-necoBlack text-2xl text-[#2D466E] overflow-hidden transition-all ${expanded ? "w-auto" : "w-0"}`}>
               dfcr
@@ -64,19 +64,17 @@ export default function Sidebar({ children, expanded, setExpanded, mobileOpen, s
 
             <button
               onClick={() => {
-                // Sur mobile, ce bouton sert à fermer le menu complètement
                 if (window.innerWidth < 768) {
-                    setMobileOpen(false);
+                  setMobileOpen(false);
                 } else {
-                    setExpanded((curr) => !curr);
+                  setExpanded((curr) => !curr);
                 }
               }}
               className="p-1.5 rounded-lg bg-[#24344D]"
             >
-              {/* Sur mobile on affiche une croix, sur desktop les chevrons */}
-              <div className="md:hidden"><X color="white" size={20}/></div>
+              <div className="md:hidden"><X color="white" size={20} /></div>
               <div className="hidden md:block">
-                 {expanded ? <ChevronFirst color="white" /> : <ChevronLast color="white" />}
+                {expanded ? <ChevronFirst color="white" /> : <ChevronLast color="white" />}
               </div>
             </button>
           </div>
@@ -85,7 +83,6 @@ export default function Sidebar({ children, expanded, setExpanded, mobileOpen, s
             <ul className="flex-1 px-3">{children}</ul>
           </SidebarContext.Provider>
 
-          {/* ... (Le reste du code Logout et User Profile reste identique) ... */}
           <div className="px-3 pb-3">
             <button
               onClick={handleLogout}
@@ -100,11 +97,11 @@ export default function Sidebar({ children, expanded, setExpanded, mobileOpen, s
               <span className={`overflow-hidden font-dropline transition-all truncate ${expanded ? "ml-3" : "w-0"}`}>
                 Déconnexion
               </span>
-               {!expanded && (
-                 <div className="absolute left-full rounded-md px-2 py-1 ml-6 bg-[#2D466E] text-white text-sm invisible opacity-20 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0 whitespace-nowrap">
-                   Déconnexion
-                 </div>
-               )}
+              {!expanded && (
+                <div className="absolute left-full rounded-md px-2 py-1 ml-6 bg-[#2D466E] text-white text-sm invisible opacity-20 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0 whitespace-nowrap">
+                  Déconnexion
+                </div>
+              )}
             </button>
           </div>
 
@@ -129,7 +126,6 @@ export default function Sidebar({ children, expanded, setExpanded, mobileOpen, s
   );
 }
 
-// SidebarItem reste inchangé, pas besoin de le modifier
 export function SidebarItem({ icon, text, active, to = "#" }) {
   const { expanded } = useContext(SidebarContext)
   return (

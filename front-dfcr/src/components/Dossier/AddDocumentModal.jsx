@@ -66,7 +66,7 @@ export const AddDocumentModal = ({ dossierId, onClose, onSuccess }) => {
           <option value="">Sélectionne un document</option>
           {documents.map((d) => (
             <option key={d.reference} value={d.reference}>
-              {d.name} — {d.reference}
+              {d.creatorName} — {d.reference}
             </option>
           ))}
         </select>

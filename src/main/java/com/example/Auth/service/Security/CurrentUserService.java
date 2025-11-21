@@ -72,6 +72,9 @@ public class CurrentUserService {
         response.put("fonction", user.getFonction());
         response.put("photoProfil", user.getPhotoProfil());
 
+        int documentCount = (user.getDocuments() != null) ? user.getDocuments().size() : 0;
+        response.put("documentCount", documentCount);
+
         return response;
     }
 
@@ -87,6 +90,7 @@ public class CurrentUserService {
     public String getRole() {
         return getAuthenticatedUser().getFonction();
     }
+
     public String getMatricule() {
         return getAuthenticatedUser().getMatricule();
     }

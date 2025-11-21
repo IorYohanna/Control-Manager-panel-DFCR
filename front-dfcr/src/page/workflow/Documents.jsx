@@ -81,8 +81,8 @@ export const DocumentsTable = ({ documents, onSelectDocument, loading }) => {
     }
 
     return (
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-            <div className="grid grid-cols-12 gap-4 px-6 py-6 bg-beige-creme/40 border-b font-necoMedium border-beige-creme text-xs font-semibold text-gray-600 uppercase tracking-wide">
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-auto max-h-[600px] thin-scrollbar">
+            <div className="grid grid-cols-12 gap-4 px-4 sm:px-6 py-4 bg-beige-creme/40 border-b font-necoMedium border-beige-creme text-xs sm:text-sm font-semibold text-gray-600 uppercase tracking-wide">
                 <div className="col-span-2">Référence</div>
                 <div className="col-span-3">Objet</div>
                 <div className="col-span-2">Date de mise à jour</div>
@@ -93,15 +93,15 @@ export const DocumentsTable = ({ documents, onSelectDocument, loading }) => {
             {documents.map((doc) => (
                 <div
                     key={doc.reference}
-                    className="grid grid-cols-12 gap-4 px-6 py-4 border-b font-eirene border-gray-100 hover:bg-gray-50 transition-colors items-center"
+                    className="grid grid-cols-12 gap-4 px-4 sm:px-6 py-4 border-b font-eirene border-gray-100 hover:bg-gray-50 transition-colors items-center text-sm sm:text-base"
                 >
-                    <div className="col-span-2 font-medium text-gray-800 text-sm">{doc.reference}</div>
-                    <div className="col-span-3 text-gray-600 text-sm truncate">{doc.objet ? doc.objet : "Vide"}</div>
-                    <div className="col-span-2 text-gray-600 text-sm">{doc.updateTime || 'N/A'}</div>
+                    <div className="col-span-2 font-medium text-gray-800 truncate">{doc.reference}</div>
+                    <div className="col-span-3 text-gray-600 truncate">{doc.objet || "Vide"}</div>
+                    <div className="col-span-2 text-gray-600">{doc.updateTime || 'N/A'}</div>
                     <div className="col-span-2">
                         <StatusBadge status={doc.status} />
                     </div>
-                    <div className="col-span-3 flex justify-end gap-2">
+                    <div className="col-span-3 flex flex-wrap justify-end gap-2">
                         <Button
                             variant="outline"
                             size="sm"
@@ -109,41 +109,19 @@ export const DocumentsTable = ({ documents, onSelectDocument, loading }) => {
                             disabled={downloadingRef === doc.reference}
                         >
                             {downloadingRef === doc.reference ? (
-                                <>
-                                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-blue-200 border-t-blue-600 mr-2"></div>
-                                    ...
-                                </>
+                                <div className="animate-spin rounded-full h-4 w-4 border-2 border-blue-200 border-t-blue-600 mr-2"></div>
                             ) : (
-                                <>
-                                    <Download size={16} />
-                                </>
+                                <Download size={16} />
                             )}
                         </Button>
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => onSelectDocument(doc, 'details')}
-                        >
-                            Détails
-                        </Button>
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => onSelectDocument(doc, 'actions')}
-                        >
-                            Actions
-                        </Button>
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => onSelectDocument(doc, 'history')}
-                        >
-                            Historique
-                        </Button>
+                        <Button variant="outline" size="sm" onClick={() => onSelectDocument(doc, 'details')}>Détails</Button>
+                        <Button variant="outline" size="sm" onClick={() => onSelectDocument(doc, 'actions')}>Actions</Button>
+                        <Button variant="outline" size="sm" onClick={() => onSelectDocument(doc, 'history')}>Historique</Button>
                     </div>
                 </div>
             ))}
         </div>
+
     );
 };
 

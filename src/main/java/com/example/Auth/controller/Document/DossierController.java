@@ -16,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-
 @RestController
 @RequestMapping("/dossiers")
 @RequiredArgsConstructor
@@ -36,13 +35,13 @@ public class DossierController {
         dossierService.addDocumentToDossier(id, reference);
         return ResponseEntity.ok("Document ajouté au dossier");
     }
-//    @GetMapping
-//    public ResponseEntity<List<Dossier>> getAllDossiers() {
-//        return ResponseEntity.ok(dossierService.getAllDossiers());
-//    }
+    // @GetMapping
+    // public ResponseEntity<List<Dossier>> getAllDossiers() {
+    // return ResponseEntity.ok(dossierService.getAllDossiers());
+    // }
 
     @GetMapping
-    public ResponseEntity<List<DossierResponseDto>> getAllDossiers(){
+    public ResponseEntity<List<DossierResponseDto>> getAllDossiers() {
         List<Dossier> dossiers = dossierService.getAllDossiers();
         List<DossierResponseDto> dossierResponseDtos = dossiers.stream().map(dossier -> {
             DossierResponseDto dto = new DossierResponseDto();
@@ -56,13 +55,13 @@ public class DossierController {
         return ResponseEntity.ok(dossierResponseDtos);
     }
 
-//    @GetMapping("/{id}")
-//    public ResponseEntity<Optional<Dossier>> getDossier(@PathVariable Long id) {
-//        return ResponseEntity.ok(dossierService.getDossierById(id));
-//    }
+    // @GetMapping("/{id}")
+    // public ResponseEntity<Optional<Dossier>> getDossier(@PathVariable Long id) {
+    // return ResponseEntity.ok(dossierService.getDossierById(id));
+    // }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DossierResponseDto> getDossier (@PathVariable Long id) {
+    public ResponseEntity<DossierResponseDto> getDossier(@PathVariable Long id) {
         Dossier dossier = dossierService.getDossierById(id)
                 .orElseThrow(() -> new RuntimeException("Dossier non trouvé avec id : " + id));
         DossierResponseDto dto = new DossierResponseDto();
@@ -87,7 +86,9 @@ public class DossierController {
                         doc.getStatus(),
                         doc.getCreator().getMatricule(),
                         doc.getCreator().getUsername(),
-                        doc.getCreator().getSurname()
+                        doc.getCreator().getSurname(),
+                        doc.getCreatedAt().toString(),
+                        doc.getUpdatedAt().toString()
                 ))
                 .toList();
 
@@ -105,11 +106,4 @@ public class DossierController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/{id}/add-document/{reference}")
-    public ResponseEntity<String> addDocumentDossier(@PathVariable Long id , @PathVariable String reference) {
-        //TODO: process POST request
-        dossierService.addDocumentToDossier(id, reference);
-        return ResponseEntity.ok("Document ajouter au dossier");
-    }
-    
 }

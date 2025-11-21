@@ -186,10 +186,10 @@ const WorkflowManagement = () => {
   const paginatedDocuments = filteredDocuments.slice(startIndex, endIndex);
 
   return (
-    <div className="w-full bg-white m-6 rounded-2xl">
-      <div className="relative bg-linear-to-r from-[#2d466e] to-[#24344d] rounded-t-2xl px-8 py-6">
+    <div className="w-full bg-white m-4 sm:m-6 rounded-2xl overflow-auto hide-scrollbar">
+      <div className="relative bg-linear-to-r from-[#2d466e] to-[#24344d] rounded-t-2xl px-4 sm:px-8 py-4 sm:py-6">
         <Header currentUser={currentUser} photo={photo}>
-          <div className="flex items-center justify-between gap-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
             <div className="flex-1">
               <ObjectSearch
                 objetSearch={objetSearch}
@@ -198,20 +198,20 @@ const WorkflowManagement = () => {
                 currentView={currentView}
               />
             </div>
-            <ViewSwitcher 
-              currentView={currentView} 
-              onViewChange={setCurrentView} 
+            <ViewSwitcher
+              currentView={currentView}
+              onViewChange={setCurrentView}
             />
           </div>
         </Header>
       </div>
 
-      {currentView === 'documents' ? (
+      {currentView === 'documents' && (
         <>
-          <div className="px-8 py-6 bg-beige-creme/50 border-b flex items-center justify-between border-[#c4beaf]/20">
-            <FilterBar 
-              activeFilter={activeFilter} 
-              setActiveFilter={setActiveFilter} 
+          <div className="px-4 sm:px-8 py-4 sm:py-6 bg-beige-creme/50 border-b flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <FilterBar
+              activeFilter={activeFilter}
+              setActiveFilter={setActiveFilter}
               currentView={currentView}
             />
             <button
@@ -223,36 +223,32 @@ const WorkflowManagement = () => {
             </button>
           </div>
 
-          <div className="px-8 py-6">
-            <div className="flex items-center gap-4">
-              <div className="flex-1">
-                <SearchBar
-                  referenceSearch={referenceSearch}
-                  setReferenceSearch={setReferenceSearch}
-                  onSearch={handleSearch}
-                  currentView={currentView}
-                />
-              </div>
-
-              <Button
-                variant="primary"
-                size="lg"
-                icon={Plus}
-                onClick={() => setShowForm(true)}
-                className="bg-linear-to-r font-necoMedium from-[#2d466e] to-[#24344d] hover:from-[#24344d] hover:to-[#2d466e] text-[#f5ece3] shadow-lg hover:shadow-lg transition-all duration-300 px-6 py-3 rounded-xl font-semibold"
-              >
-                Importer
-              </Button>
+          <div className="px-4 sm:px-8 py-4 sm:py-6 flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+            <div className="flex-1">
+              <SearchBar
+                referenceSearch={referenceSearch}
+                setReferenceSearch={setReferenceSearch}
+                onSearch={handleSearch}
+                currentView={currentView}
+              />
             </div>
+            <Button
+              variant="primary"
+              size="lg"
+              icon={Plus}
+              onClick={() => setShowForm(true)}
+              className="bg-linear-to-r from-[#2d466e] to-[#24344d] hover:from-[#24344d] hover:to-[#2d466e] text-[#f5ece3] shadow-lg px-6 py-3 rounded-xl font-semibold"
+            >
+              Importer
+            </Button>
           </div>
 
-          <div className="px-8 pb-8">
+          <div className="px-4 sm:px-8 pb-8 ">
             <DocumentsTable
               documents={paginatedDocuments}
               onSelectDocument={handleSelectDocument}
               loading={loading}
             />
-
             {totalPages > 1 && (
               <div className="mt-6">
                 <Pagination
@@ -264,10 +260,7 @@ const WorkflowManagement = () => {
             )}
           </div>
 
-          {showForm && (
-            <FormDocument onClose={() => setShowForm(false)} />
-          )}
-
+          {showForm && <FormDocument onClose={() => setShowForm(false)} />}
           {showModal && selectedDocument && (
             <DocumentModal
               document={selectedDocument}
@@ -279,10 +272,11 @@ const WorkflowManagement = () => {
             />
           )}
         </>
-      ) : (
-        <DossierManagement />
       )}
+
+      {currentView !== 'documents' && <DossierManagement />}
     </div>
+
   );
 };
 
