@@ -49,8 +49,8 @@ export default function MainLayout() {
           to="/home/chat" 
           />
         <SidebarItem icon={<BellRing size={20}/>}
-          text="Notification" 
-          to="/home/notification" 
+          text="Envoyer ontif" 
+          to="/home/notifsender" 
           />
       </Sidebar>
 

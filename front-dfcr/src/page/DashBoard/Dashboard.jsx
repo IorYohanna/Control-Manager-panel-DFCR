@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import Service from "./Service";
+import NotificationWidget from "../../components/Notification/NotificationWidget";
 const idServices = ['SAGA', 'SF', 'SRFP', 'SCRI', 'SPSE'];
 
 const Dashboard = () => {
@@ -23,6 +24,10 @@ const Dashboard = () => {
               <div className="min-w-0">
                 <h1 className=" sm:text-lg lg:text-3xl font-dropline font-bold text-black tracking-wider">Bien le bonjour!</h1>
               </div>
+            </div>
+            
+            <div>
+              <NotificationWidget/>
             </div>
 
             {/* CENTER : NAVIGATION SERVICES - Compact */}

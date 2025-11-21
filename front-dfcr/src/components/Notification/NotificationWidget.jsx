@@ -121,7 +121,7 @@ function NotificationItem({ notification, onMarkAsRead }) {
 }
 
 // ============ Main Notification Component ============
-export default function NotificationCenter() {
+export default function NotificationWidget() {
   const [notifications, setNotifications] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -262,7 +262,7 @@ export default function NotificationCenter() {
   }, []);
 
   return (
-    <div className="relative w-full m-50" ref={dropdownRef}>
+    <div className="relative w-full" ref={dropdownRef}>
       {/* Bouton Bell */}
       <button
         onClick={() => setIsOpen(!isOpen)}

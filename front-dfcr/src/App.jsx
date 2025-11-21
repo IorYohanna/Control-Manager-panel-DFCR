@@ -18,6 +18,7 @@ import Chat from "./page/Chat/Chat";
 import DossierDetails from "./page/Dossier/DossierDetails";
 import DossierManagement from "./page/Dossier/Dossier";
 import NotificationWidget from "./components/Notification/NotificationWidget";
+import AdminNotificationSender from "./page/Notification/AdminNotificationSender";
 
 function App() {
   const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
@@ -64,6 +65,7 @@ function App() {
             <Route path="dossier" element={<DossierManagement />} />
             <Route path="dossiers/:id" element={<DossierDetails />} />
             <Route path="notification" element={<NotificationWidget/>} />
+            <Route path="notifsender" element={<AdminNotificationSender/>} />
           </Route>
         </Routes>
       </Router>
