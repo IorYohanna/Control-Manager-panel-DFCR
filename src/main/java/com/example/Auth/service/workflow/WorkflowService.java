@@ -3,6 +3,7 @@ package com.example.Auth.service.workflow;
 import com.example.Auth.dto.Dashboard.CompletedDocumentDto;
 import com.example.Auth.dto.Workflow.WorkflowHistoriqueDTO;
 import com.example.Auth.model.Document.Document;
+import com.example.Auth.event.NotificationEvent;
 import com.example.Auth.model.User.User;
 import com.example.Auth.model.workflow.Workflow;
 import com.example.Auth.model.workflow.WorkflowHistorique;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +31,9 @@ public class WorkflowService {
 
     @Autowired
     private DocumentRepository documentRepository;
+
+    @Autowired
+    private ApplicationEventPublisher publisher;
 
     private Workflow getOrCreateWorkflow(Document document) {
         return workflowRepository
@@ -69,10 +74,6 @@ public class WorkflowService {
         return savedWorkflow;
     }
 
-    //en_attente assigne en_traitement termine validation_directeur au_service complet
-    //type : RECEPTION , ENVOYER , ASSIGNATION, TRAITEMENT, SOUMISSION, VALIDATION_CHEF, VALIDATION_DIRECTEUR
-
-
     /**
      * 1. Document arrive au Directeur - Status: EN_ATTENTE
      */
@@ -112,6 +113,15 @@ public class WorkflowService {
 
         Workflow workflow = getOrCreateWorkflow(document);
         ServiceDfcr service = workflow.getService();
+
+        publisher.publishEvent(
+                new NotificationEvent(
+                        "ASSIGNATION",
+                        chefService,
+                        employe,
+                        document
+                )
+        );
         return updateDocumentAndWorkflow(document, "assigne", workflow,
                 "ASSIGNATION", "ASSIGNER", "assigne",
                 chefService, employe, service, remarque);

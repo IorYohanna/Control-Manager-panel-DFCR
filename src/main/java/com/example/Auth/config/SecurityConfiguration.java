@@ -48,6 +48,7 @@ public class SecurityConfiguration {
                                 .requestMatchers("/ws-message/**").permitAll()
                                 .requestMatchers("/dashboard/**").authenticated()
                                 .requestMatchers("/messages/**").authenticated()
+                                .requestMatchers("/notifications/**").authenticated()
                                 .anyRequest().authenticated())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
@@ -65,7 +66,7 @@ public class SecurityConfiguration {
                 "https://backend.com",
                 "http://localhost:8080",
                 "http://localhost:5173"));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         config.setAllowedHeaders(List.of("Authorization", "Content-Type", "Cookie"));
         config.setAllowCredentials(true);
 

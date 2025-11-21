@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 import Sidebar, { SidebarItem } from "./SideBar";
-import { LayoutDashboard, Package, Calendar, MessageCircle, Mail, Workflow, Menu } from "lucide-react";
+import { LayoutDashboard, Package, Calendar, MessageCircle, Mail, Workflow, Menu, BellRing } from "lucide-react";
 import { useState } from "react";
 
 export default function MainLayout() {
@@ -47,6 +47,10 @@ export default function MainLayout() {
         <SidebarItem icon={<MessageCircle size={20}/>}
           text="Messagerie" 
           to="/home/chat" 
+          />
+        <SidebarItem icon={<BellRing size={20}/>}
+          text="Notification" 
+          to="/home/notification" 
           />
       </Sidebar>
 
