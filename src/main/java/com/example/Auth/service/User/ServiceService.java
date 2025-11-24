@@ -1,6 +1,8 @@
 package com.example.Auth.service.User;
 
 import com.example.Auth.model.Document.Event;
+import com.example.Auth.model.User.User;
+import com.example.Auth.dto.User.UserDto;
 import org.springframework.stereotype.Service;
 
 import com.example.Auth.dto.User.ServiceDto;
@@ -10,6 +12,7 @@ import com.example.Auth.utils.LoggerService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ServiceService {
@@ -24,11 +27,10 @@ public class ServiceService {
 
     public ServiceDfcr createService(ServiceDto input) {
         ServiceDfcr service = new ServiceDfcr(
-            input.getIdService(),
-            input.getServiceName(),
-            input.getAttribution(),
-            input.getServiceEmail()
-        );
+                input.getIdService(),
+                input.getServiceName(),
+                input.getAttribution(),
+                input.getServiceEmail());
 
         log.info("Création du service : " + input.getIdService());
         return serviceRepository.save(service);
@@ -78,5 +80,39 @@ public class ServiceService {
         ServiceDfcr service = serviceOpt.get();
         return service.getEvents();
     }
-}
 
+    /**
+     * Récupère tous les utilisateurs d'un service
+     */
+    public List<UserDto> getUsersByService(String idService) {
+        Optional<ServiceDfcr> serviceOpt = serviceRepository.findById(idService);
+        if (serviceOpt.isEmpty()) {
+            throw new RuntimeException("Service non trouvé avec id : " + idService);
+        }
+
+        ServiceDfcr service = serviceOpt.get();
+        log.info("Récupération des utilisateurs du service : " + idService);
+
+        // Convertir les utilisateurs en DTO
+        return service.getUsers().stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Convertit un User en UserDto
+     */
+    private UserDto convertToDto(User user) {
+        UserDto dto = new UserDto();
+        dto.setMatricule(user.getMatricule());
+        dto.setUsername(user.getUsername());
+        dto.setSurname(user.getSurname());
+        dto.setEmail(user.getEmail());
+        dto.setFonction(user.getFonction());
+        dto.setContact(String.valueOf(user.getContact()));
+        dto.setIdservice(user.getService() != null ? user.getService().getIdService() : null);
+        dto.setScore(String.valueOf(user.getScore()));
+        dto.setEvaluation(user.getEvaluation());
+        return dto;
+    }
+}

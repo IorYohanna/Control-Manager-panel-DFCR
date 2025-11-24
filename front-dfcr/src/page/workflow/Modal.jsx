@@ -1,4 +1,4 @@
-import { BaggageClaim, Calendar, CheckCircle, Clock, Download, History, Printer, Send, User, Workflow, WorkflowIcon, XCircle, Zap } from "lucide-react";
+import { BaggageClaim, Calendar, CheckCircle, Clock, Download, History, Printer, Send, User, Workflow, WorkflowIcon, XCircle, Zap, AlertTriangle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button, Select, StatusBadge, TabButton } from "./Base";
 import { ActionForm } from "./Action";
@@ -194,10 +194,38 @@ export const DocumentModal = ({ document, onClose, currentUser, serviceUsers, on
         }, 1500);
       } else {
         const errorText = await response.text();
-        setMessage({ type: 'error', text: errorText || 'Erreur lors de l\'action' });
+
+        let cleanErrorMessage = errorText;
+        try {
+          const errorJson = JSON.parse(errorText);
+          cleanErrorMessage = errorJson.message || errorText;
+        } catch {
+          cleanErrorMessage = errorText;
+        }
+
+        const isAuthError = cleanErrorMessage.includes('Action non autorisée') ||
+          cleanErrorMessage.includes('n\'appartenez pas au service') ||
+          cleanErrorMessage.includes('Seul') ||
+          response.status === 403;
+
+        setMessage({
+          type: 'error',
+          text: cleanErrorMessage || 'Erreur lors de l\'action',
+          isAuthError: isAuthError
+        });
+
+        if (isAuthError) {
+          setTimeout(() => {
+            onActionComplete(); 
+          }, 3000);
+        }
       }
     } catch (err) {
-      setMessage({ type: 'error', text: err.message });
+      setMessage({
+        type: 'error',
+        text: err.message || 'Une erreur inattendue est survenue',
+        isAuthError: false
+      });
     } finally {
       setLoading(false);
     }
@@ -339,12 +367,36 @@ export const DocumentModal = ({ document, onClose, currentUser, serviceUsers, on
 
                   {message && (
                     <div className={`p-4 rounded-lg text-sm ${message.type === 'success'
-                      ? 'bg-green-50 text-green-800 border border-green-200'
-                      : 'bg-red-50 text-red-800 border border-red-200'
+                        ? 'bg-green-50 text-green-800 border border-green-200'
+                        : message.isAuthError
+                          ? 'bg-orange-50 text-orange-900 border border-orange-200'
+                          : 'bg-red-50 text-red-800 border border-red-200'
                       }`}>
-                      <div className="flex items-center gap-2">
-                        {message.type === 'success' ? <CheckCircle size={18} /> : <XCircle size={18} />}
-                        {message.text}
+                      <div className="flex items-start gap-3">
+                        <div className="shrink-0 mt-0.5">
+                          {message.type === 'success' ? (
+                            <CheckCircle size={18} />
+                          ) : message.isAuthError ? (
+                            <AlertTriangle size={18} />
+                          ) : (
+                            <XCircle size={18} />
+                          )}
+                        </div>
+                        <div className="flex-1">
+                          <div className="font-semibold mb-1">
+                            {message.type === 'success'
+                              ? 'Succès'
+                              : message.isAuthError
+                                ? 'Accès non autorisé'
+                                : 'Erreur'}
+                          </div>
+                          <div>{message.text}</div>
+                          {message.isAuthError && (
+                            <div className="mt-2 text-xs opacity-80">
+                              Cette action ne peut être effectuée que par la personne assignée. La page va se rafraîchir pour afficher le statut actuel.
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
                   )}

@@ -18,7 +18,7 @@ export const Button = ({ children, variant = 'primary', size = 'md', icon: Icon,
     <button
       onClick={onClick}
       disabled={disabled || loading}
-      className={`inline-flex items-center gap-2 rounded-xl font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 active:scale-95 ${variants[variant]} ${sizes[size]} ${className}`}
+      className={`inline-flex items-center gap-2 rounded-xl font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed  ${variants[variant]} ${sizes[size]} ${className}`}
     >
       {loading ? (
         <div className="animate-spin rounded-full h-4 w-4 border-2 border-[#f5ece3] border-t-transparent" />

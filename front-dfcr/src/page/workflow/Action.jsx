@@ -14,6 +14,11 @@ export const ActionForm = ({ action, formData, setFormData, serviceUsers }) => {
   const needsTypeWorkflow = ['send-to-service'].includes(action);
   const needsDirecteurValidation = ['directeur-validate'].includes(action);
 
+  const formatUserDisplay = (user) => {
+    const name = user.surname || user.username || 'Sans nom';
+    return `${name} (${user.matricule}) - ${user.fonction}`;
+  };
+
   return (
     <div className="space-y-4 p-5 bg-linear-to-br from-gray-50 to-blue-50 rounded-lg border border-gray-200">
       <h3 className="font-semibold text-gray-700 text-sm flex items-center gap-2">
@@ -43,22 +48,28 @@ export const ActionForm = ({ action, formData, setFormData, serviceUsers }) => {
             >
               <option value="">-- Sélectionner un employé --</option>
               {serviceUsers
-                .filter(u => u.fonction?.toLowerCase().includes('employe'))
+                .filter(u => u.fonction?.toLowerCase().includes('employe') ||
+                  u.fonction?.toLowerCase().includes('employé'))
                 .map(user => (
                   <option key={user.matricule} value={user.matricule}>
-                    {user.username} - {user.matricule}
+                    {formatUserDisplay(user)}
                   </option>
                 ))}
             </Select>
           ) : (
-            <Input
-              label="Matricule de l'employé"
-              required
-              type="text"
-              value={formData.employeMatricule || ''}
-              onChange={(e) => updateField('employeMatricule', e.target.value)}
-              placeholder="ex: 001"
-            />
+            <div>
+              <Input
+                label="Matricule de l'employé"
+                required
+                type="text"
+                value={formData.employeMatricule || ''}
+                onChange={(e) => updateField('employeMatricule', e.target.value)}
+                placeholder="ex: 001"
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                Aucun employé trouvé dans le service. Veuillez saisir le matricule manuellement.
+              </p>
+            </div>
           )
         )}
 
@@ -75,19 +86,24 @@ export const ActionForm = ({ action, formData, setFormData, serviceUsers }) => {
                 .filter(u => u.fonction?.toLowerCase().includes('chef'))
                 .map(user => (
                   <option key={user.matricule} value={user.matricule}>
-                    {user.username} - {user.matricule}
+                    {formatUserDisplay(user)}
                   </option>
                 ))}
             </Select>
           ) : (
-            <Input
-              label="Matricule du chef"
-              required
-              type="text"
-              value={formData.chefMatricule || ''}
-              onChange={(e) => updateField('chefMatricule', e.target.value)}
-              placeholder="Matricule du chef"
-            />
+            <div>
+              <Input
+                label="Matricule du chef"
+                required
+                type="text"
+                value={formData.chefMatricule || ''}
+                onChange={(e) => updateField('chefMatricule', e.target.value)}
+                placeholder="Matricule du chef"
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                Aucun chef trouvé dans le service. Veuillez saisir le matricule manuellement.
+              </p>
+            </div>
           )
         )}
 

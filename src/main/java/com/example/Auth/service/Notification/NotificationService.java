@@ -105,7 +105,6 @@ public class NotificationService {
         User sender = event.getSender();
         String senderName = (sender != null) ? sender.getSurname() : "Système";
 
-        // Récupérer le workflow depuis l'event data
         Workflow workflow = null;
         if (event.getData() instanceof Workflow) {
             workflow = (Workflow) event.getData();

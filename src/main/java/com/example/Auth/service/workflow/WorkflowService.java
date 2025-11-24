@@ -49,6 +49,40 @@ public class WorkflowService {
                 workflowHistoriqueRepository.save(historique);
         }
 
+        /**
+         * Valide que l'utilisateur est bien le destinataire assigné dans le dernier
+         * workflow
+         */
+        private void validateDestinataire(Workflow workflow, User user, String action) {
+                if (workflow.getDestinataire() == null) {
+                        throw new RuntimeException("Aucun destinataire assigné pour cette action");
+                }
+
+                if (!workflow.getDestinataire().getMatricule().equals(user.getMatricule())) {
+                        throw new RuntimeException(
+                                        "Action non autorisée: Seul " + workflow.getDestinataire().getUsername() +
+                                                        " (matricule: " + workflow.getDestinataire().getMatricule() +
+                                                        ") peut effectuer cette action (" + action + ")");
+                }
+        }
+
+        /**
+         * Valide que l'utilisateur appartient au service assigné
+         */
+        private void validateServiceMember(Workflow workflow, User user, String action) {
+                if (workflow.getService() == null) {
+                        throw new RuntimeException("Aucun service assigné pour cette action");
+                }
+
+                if (user.getService() == null ||
+                                !user.getService().getIdService().equals(workflow.getService().getIdService())) {
+                        throw new RuntimeException(
+                                        "Action non autorisée: Vous n'appartenez pas au service " +
+                                                        workflow.getService().getServiceName()
+                                                        + " assigné pour ce document");
+                }
+        }
+
         private Workflow updateDocumentAndWorkflow(Document document, String documentStatus,
                         Workflow workflow, String workflowType,
                         String action, String workflowStatus,
@@ -109,19 +143,30 @@ public class WorkflowService {
                                 .orElseThrow(() -> new RuntimeException("Document non trouvé"));
 
                 Workflow workflow = getOrCreateWorkflow(document);
+
+                // VALIDATION: Seul le directeur assigné peut envoyer au service
+                validateDestinataire(workflow, directeur, "envoyer au service");
+
+                // Trouver le chef de service du service assigné
+                User chefService = service.getUsers().stream()
+                                .filter(user -> user.getFonction() != null &&
+                                                user.getFonction().toLowerCase().contains("chef"))
+                                .findFirst()
+                                .orElse(null);
+
                 Workflow savedWorkflow = updateDocumentAndWorkflow(document, "au_service", workflow,
                                 typeWorkflow, "ENVOYER", "au_service",
-                                directeur, null, service, remarque);
+                                directeur, chefService, service, remarque);
 
-                // Envoyer notification au service (chef de service si disponible)
-                // Note: Vous devrez adapter selon votre logique pour récupérer le chef de
-                // service
-                publisher.publishEvent(
-                                new NotificationEvent(
-                                                "ENVOI_SERVICE",
-                                                directeur,
-                                                null, // À compléter avec le chef de service si nécessaire
-                                                savedWorkflow));
+                // Envoyer notification au chef de service
+                if (chefService != null) {
+                        publisher.publishEvent(
+                                        new NotificationEvent(
+                                                        "ENVOI_SERVICE",
+                                                        directeur,
+                                                        chefService,
+                                                        savedWorkflow));
+                }
 
                 return savedWorkflow;
         }
@@ -136,6 +181,18 @@ public class WorkflowService {
                                 .orElseThrow(() -> new RuntimeException("Document non trouvé"));
 
                 Workflow workflow = getOrCreateWorkflow(document);
+
+                // VALIDATION: Le chef doit appartenir au service assigné
+                validateServiceMember(workflow, chefService, "assigner à un employé");
+
+                // Vérifier que l'employé appartient au même service
+                if (employe.getService() == null ||
+                                !employe.getService().getIdService().equals(workflow.getService().getIdService())) {
+                        throw new RuntimeException(
+                                        "L'employé doit appartenir au service "
+                                                        + workflow.getService().getServiceName());
+                }
+
                 ServiceDfcr service = workflow.getService();
 
                 Workflow savedWorkflow = updateDocumentAndWorkflow(document, "assigne", workflow,
@@ -162,13 +219,13 @@ public class WorkflowService {
                                 .orElseThrow(() -> new RuntimeException("Document non trouvé"));
 
                 Workflow workflow = getOrCreateWorkflow(document);
+
+                validateDestinataire(workflow, employe, "commencer le traitement");
+
                 ServiceDfcr service = workflow.getService();
                 Workflow savedWorkflow = updateDocumentAndWorkflow(document, "en_traitement", workflow,
                                 "TRAITEMENT", "TRAITER", "en_traitement",
                                 employe, null, service, "Document en cours de traitement");
-
-                // Envoyer notification au chef de service (si vous voulez le notifier)
-                // Récupérer le chef depuis le workflow précédent si nécessaire
 
                 return savedWorkflow;
         }
@@ -183,6 +240,14 @@ public class WorkflowService {
                                 .orElseThrow(() -> new RuntimeException("Document non trouvé"));
 
                 Workflow workflow = getOrCreateWorkflow(document);
+
+                // VALIDATION: Seul l'employé qui traite peut terminer et envoyer
+                if (workflow.getActeur() == null ||
+                                !workflow.getActeur().getMatricule().equals(employe.getMatricule())) {
+                        throw new RuntimeException(
+                                        "Action non autorisée: Seul l'employé qui traite le document peut le soumettre");
+                }
+
                 ServiceDfcr service = workflow.getService();
                 Workflow savedWorkflow = updateDocumentAndWorkflow(document, "termine", workflow,
                                 "SOUMISSION", "SOUMETTRE", "termine",
@@ -209,6 +274,10 @@ public class WorkflowService {
                                 .orElseThrow(() -> new RuntimeException("Document non trouvé"));
 
                 Workflow workflow = getOrCreateWorkflow(document);
+
+                // VALIDATION: Seul le chef de service assigné peut valider
+                validateDestinataire(workflow, chefService, "valider et envoyer au directeur");
+
                 ServiceDfcr service = workflow.getService();
                 Workflow savedWorkflow = updateDocumentAndWorkflow(document, "validation_directeur", workflow,
                                 "VALIDATION_CHEF", "VALIDER", "validation_directeur",
@@ -235,6 +304,10 @@ public class WorkflowService {
                                 .orElseThrow(() -> new RuntimeException("Document non trouvé"));
 
                 Workflow workflow = getOrCreateWorkflow(document);
+
+                // VALIDATION: Seul le chef de service assigné peut refuser
+                validateDestinataire(workflow, chefService, "refuser le document");
+
                 ServiceDfcr service = workflow.getService();
                 Workflow savedWorkflow = updateDocumentAndWorkflow(document, "au_service", workflow,
                                 "VALIDATION_CHEF", "REFUSER", "au_service",
@@ -261,6 +334,10 @@ public class WorkflowService {
                                 .orElseThrow(() -> new RuntimeException("Document non trouvé"));
 
                 Workflow workflow = getOrCreateWorkflow(document);
+
+                // VALIDATION: Seul le directeur assigné peut valider comme complet
+                validateDestinataire(workflow, directeur, "valider comme complet");
+
                 workflow.setEstComplet(true);
                 ServiceDfcr service = workflow.getService();
 
@@ -289,6 +366,10 @@ public class WorkflowService {
                                 .orElseThrow(() -> new RuntimeException("Document non trouvé"));
 
                 Workflow workflow = getOrCreateWorkflow(document);
+
+                // VALIDATION: Seul le directeur assigné peut refuser
+                validateDestinataire(workflow, directeur, "refuser comme incomplet");
+
                 workflow.setEstComplet(false);
 
                 Workflow savedWorkflow = updateDocumentAndWorkflow(document, "au_service", workflow,

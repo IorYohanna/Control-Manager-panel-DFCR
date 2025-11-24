@@ -74,7 +74,7 @@ const WorkflowManagement = () => {
       const { userData, photoUrl } = await fetchCompleteUserProfile();
 
       setCurrentUser(userData);
-      if (userData.serviceName) loadServiceUsers(userData.serviceName);
+      if (userData.service.idService) loadServiceUsers(userData.service.idService);
 
       if (photoUrl) {
         setPhoto(photoUrl);
@@ -113,12 +113,25 @@ const WorkflowManagement = () => {
 
   const loadServiceUsers = async () => {
     try {
-      const res = await fetch(`${API_BASE_URL}/current-user/service/info`, {
+      const serviceInfoRes = await fetch(`${API_BASE_URL}/current-user/service/info`, {
         headers: getAuthHeader()
       });
-      if (res.ok) {
-        const data = await safeJsonParse(res);
-        setServiceUsers(Array.isArray(data) ? data : []);
+
+      if (serviceInfoRes.ok) {
+        const serviceInfo = await safeJsonParse(serviceInfoRes);
+        console.log('Info du service:', serviceInfo);
+
+        if (serviceInfo.idService) {
+          const usersRes = await fetch(`${API_BASE_URL}/services/${serviceInfo.idService}/users`, {
+            headers: getAuthHeader()
+          });
+
+          if (usersRes.ok) {
+            const users = await safeJsonParse(usersRes);
+            setServiceUsers(Array.isArray(users) ? users : []);
+            console.log('Utilisateurs du service:', users);
+          }
+        }
       }
     } catch (err) {
       console.error('Erreur chargement utilisateurs:', err);

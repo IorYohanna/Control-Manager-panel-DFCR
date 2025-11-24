@@ -56,6 +56,14 @@ public class ServiceDfcr {
         return events != null ? events.size() : 0;
     }
 
+    public String getChefService () {
+        for (User user : users) {
+            if (user.getFonction() != null && user.getFonction().equals("Chef de service")) {
+                return user.getFonction();
+            }
+        }
+        return null;
+    }
     public ServiceDfcr(String idService, String serviceName, String attribution, String serviceEmail) {
         this.idService = idService;
         this.serviceName = serviceName;

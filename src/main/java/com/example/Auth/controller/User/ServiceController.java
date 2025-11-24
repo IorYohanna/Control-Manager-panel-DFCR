@@ -1,9 +1,11 @@
 package com.example.Auth.controller.User;
+
 import com.example.Auth.dto.EventResponseDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.Auth.dto.User.ServiceDto;
+import com.example.Auth.dto.User.UserDto;
 import com.example.Auth.model.User.ServiceDfcr;
 import com.example.Auth.service.User.ServiceService;
 
@@ -18,6 +20,19 @@ public class ServiceController {
 
     public ServiceController(ServiceService serviceService) {
         this.serviceService = serviceService;
+    }
+
+    @GetMapping("/{idService}/users")
+    public ResponseEntity<?> getUsersByService(@PathVariable String idService) {
+        try {
+            List<UserDto> users = serviceService.getUsersByService(idService);
+            return ResponseEntity.ok(users);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError()
+                    .body("Erreur lors de la récupération des utilisateurs: " + e.getMessage());
+        }
     }
 
     @PostMapping
@@ -62,12 +77,12 @@ public class ServiceController {
 
     @GetMapping("/events/{idService}")
     public ResponseEntity<List<EventResponseDto>> getServiceEvents(@PathVariable String idService) {
-        try{
+        try {
             List<EventResponseDto> eventDtos = serviceService.getAllEvents(idService.toUpperCase())
                     .stream()
                     .map(EventResponseDto::new)
                     .toList();
-            return  ResponseEntity.ok(eventDtos);
+            return ResponseEntity.ok(eventDtos);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
