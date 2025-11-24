@@ -1,19 +1,19 @@
-import { MoreVertical, ChevronLast, ChevronFirst, LogOut, X } from "lucide-react" // Ajout de X pour fermer
+import { MoreVertical, ChevronLast, ChevronFirst, LogOut, X } from "lucide-react"
 import { useContext, createContext, useState, useEffect } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { fectUserData } from "../api/User/currentUser";
 import { fetchUserPhoto } from "../api/User/profileinfo";
+import UserAvatar from "../page/User/UserAvatar";
 
 const SidebarContext = createContext()
 
-// On récupère mobileOpen et setMobileOpen
 export default function Sidebar({ children, expanded, setExpanded, mobileOpen, setMobileOpen }) {
 
   const [userData, setUserData] = useState({
     user: "",
     userEmail: "",
   });
-  const [previewUrl, setPreviewUrl] = useState();
+  const [previewUrl, setPreviewUrl] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,8 +24,15 @@ export default function Sidebar({ children, expanded, setExpanded, mobileOpen, s
           user: data.fullName,
           userEmail: data.email,
         })
-        const imgUrl = await fetchUserPhoto(data.matricule)
-        setPreviewUrl(imgUrl);
+
+        // Gérer le cas où la photo peut être null ou undefined
+        try {
+          const imgUrl = await fetchUserPhoto(data.matricule);
+          setPreviewUrl(imgUrl || null);
+        } catch (error) {
+          console.log("Pas de photo de profil disponible:", error);
+          setPreviewUrl(null);
+        }
       } catch (error) {
         console.error(error)
       }
@@ -108,7 +115,10 @@ export default function Sidebar({ children, expanded, setExpanded, mobileOpen, s
           <div className="border-t border-[#73839E] flex p-3">
             <div className={`flex justify-between items-center gap-2 overflow-hidden transition-all ${expanded ? "w-52 ml-3" : "w-0"}`}>
               <div className="leading-4 flex gap-2 items-center min-w-0 flex-1">
-                <img src={previewUrl} alt=" " className="w-10 h-10 rounded-full shrink-0" />
+                <UserAvatar
+                  user={userData.user}
+                  imageUrl={previewUrl}
+                />
                 <div className="flex flex-col min-w-0 flex-1">
                   <h4 className="font-stardom capitalize font-bold text-[#2D466E] truncate">{userData.user}</h4>
                   <span className="text-sm text-[#2f486d] font-eirene truncate">{userData.userEmail}</span>

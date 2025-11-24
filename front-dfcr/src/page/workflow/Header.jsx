@@ -1,5 +1,6 @@
 import { RefreshCw, Search, Folder, FileText } from "lucide-react";
 import { SearchInput, TabButton } from "./Base";
+import UserAvatar from "../User/UserAvatar";
 
 export const Header = ({ currentUser, photo, children }) => (
   <div className="space-y-4">
@@ -11,7 +12,10 @@ export const Header = ({ currentUser, photo, children }) => (
         {currentUser && (
           <div className="flex items-center gap-6 pl-4">
             <div className="rounded-full overflow-hidden ring-2 ring-[#f5ece3]">
-              <img src={photo} alt={currentUser.username} className="w-10 h-10 md:w-12 md:h-12 object-cover" />
+              <UserAvatar
+                user={currentUser.surname}
+                imageUrl={photo}
+              />
             </div>
             <div className="text-left">
               <div className="font-semibold text-[#f5ece3] text-sm capitalize font-necoMedium">
