@@ -36,8 +36,7 @@ export const UpcomingEvents = ({ upcomingEvents = [], todayEvents = [] }) => {
     <>
       {/* Card Principale */}
       <div className="col-span-1 h-full relative group">
-        <div className="h-full flex flex-col backdrop-blur-xl bg-[#f5ece3]/50 rounded-[32px] p-6 lg:p-8 shadow-lg border border-white/50 hover:border-white/60 transition-all duration-500 hover:shadow-xl">
-          
+        <div className="h-full flex flex-col backdrop-blur-xl bg-[#f5ece3]/70 rounded-4xl p-6 lg:p-8 shadow-lg border border-white/50 hover:border-white/60 transition-all duration-500 hover:shadow-xl">
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-xl text-[#2d466e] font-bold font-dropline">

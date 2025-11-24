@@ -1,119 +1,36 @@
 import { useEffect, useState, useRef } from "react";
-import SockJS from "sockjs-client";
-import { Client } from "@stomp/stompjs";
-import { Bell, X, Check, CheckCheck } from "lucide-react";
-
-// ============ API Calls ============
-const API_BASE = "http://localhost:8080";
-
-async function getCurrentUser() {
-  const token = localStorage.getItem("token");
-  try {
-    // Décoder le JWT pour obtenir le matricule
-    const payload = JSON.parse(atob(token.split(".")[1]));
-    return payload.sub;
-  } catch {
-    // Fallback si le token n'est pas valide
-    const res = await fetch(`${API_BASE}/auth/me`, {
-      headers: { 
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json"
-      }
-    });
-    if (!res.ok) throw new Error("Failed to get current user");
-    const data = await res.json();
-    return data.matricule;
-  }
-}
-
-async function getNotifications(userId) {
-  const token = localStorage.getItem("token");
-  const res = await fetch(`${API_BASE}/notifications/${userId}`, {
-    headers: { 
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json"
-    }
-  });
-  if (!res.ok) throw new Error("Failed to fetch notifications");
-  return res.json();
-}
-
-async function markAsRead(notificationId) {
-  const token = localStorage.getItem("token");
-  const res = await fetch(`${API_BASE}/notifications/${notificationId}/read`, {
-    method: "PATCH",
-    headers: { 
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json"
-    }
-  });
-  if (!res.ok) throw new Error("Failed to mark as read");
-  return res.json();
-}
-
-async function markAllAsRead(userId) {
-  const token = localStorage.getItem("token");
-  const res = await fetch(`${API_BASE}/notifications/${userId}/read-all`, {
-    method: "PATCH",
-    headers: { 
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json"
-    }
-  });
-  if (!res.ok) throw new Error("Failed to mark all as read");
-  return res.json();
-}
+import { Bell, CheckCheck } from "lucide-react";
+import {
+  getCurrentUser,
+  getNotifications,
+  markAsRead,
+  markAllAsRead,
+  createNotificationWebSocket,
+  formatRelativeDate,
+  getNotificationIcon
+} from "../../api/Notification/notification";
 
 // ============ Notification Item Component ============
 function NotificationItem({ notification, onMarkAsRead }) {
-  const getIcon = (type) => {
-    switch (type) {
-      case "ASSSIGNE_EMPLOYE":
-        return "📋";
-      case "TASK_COMPLETED":
-        return "✅";
-      case "TASK_UPDATED":
-        return "🔄";
-      default:
-        return "🔔";
-    }
-  };
-
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffMs = now - date;
-    const diffMins = Math.floor(diffMs / 60000);
-    
-    if (diffMins < 1) return "À l'instant";
-    if (diffMins < 60) return `Il y a ${diffMins} min`;
-    
-    const diffHours = Math.floor(diffMins / 60);
-    if (diffHours < 24) return `Il y a ${diffHours}h`;
-    
-    const diffDays = Math.floor(diffHours / 24);
-    if (diffDays < 7) return `Il y a ${diffDays}j`;
-    
-    return date.toLocaleDateString("fr-FR", { day: "2-digit", month: "short" });
-  };
-
   return (
     <div
-      className={`p-4 border-b border-gray-100 hover:bg-gray-50 transition-colors cursor-pointer ${
-        !notification.read ? "bg-blue-50" : ""
+      className={`p-4 border-b border-[#2d466e]/10 hover:bg-[#2d466e]/5 transition-all duration-200 cursor-pointer ${
+        !notification.read ? "bg-[#2d466e]/20" : ""
       }`}
       onClick={() => onMarkAsRead(notification.id)}
     >
       <div className="flex items-start gap-3">
-        <div className="text-2xl flex-shrink-0">{getIcon(notification.type)}</div>
+        <div className="text-2xl shrink-0">{getNotificationIcon(notification.type)}</div>
         <div className="flex-1 min-w-0">
-          <p className={`text-sm ${!notification.read ? "font-semibold text-gray-900" : "text-gray-700"}`}>
+          <p className={`text-sm font-eirene ${!notification.read ? "font-semibold text-[#2d466e]" : "text-[#73839e]"}`}>
             {notification.message}
           </p>
-          <p className="text-xs text-gray-500 mt-1">{formatDate(notification.createdAt)}</p>
+          <p className="text-xs text-[#73839e] mt-1 font-eirene">
+            {formatRelativeDate(notification.createdAt)}
+          </p>
         </div>
         {!notification.read && (
-          <div className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0 mt-2"></div>
+          <div className="w-2 h-2 bg-[#2d466e] rounded-full shrink-0 mt-2"></div>
         )}
       </div>
     </div>
@@ -171,44 +88,12 @@ export default function NotificationWidget() {
   // ============ WebSocket Connection ============
   useEffect(() => {
     if (!currentUser) return;
-
-    const token = localStorage.getItem("token");
-    const socket = new SockJS("http://localhost:8080/ws-message");
     
-    const client = new Client({
-      webSocketFactory: () => socket,
-      connectHeaders: { Authorization: `Bearer ${token}` },
-      reconnectDelay: 5000,
-      onConnect: () => {
-        console.log("🔔 WebSocket Notifications Connected");
-        
-        // S'abonner aux notifications de l'utilisateur
-        client.subscribe(`/user/queue/notifications`, (msg) => {
-          try {
-            const notification = JSON.parse(msg.body);
-            console.log("📩 Nouvelle notification reçue:", notification);
-            
-            // Ajouter la nouvelle notification en haut de la liste
-            setNotifications(prev => [notification, ...prev]);
-            
-            // Animation ou son (optionnel)
-            if (Notification.permission === "granted") {
-              new Notification("Nouvelle notification", {
-                body: notification.message,
-                icon: "/notification-icon.png"
-              });
-            }
-          } catch (e) {
-            console.error("Erreur parsing notification:", e);
-          }
-        });
-      },
-      onStompError: (frame) => {
-        console.error("Erreur STOMP:", frame);
-      }
-    });
+    const handleNewNotification = (notification) => {
+      setNotifications(prev => [notification, ...prev]);
+    };
 
-    client.activate();
+    const client = createNotificationWebSocket(currentUser, handleNewNotification);
     stompClientRef.current = client;
 
     return () => {
@@ -266,12 +151,12 @@ export default function NotificationWidget() {
       {/* Bouton Bell */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="relative p-2 rounded-full hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="relative p-2 rounded-full hover:bg-[#2d466e]/10 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#2d466e]/30"
         aria-label="Notifications"
       >
-        <Bell className="w-6 h-6 text-gray-700" />
+        <Bell className="w-6 h-6 text-[#2d466e]" />
         {unreadCount > 0 && (
-          <span className="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+          <span className="absolute top-0 right-0 bg-[#ef4444] text-white text-xs font-bold font-eirene rounded-full w-5 h-5 flex items-center justify-center animate-pulse">
             {unreadCount > 9 ? "9+" : unreadCount}
           </span>
         )}
@@ -279,19 +164,19 @@ export default function NotificationWidget() {
 
       {/* Dropdown Panel */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-96 bg-white rounded-lg shadow-2xl border border-gray-200 z-50 max-h-[600px] flex flex-col">
+        <div className="absolute right-0 mt-2 w-96 backdrop-blur-xl bg-[#f5ece3] rounded-3xl shadow-2xl border border-white/30 z-50 max-h-[600px] flex flex-col overflow-hidden">
           {/* Header */}
-          <div className="p-4 border-b border-gray-200 flex items-center justify-between bg-gradient-to-r from-blue-50 to-indigo-50">
+          <div className="p-6 border-b border-[#2d466e]/10 flex items-center justify-between bg-linear-to-br from-[#2d466e]/5 to-transparent">
             <div>
-              <h3 className="font-bold text-gray-900 text-lg">Notifications</h3>
-              <p className="text-xs text-gray-600">
+              <h3 className="font-bold font-dropline text-[#2d466e] text-xl">Notifications</h3>
+              <p className="text-xs text-[#73839e] font-eirene mt-1">
                 {unreadCount > 0 ? `${unreadCount} non lue${unreadCount > 1 ? "s" : ""}` : "Aucune nouvelle notification"}
               </p>
             </div>
             {unreadCount > 0 && (
               <button
                 onClick={handleMarkAllAsRead}
-                className="text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center gap-1"
+                className="text-[#2d466e] hover:text-[#1a2d4d] text-sm font-medium font-eirene flex items-center gap-1 px-3 py-1.5 rounded-lg hover:bg-[#2d466e]/10 transition-all duration-200"
                 title="Tout marquer comme lu"
               >
                 <CheckCheck className="w-4 h-4" />
@@ -303,14 +188,14 @@ export default function NotificationWidget() {
           {/* Liste des notifications */}
           <div className="overflow-y-auto flex-1">
             {loading ? (
-              <div className="p-8 text-center text-gray-500">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto"></div>
-                <p className="mt-2 text-sm">Chargement...</p>
+              <div className="p-8 text-center text-[#73839e]">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#2d466e] mx-auto"></div>
+                <p className="mt-2 text-sm font-eirene">Chargement...</p>
               </div>
             ) : notifications.length === 0 ? (
-              <div className="p-8 text-center text-gray-500">
-                <Bell className="w-12 h-12 mx-auto text-gray-300 mb-2" />
-                <p className="text-sm">Aucune notification</p>
+              <div className="p-8 text-center text-[#73839e]">
+                <Bell className="w-12 h-12 mx-auto text-[#2d466e]/20 mb-2" />
+                <p className="text-sm font-eirene">Aucune notification</p>
               </div>
             ) : (
               notifications.map(notification => (
@@ -323,12 +208,12 @@ export default function NotificationWidget() {
             )}
           </div>
 
-          {/* Footer (optionnel) */}
+          {/* Footer */}
           {notifications.length > 0 && (
-            <div className="p-3 border-t border-gray-200 bg-gray-50">
+            <div className="p-4 border-t border-[#2d466e]/10 bg-linear-to-br from-transparent to-[#2d466e]/5">
               <button
                 onClick={() => setIsOpen(false)}
-                className="w-full text-center text-sm text-blue-600 hover:text-blue-800 font-medium"
+                className="w-full text-center text-sm text-[#2d466e] hover:text-[#1a2d4d] font-medium font-eirene py-2 rounded-lg hover:bg-[#2d466e]/10 transition-all duration-200"
               >
                 Fermer
               </button>

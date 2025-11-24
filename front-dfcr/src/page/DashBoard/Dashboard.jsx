@@ -10,7 +10,7 @@ const Dashboard = () => {
   const { sidebarExpanded } = useOutletContext();
 
   return (
-    <div className=" bg-linear-to-b from-white/50 to-white/30 overflow-y-auto w-full thin-scrollbar ">
+    <div className="  overflow-y-auto w-full thin-scrollbar ">
       
       {/* HEADER HERO - Sticky & Elegant */}
       <div className="sticky top-0 z-40 mx-3 sm:mx-5 mt-3 sm:mt-5 mb-5">
@@ -26,9 +26,7 @@ const Dashboard = () => {
               </div>
             </div>
             
-            <div>
-              <NotificationWidget/>
-            </div>
+            
 
             {/* CENTER : NAVIGATION SERVICES - Compact */}
             <div className="flex items-center gap-1.5 bg-[#2d466e] backdrop-blur-md rounded-4xl px-1.5 py-1.5 border border-white/10">
@@ -58,6 +56,9 @@ const Dashboard = () => {
                   })}
                 </p>
               </div>
+            </div>
+            <div>
+              <NotificationWidget/>
             </div>
           </div>
 

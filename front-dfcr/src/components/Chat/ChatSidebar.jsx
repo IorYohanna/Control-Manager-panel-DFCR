@@ -106,8 +106,15 @@ export default function ChatSidebar({ users, currentUserMatricule, selectedUserI
                 </p>
                 <div className="flex items-center gap-2 text-xs opacity-80">
                   <span className="truncate max-w-[100px]">{user.fonction}</span>
-                  <span className="w-1 h-1 rounded-full bg-current opacity-50"></span>
-                  <span className="truncate">{user.idService}</span>
+                  <span>
+                    {user.idService !== "Aucun" ? (
+                      <span className="flex items-center gap-2">
+                        <span className="w-1 h-1 rounded-full bg-current opacity-50"></span>
+                        <span className="truncate">{user.idService}</span>
+                      </span>
+                    ) : null}
+                  </span>
+                  
                 </div>
               </div>
             </div>

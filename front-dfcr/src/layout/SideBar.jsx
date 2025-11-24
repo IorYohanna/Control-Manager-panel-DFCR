@@ -15,7 +15,6 @@ export default function Sidebar({ children, expanded, setExpanded, mobileOpen, s
   });
   const [previewUrl, setPreviewUrl] = useState(null);
   const navigate = useNavigate();
-
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -114,19 +113,26 @@ export default function Sidebar({ children, expanded, setExpanded, mobileOpen, s
 
           <div className="border-t border-[#73839E] flex p-3">
             <div className={`flex justify-between items-center gap-2 overflow-hidden transition-all ${expanded ? "w-52 ml-3" : "w-0"}`}>
+              
               <div className="leading-4 flex gap-2 items-center min-w-0 flex-1">
                 <UserAvatar
                   user={userData.user}
                   imageUrl={previewUrl}
                 />
                 <div className="flex flex-col min-w-0 flex-1">
-                  <h4 className="font-stardom capitalize font-bold text-[#2D466E] truncate">{userData.user}</h4>
-                  <span className="text-sm text-[#2f486d] font-eirene truncate">{userData.userEmail}</span>
+                  <h4 className="font-stardom capitalize font-bold text-[#2D466E] truncate">
+                    {userData.user}
+                  </h4>
+                  <span className="text-sm text-[#2f486d] font-eirene truncate">
+                    {userData.userEmail}
+                  </span>
                 </div>
               </div>
+
               <Link to="/home/user-settings" className="shrink-0">
                 <MoreVertical size={20} className="text-[#2D466E]" />
               </Link>
+
             </div>
           </div>
 

@@ -48,10 +48,10 @@ export default function MainLayout() {
           text="Messagerie" 
           to="/home/chat" 
           />
-        <SidebarItem icon={<BellRing size={20}/>}
-          text="Envoyer ontif" 
+        {/* <SidebarItem icon={<BellRing size={20}/>}
+          text="Envoyer notif" 
           to="/home/notifsender" 
-          />
+          /> */}
       </Sidebar>
 
       <Outlet 

@@ -51,7 +51,7 @@ export const CompletedDocuments = ({ idService }) => {
 
   return (
     <div className="col-span-1 md:col-span-2 h-full flex flex-col relative group">
-      <div className="h-full flex flex-col backdrop-blur-xl bg-[#f5ece3]/50 rounded-4xl p-6 lg:p-8 shadow-lg border border-white/50 hover:border-white/60 transition-all duration-100 hover:shadow-xl">
+      <div className="h-full flex flex-col backdrop-blur-xl bg-[#f5ece3]/70 rounded-4xl p-6 lg:p-8 shadow-lg border border-white/50 hover:border-white/60 transition-all duration-100 hover:shadow-xl">
         
         {/* Header & Filtres */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">

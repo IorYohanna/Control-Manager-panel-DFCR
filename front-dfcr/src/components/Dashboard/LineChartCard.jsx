@@ -40,7 +40,7 @@ export default function Example() {
 
   if (loading) {
     return (
-      <div className="h-full min-h-[350px] backdrop-blur-xl bg-[#f5ece3]/50 rounded-[32px] p-8 shadow-lg border border-white/20 animate-pulse flex flex-col">
+      <div className="h-full min-h-[350px] backdrop-blur-xl bg-[#f5ece3]/75 rounded-4xl p-8 shadow-lg border border-white/20 animate-pulse flex flex-col">
          <div className="h-6 w-1/3 bg-[#2d466e]/10 rounded mb-2"></div>
          <div className="h-4 w-1/4 bg-[#2d466e]/10 rounded mb-8"></div>
          <div className="flex-1 bg-[#2d466e]/5 rounded-xl"></div>
@@ -49,7 +49,7 @@ export default function Example() {
   }
 
   return (
-    <div className="h-full min-h-[350px] flex flex-col backdrop-blur-xl bg-[#f5ece3]/50 rounded-[32px] p-6 md:p-8 shadow-lg hover:shadow-xl transition-all duration-300 border border-white/20">
+    <div className="h-full min-h-[350px] flex flex-col backdrop-blur-xl bg-[#f5ece3]/75 rounded-4xl p-6 md:p-8 shadow-lg hover:shadow-xl transition-all duration-300 border border-white/20">
       <div className="mb-6 flex justify-between items-end">
         <div>
             <h3 className="text-xl font-dropline text-[#2d466e] font-bold">

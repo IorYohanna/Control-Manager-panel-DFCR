@@ -119,7 +119,7 @@ export default function Chat() {
   if (loading) return <div className="p-10 text-center text-[#73839e]">Chargement du module de chat...</div>;
 
   return (
-    <div className="flex w-full bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100 md:m-3 xl:m-5">
+    <div className="flex w-full font-eirene bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100 md:m-3 xl:m-5">
       
       {/* SIDEBAR : Visible sur mobile si aucun user sélectionné, toujours visible sur Desktop */}
       <div className={`w-full md:w-80 flex-col border-r border-gray-100 bg-[#f5ece3] ${selectedUserId ? 'hidden md:flex' : 'flex'}`}>
