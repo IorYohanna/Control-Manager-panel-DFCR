@@ -26,12 +26,61 @@ export default function GmailPage() {
     initAuth();
   }, []);
 
+  // ============ Gestion du Login avec Popup ============
   const handleLogin = async () => {
     try {
       const data = await GmailAPI.getLoginUrl();
-      window.location.href = data.url;
-    } catch {
-      alert('Erreur de connexion');
+      
+      // Configuration de la popup OAuth
+      const width = 600;
+      const height = 700;
+      const left = (window.screen.width - width) / 2;
+      const top = (window.screen.height - height) / 2;
+      
+      // Ouvrir la popup
+      const popup = window.open(
+        data.url,
+        'GmailOAuth',
+        `width=${width},height=${height},left=${left},top=${top},toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes`
+      );
+      
+      // Vérifier si la popup s'est ouverte
+      if (!popup || popup.closed || typeof popup.closed === 'undefined') {
+        alert('Veuillez autoriser les popups pour vous connecter à Gmail');
+        return;
+      }
+      
+      // Surveiller la popup et vérifier l'authentification
+      const checkAuthInterval = setInterval(async () => {
+        // Si la popup est fermée
+        if (popup.closed) {
+          clearInterval(checkAuthInterval);
+          
+          // Vérifier l'authentification après fermeture
+          setTimeout(async () => {
+            const authData = await GmailAPI.checkAuth();
+            if (authData.authenticated) {
+              setIsAuthenticated(true);
+              await loadEmails();
+              console.log('✅ Connexion Gmail réussie');
+            } else {
+              console.log('❌ Authentification Gmail annulée ou échouée');
+            }
+          }, 500);
+        }
+      }, 500);
+      
+      // Timeout de sécurité (2 minutes)
+      setTimeout(() => {
+        clearInterval(checkAuthInterval);
+        if (popup && !popup.closed) {
+          popup.close();
+        }
+      }, 120000);
+      
+    } catch (error) {
+      console.error('Erreur de connexion:', error);
+      alert('Erreur de connexion à Gmail');
     }
   };
 
