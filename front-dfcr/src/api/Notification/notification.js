@@ -10,21 +10,37 @@ const API_BASE = "http://localhost:8080";
  */
 export async function getCurrentUser() {
   const token = localStorage.getItem("token");
+  if (!token) {
+    console.error("Pas de token trouvé dans localStorage");
+    return null;
+  }
+
+  // Vérifier que le token a 3 parties (header.payload.signature)
+  if (token.split(".").length !== 3) {
+    throw new Error("Token invalide pour WS");
+  }
+
   try {
     // Décoder le JWT pour obtenir le matricule
     const payload = JSON.parse(atob(token.split(".")[1]));
     return payload.sub;
-  } catch {
-    // Fallback si le token n'est pas valide
-    const res = await fetch(`${API_BASE}/auth/me`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
-    if (!res.ok) throw new Error("Failed to get current user");
-    const data = await res.json();
-    return data.matricule;
+  } catch (error) {
+    console.error("Erreur décodage token:", error);
+    // Fallback vers l'API si le décodage échoue
+    try {
+      const res = await fetch(`${API_BASE}/auth/me`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+      if (!res.ok) throw new Error("Failed to get current user");
+      const data = await res.json();
+      return data.matricule;
+    } catch (apiError) {
+      console.error("Erreur API /auth/me:", apiError);
+      return null;
+    }
   }
 }
 
@@ -33,13 +49,21 @@ export async function getCurrentUser() {
  */
 export async function getNotifications(userId) {
   const token = localStorage.getItem("token");
+  if (!token) {
+    throw new Error("Token non trouvé");
+  }
+
   const res = await fetch(`${API_BASE}/notifications/${userId}`, {
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
   });
-  if (!res.ok) throw new Error("Failed to fetch notifications");
+
+  if (!res.ok) {
+    throw new Error(`Failed to fetch notifications: ${res.status}`);
+  }
+
   return res.json();
 }
 
@@ -48,6 +72,10 @@ export async function getNotifications(userId) {
  */
 export async function markAsRead(notificationId) {
   const token = localStorage.getItem("token");
+  if (!token) {
+    throw new Error("Token non trouvé");
+  }
+
   const res = await fetch(`${API_BASE}/notifications/${notificationId}/read`, {
     method: "PATCH",
     headers: {
@@ -55,7 +83,11 @@ export async function markAsRead(notificationId) {
       "Content-Type": "application/json",
     },
   });
-  if (!res.ok) throw new Error("Failed to mark as read");
+
+  if (!res.ok) {
+    throw new Error(`Failed to mark as read: ${res.status}`);
+  }
+
   return res.json();
 }
 
@@ -72,47 +104,167 @@ export async function markAllAsRead(userId) {
     },
   });
   if (!res.ok) throw new Error("Failed to mark all as read");
-  return res.json();
+
+  // ⚡ Vérifie si la réponse a du JSON
+  const text = await res.text();
+  if (!text) return {}; // réponse vide, retourne un objet vide
+  return JSON.parse(text);
+}
+
+// ============ Audio Configuration ============
+let audioContext = null;
+let audioBuffer = null;
+let audioEnabled = false;
+let soundMuted = false;
+
+/**
+ * Initialise l'audio (doit être appelé après une interaction utilisateur)
+ */
+export async function initAudio() {
+  if (audioEnabled) return true;
+
+  try {
+    // Créer le contexte audio
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+    // Charger le fichier audio
+    const response = await fetch("/sounds/notification.mp3");
+    const arrayBuffer = await response.arrayBuffer();
+    audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+
+    audioEnabled = true;
+
+    // Récupérer l'état du son depuis localStorage
+    const savedMuteState = localStorage.getItem("notificationSoundMuted");
+    soundMuted = savedMuteState === "true";
+
+    console.log("🔊 Audio initialisé avec succès");
+    return true;
+  } catch (error) {
+    console.error("❌ Erreur initialisation audio:", error);
+    return false;
+  }
+}
+
+/**
+ * Active/Désactive le son
+ */
+export function toggleSound() {
+  soundMuted = !soundMuted;
+  localStorage.setItem("notificationSoundMuted", soundMuted.toString());
+  console.log(soundMuted ? "🔇 Son désactivé" : "🔊 Son activé");
+  return soundMuted;
+}
+
+/**
+ * Récupère l'état du son
+ */
+export function isSoundMuted() {
+  return soundMuted;
+}
+
+/**
+ * Joue le son de notification
+ */
+export function playNotificationSound() {
+  if (!audioEnabled || !audioContext || !audioBuffer || soundMuted) {
+    if (soundMuted) {
+      console.log("🔇 Son muté");
+    } else {
+      console.warn("⚠️ Audio non initialisé");
+    }
+    return;
+  }
+
+  try {
+    // Reprendre le contexte s'il est suspendu
+    if (audioContext.state === "suspended") {
+      audioContext.resume();
+    }
+
+    // Créer une source audio
+    const source = audioContext.createBufferSource();
+    source.buffer = audioBuffer;
+
+    // Créer un nœud de gain pour contrôler le volume
+    const gainNode = audioContext.createGain();
+    gainNode.gain.value = 0.5; // Volume à 50%
+
+    // Connecter source -> gain -> destination
+    source.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+
+    // Jouer le son
+    source.start(0);
+  } catch (error) {
+    console.error("❌ Erreur lors de la lecture du son:", error);
+  }
 }
 
 /**
  * Initialise la connexion WebSocket pour les notifications en temps réel
  */
-export function createNotificationWebSocket(
-  currentUser,
-  onNotification,
-  token
-) {
-  const socket = new SockJS("http://localhost:8080/ws-message");
+export function createNotificationWebSocket(currentUser, onNotification) {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    console.error("❌ Token manquant pour WebSocket");
+    return null;
+  }
+
+  const socket = new SockJS(`${API_BASE}/ws-message`);
 
   const client = new Client({
     webSocketFactory: () => socket,
-    connectHeaders: { Authorization: `Bearer ${token}` },
+    connectHeaders: {
+      Authorization: `Bearer ${token}`,
+    },
     reconnectDelay: 5000,
+    heartbeatIncoming: 4000,
+    heartbeatOutgoing: 4000,
+
     onConnect: () => {
-      console.log("🔔 WebSocket Notifications Connected");
+      console.log("🔔 WebSocket Notifications Connected pour:", currentUser);
 
       // S'abonner aux notifications de l'utilisateur
-      client.subscribe(`/user/queue/notifications`, (msg) => {
-        try {
-          const notification = JSON.parse(msg.body);
-          console.log("📩 Nouvelle notification reçue:", notification);
-          onNotification(notification);
+      const subscription = client.subscribe(
+        `/user/queue/notifications`,
+        (msg) => {
+          try {
+            const notification = JSON.parse(msg.body);
+            console.log("📩 Nouvelle notification reçue:", notification);
+            onNotification(notification);
 
-          // Notification navigateur
-          if (Notification.permission === "granted") {
-            new Notification("Nouvelle notification", {
-              body: notification.message,
-              icon: "/notification-icon.png",
-            });
+            // 🔊 Jouer le son de notification
+            playNotificationSound();
+
+            // Notification navigateur
+            if (Notification.permission === "granted") {
+              new Notification("Nouvelle notification", {
+                body: notification.message,
+                icon: "/notification-icon.png",
+              });
+            }
+          } catch (e) {
+            console.error("❌ Erreur parsing notification:", e);
           }
-        } catch (e) {
-          console.error("Erreur parsing notification:", e);
         }
-      });
+      );
+
+      console.log("✅ Abonnement créé:", subscription.id);
     },
+
     onStompError: (frame) => {
-      console.error("Erreur STOMP:", frame);
+      console.error("❌ Erreur STOMP:", frame.headers.message);
+      console.error("Détails:", frame.body);
+    },
+
+    onWebSocketError: (error) => {
+      console.error("❌ Erreur WebSocket:", error);
+    },
+
+    onDisconnect: () => {
+      console.log("🔌 WebSocket déconnecté");
     },
   });
 
@@ -147,11 +299,18 @@ export function formatRelativeDate(dateString) {
 export function getNotificationIcon(type) {
   switch (type) {
     case "ASSSIGNE_EMPLOYE":
+    case "TASK_ASSIGNED":
       return "📋";
     case "TASK_COMPLETED":
       return "✅";
     case "TASK_UPDATED":
       return "🔄";
+    case "MEETING_SCHEDULED":
+      return "📅";
+    case "SERVICE_UPDATE":
+      return "📢";
+    case "SYSTEM_MAINTENANCE":
+      return "🔧";
     default:
       return "🔔";
   }

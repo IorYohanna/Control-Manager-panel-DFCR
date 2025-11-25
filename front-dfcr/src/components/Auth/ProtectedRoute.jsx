@@ -1,0 +1,12 @@
+// src/components/Auth/ProtectedRoute.jsx
+import { Navigate } from "react-router-dom";
+
+export default function ProtectedRoute({ children }) {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    return <Navigate to="/" replace />; // redirige vers Login
+  }
+
+  return children; // accès autorisé
+}

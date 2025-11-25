@@ -19,6 +19,9 @@ import DossierDetails from "./page/Dossier/DossierDetails";
 import DossierManagement from "./page/Dossier/Dossier";
 import NotificationWidget from "./components/Notification/NotificationWidget";
 import AdminNotificationSender from "./page/Notification/AdminNotificationSender";
+import GmailCallback from "./page/Gmail/GmailCallback";
+import PublicRoute from "./components/Auth/PublicRoute";
+import ProtectedRoute from "./components/Auth/ProtectedRoute";
 
 function App() {
   const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
@@ -46,15 +49,49 @@ function App() {
     <GoogleOAuthProvider clientId={clientId}>
       <Router>
         <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/verify" element={<Verify />} />
-          <Route path="/document" element={<FormDocument />} />
-          <Route path="/historique" element={<Historique />} />
-          <Route path="/chat" element={<Chat />} />
-          <Route path="/notification" element={<AdminNotificationSender/>} />
+          {/* Routes publiques */}
+          <Route path="/" element={
+            <PublicRoute>
+              <Login />
+            </PublicRoute>
+          } />
 
-          <Route path="/home" element={<MainLayout />}>
+          <Route path="/signup" element={
+            <PublicRoute>
+              <Signup />
+            </PublicRoute>
+          } />
+
+          <Route path="/verify" element={
+            <PublicRoute>
+              <Verify />
+            </PublicRoute>
+          } />
+
+          {/* Routes protégées */}
+          <Route path="/document" element={
+            <ProtectedRoute>
+              <FormDocument />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/historique" element={
+            <ProtectedRoute>
+              <Historique />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/notification" element={
+            <ProtectedRoute>
+              <AdminNotificationSender />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/home" element={
+            <ProtectedRoute>
+              <MainLayout />
+            </ProtectedRoute>
+          }>
             <Route index element={<HomePage />} />
             <Route path="user-settings" element={<UserSettings />} />
             <Route path="online-drive" element={<GoogleDriveViewer />} />
@@ -65,7 +102,10 @@ function App() {
             <Route path="dossier" element={<DossierManagement />} />
             <Route path="dossiers/:id" element={<DossierDetails />} />
           </Route>
-        </Routes>
+
+          {/* callback OAuth accessible publiquement */}
+          <Route path="/gmail-callback" element={<GmailCallback />} />
+        </Routes>   
       </Router>
     </GoogleOAuthProvider>
   );

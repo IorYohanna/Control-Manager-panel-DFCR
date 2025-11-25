@@ -3,13 +3,16 @@ const API_BASE_URL = "http://localhost:8080/api";
 export async function checkAuth() {
   try {
     const response = await fetch(`${API_BASE_URL}/auth/gmail/status`, {
+      method: "GET",
       credentials: "include",
     });
+
     if (!response.ok) return { authenticated: false };
+
     const data = await response.json();
     return data;
   } catch (err) {
-    console.error("Erreur lors de la vérification de l'authentification", err);
+    console.error("Erreur checkAuth Gmail", err);
     return { authenticated: false };
   }
 }
@@ -32,7 +35,7 @@ export async function getLoginUrl() {
  */
 export async function fetchEmails(maxResults = 10) {
   try {
-    console.time("fetchEmails"); // Mesurer le temps
+    const startTime = performance.now();
 
     // Utiliser l'endpoint optimisé
     const response = await fetch(
@@ -40,7 +43,13 @@ export async function fetchEmails(maxResults = 10) {
     );
 
     const data = await response.json();
-    console.timeEnd("fetchEmails");
+
+    const endTime = performance.now();
+    console.log(
+      `✉️ Chargement de ${data.length} emails en ${(
+        endTime - startTime
+      ).toFixed(0)}ms`
+    );
 
     return data;
   } catch (err) {

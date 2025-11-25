@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FilterBar, Header, ObjectSearch, SearchBar, ViewSwitcher } from '../../components/workflow/Header';
-import { DocumentsTable, Pagination } from './Documents';
+import { DocumentsTable, Pagination } from '../../components/workflow/Documents'
 import { DocumentModal } from './Modal';
 import { fetchCompleteUserProfile } from '../../api/User/profileinfo';
 import { Button } from '../../components/workflow/Base';

@@ -41,15 +41,13 @@ public class GmailOAuthController {
                     .execute();
 
             gmailService.saveToken(tokenResponse);
-
-            // ✅ On stocke l'access_token dans la session
             session.setAttribute("gmail_access_token", tokenResponse.getAccessToken());
 
-            // Redirige vers le front avec un flag
-            response.sendRedirect("http://localhost:5173/home/email?gmailLoginSuccess=true");
+            // ✅ Redirige vers la page callback qui fermera la popup
+            response.sendRedirect("http://localhost:5173/gmail-callback?success=true");
 
         } catch (Exception e) {
-            response.sendRedirect("http://localhost:5173/home/email?gmailLoginSuccess=false");
+            response.sendRedirect("http://localhost:5173/gmail-callback?success=false");
         }
     }
 

@@ -5,6 +5,8 @@ import { fectUserData } from "../api/User/currentUser";
 import { fetchUserPhoto } from "../api/User/profileinfo";
 import UserAvatar from "../components/User/UserAvatar";
 
+import { logout } from "../api/Email/gmail";
+
 const SidebarContext = createContext()
 
 export default function Sidebar({ children, expanded, setExpanded, mobileOpen, setMobileOpen }) {
@@ -39,9 +41,12 @@ export default function Sidebar({ children, expanded, setExpanded, mobileOpen, s
     loadData()
   }, [])
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     localStorage.removeItem("token");
     localStorage.removeItem("token_expiration");
+
+    await logout();
+    localStorage.removeItem("gmail_auth")
     navigate("/");
   };
 

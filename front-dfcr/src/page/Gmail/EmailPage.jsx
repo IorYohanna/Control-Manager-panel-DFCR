@@ -4,7 +4,7 @@ import EmailHeader from '../../components/Gmail/List/EmailHeader';
 import EmailList from '../../components/Gmail/List/EmailList';  
 import EmailViewer from '../../components/Gmail/List/EmailViewer';
 
-import * as GmailAPI from "../../api/Email/gmail";
+import * as GmailAPI from '../../api/Email/gmail'
 import { Mail } from 'lucide-react';
 
 export default function GmailPage() {
@@ -18,71 +18,77 @@ export default function GmailPage() {
   const [hasMore, setHasMore] = useState(false);
 
   useEffect(() => {
-    const initAuth = async () => {
-      const data = await GmailAPI.checkAuth();
-      setIsAuthenticated(data.authenticated);
-      if (data.authenticated) loadEmails();
-    };
-    initAuth();
-  }, []);
+    async function init() {
+      const result = await GmailAPI.checkAuth();
+
+      if (!result.authenticated) {
+        localStorage.removeItem("gmail_auth");
+        setIsAuthenticated(false);
+        return;
+      }
+
+      // Si oui
+      localStorage.setItem("gmail_auth", "true");
+      setIsAuthenticated(true);
+      await loadEmails();
+    }
+
+    init();
+}, []);
 
   // ============ Gestion du Login avec Popup ============
   const handleLogin = async () => {
     try {
       const data = await GmailAPI.getLoginUrl();
-      
-      // Configuration de la popup OAuth
+
       const width = 600;
       const height = 700;
       const left = (window.screen.width - width) / 2;
       const top = (window.screen.height - height) / 2;
-      
-      // Ouvrir la popup
+
+      // ✅ Crée d'abord le listener
+      const handleMessage = async (event) => {
+        if (event.origin !== window.location.origin) return;
+        if (event.data.type === 'gmail-auth-success') {
+          window.removeEventListener('message', handleMessage);
+          const authData = await GmailAPI.checkAuth();
+          if (authData.authenticated) {
+            setIsAuthenticated(true);
+            await loadEmails();
+          }
+          localStorage.getItem("gmail_auth", "true")
+        }
+      };
+
+      window.addEventListener('message', handleMessage);
+
+      // Puis ouvre la popup
       const popup = window.open(
         data.url,
         'GmailOAuth',
         `width=${width},height=${height},left=${left},top=${top},toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes`
       );
-      
-      // Vérifier si la popup s'est ouverte
+
       if (!popup || popup.closed || typeof popup.closed === 'undefined') {
+        window.removeEventListener('message', handleMessage);
         alert('Veuillez autoriser les popups pour vous connecter à Gmail');
         return;
       }
-      
-      // Surveiller la popup et vérifier l'authentification
-      const checkAuthInterval = setInterval(async () => {
-        // Si la popup est fermée
-        if (popup.closed) {
-          clearInterval(checkAuthInterval);
-          
-          // Vérifier l'authentification après fermeture
-          setTimeout(async () => {
-            const authData = await GmailAPI.checkAuth();
-            if (authData.authenticated) {
-              setIsAuthenticated(true);
-              await loadEmails();
-              console.log('✅ Connexion Gmail réussie');
-            } else {
-              console.log('❌ Authentification Gmail annulée ou échouée');
-            }
-          }, 500);
+
+      // Timeout de sécurité pour fermer la popup au cas où
+      const popupChecker = setInterval(() => {
+        if (!popup || popup.closed) {
+          clearInterval(popupChecker);
+          window.removeEventListener('message', handleMessage);
         }
       }, 500);
-      
-      // Timeout de sécurité (2 minutes)
-      setTimeout(() => {
-        clearInterval(checkAuthInterval);
-        if (popup && !popup.closed) {
-          popup.close();
-        }
-      }, 120000);
-      
+
     } catch (error) {
       console.error('Erreur de connexion:', error);
       alert('Erreur de connexion à Gmail');
     }
   };
+
 
   const loadEmails = async (isInitial = true) => {
     setLoading(true);

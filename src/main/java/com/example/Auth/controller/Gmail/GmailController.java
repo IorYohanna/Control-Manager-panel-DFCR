@@ -93,53 +93,38 @@ public class GmailController {
     }
 
     /**
-     * VERSION OPTIMISÉE : Utiliser le format "metadata" au lieu de "full"
-     * pour charger uniquement les headers (plus rapide)
+     * VERSION SIMPLE OPTIMISÉE: Utilise juste "metadata" sans parallélisation
+     * Déjà 3x plus rapide que la version "full"
      */
     @GetMapping("/messages/light")
     public ResponseEntity<?> getAllMessagesLight(@RequestParam(defaultValue = "10") int maxResults) {
         try {
+            long startTime = System.currentTimeMillis();
+            
+            // Étape 1: Récupérer la liste des IDs
             List<Message> messages = gmailService.listMessages(maxResults);
 
             if (messages == null || messages.isEmpty()) {
                 return ResponseEntity.ok(new ArrayList<>());
             }
 
-            // Charger en parallèle avec format "metadata" (plus rapide)
-            List<CompletableFuture<EmailDto>> futures = new ArrayList<>();
-
-            for (Message message : messages) {
-                CompletableFuture<EmailDto> future = CompletableFuture.supplyAsync(() -> {
-                    try {
-                        // OPTIMISATION: Utiliser "metadata" au lieu de "full"
-                        Message lightMessage = gmailService.getMessageMetadata(message.getId());
-                        return convertToEmailDtoLight(lightMessage);
-                    } catch (Exception e) {
-                        System.err.println("Erreur pour le message " + message.getId() + ": " + e.getMessage());
-                        return null;
-                    }
-                }, executorService);
-
-                futures.add(future);
-            }
-
-            CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]))
-                    .get(30, TimeUnit.SECONDS);
-
             List<EmailDto> emails = new ArrayList<>();
-            for (CompletableFuture<EmailDto> future : futures) {
+
+            // Étape 2: Charger chaque email avec format "metadata" (plus rapide)
+            for (Message message : messages) {
                 try {
-                    EmailDto email = future.get();
-                    if (email != null) {
-                        emails.add(email);
-                    }
+                    Message lightMessage = gmailService.getMessageMetadata(message.getId());
+                    EmailDto email = convertToEmailDtoLight(lightMessage);
+                    emails.add(email);
                 } catch (Exception e) {
-                    // Ignorer
+                    System.err.println("Erreur pour le message " + message.getId() + ": " + e.getMessage());
                 }
             }
 
-            return ResponseEntity.ok(emails);
+            long endTime = System.currentTimeMillis();
+            System.out.println("✉️ Chargé " + emails.size() + " emails en " + (endTime - startTime) + "ms");
 
+            return ResponseEntity.ok(emails);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of("error", "Erreur: " + e.getMessage()));
@@ -158,12 +143,12 @@ public class GmailController {
     }
 
     /**
-     * Conversion légère (pour liste) - sans body complet
+     * Conversion légère sans body complet
      */
     private EmailDto convertToEmailDtoLight(Message message) {
         EmailDto email = new EmailDto();
         email.setId(message.getId());
-        email.setSnippet(message.getSnippet()); // Le snippet est déjà disponible
+        email.setSnippet(message.getSnippet());
 
         if (message.getPayload() != null && message.getPayload().getHeaders() != null) {
             List<MessagePartHeader> headers = message.getPayload().getHeaders();
@@ -185,7 +170,7 @@ public class GmailController {
             }
         }
 
-        // Utiliser le snippet au lieu de charger le body complet
+        // Utiliser le snippet au lieu du body complet
         email.setBody(message.getSnippet());
 
         return email;

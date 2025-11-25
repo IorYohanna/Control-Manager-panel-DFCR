@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { Bell, CheckCheck } from "lucide-react";
+import { Bell, CheckCheck, Volume2, VolumeX } from "lucide-react";
 import {
   getCurrentUser,
   getNotifications,
@@ -7,7 +7,10 @@ import {
   markAllAsRead,
   createNotificationWebSocket,
   formatRelativeDate,
-  getNotificationIcon
+  getNotificationIcon,
+  initAudio,
+  toggleSound,
+  isSoundMuted
 } from "../../api/Notification/notification";
 
 // ============ Notification Item Component ============
@@ -43,6 +46,8 @@ export default function NotificationWidget() {
   const [currentUser, setCurrentUser] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [audioInitialized, setAudioInitialized] = useState(false);
+  const [soundMuted, setSoundMuted] = useState(false);
   const stompClientRef = useRef(null);
   const dropdownRef = useRef(null);
 
@@ -61,6 +66,22 @@ export default function NotificationWidget() {
     }
     init();
   }, []);
+
+  // ============ Initialisation de l'audio au premier clic ============
+  const handleFirstInteraction = async () => {
+    if (!audioInitialized) {
+      const success = await initAudio();
+      setAudioInitialized(success);
+      setSoundMuted(isSoundMuted());
+    }
+  };
+
+  // ============ Toggle son ============
+  const handleToggleSound = (e) => {
+    e.stopPropagation(); // Empêcher l'ouverture du dropdown
+    const newMutedState = toggleSound();
+    setSoundMuted(newMutedState);
+  };
 
   // ============ Chargement des notifications ============
   useEffect(() => {
@@ -97,7 +118,7 @@ export default function NotificationWidget() {
     stompClientRef.current = client;
 
     return () => {
-      if (client.connected) {
+      if (client && client.connected) {
         console.log("🔌 Déconnexion WebSocket Notifications");
         client.deactivate();
       }
@@ -139,6 +160,12 @@ export default function NotificationWidget() {
     }
   };
 
+  // ============ Toggle dropdown avec initialisation audio ============
+  const handleToggleDropdown = async () => {
+    await handleFirstInteraction();
+    setIsOpen(!isOpen);
+  };
+
   // ============ Demande de permission pour les notifications du navigateur ============
   useEffect(() => {
     if (Notification.permission === "default") {
@@ -149,18 +176,36 @@ export default function NotificationWidget() {
   return (
     <div className="relative w-full" ref={dropdownRef}>
       {/* Bouton Bell */}
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="relative p-2 rounded-full hover:bg-[#2d466e]/10 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#2d466e]/30"
-        aria-label="Notifications"
-      >
-        <Bell className="w-6 h-6 text-[#2d466e]" />
-        {unreadCount > 0 && (
-          <span className="absolute top-0 right-0 bg-[#ef4444] text-white text-xs font-bold font-eirene rounded-full w-5 h-5 flex items-center justify-center animate-pulse">
-            {unreadCount > 9 ? "9+" : unreadCount}
-          </span>
+      <div className="flex items-center gap-2">
+        <button
+          onClick={handleToggleDropdown}
+          className="relative p-2 rounded-full hover:bg-[#2d466e]/10 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#2d466e]/30"
+          aria-label="Notifications"
+        >
+          <Bell className="w-6 h-6 text-[#2d466e]" />
+          {unreadCount > 0 && (
+            <span className="absolute top-0 right-0 bg-[#ef4444] text-white text-xs font-bold font-eirene rounded-full w-5 h-5 flex items-center justify-center animate-pulse">
+              {unreadCount > 9 ? "9+" : unreadCount}
+            </span>
+          )}
+        </button>
+
+        {/* Bouton Son */}
+        {audioInitialized && (
+          <button
+            onClick={handleToggleSound}
+            className="p-2 rounded-full hover:bg-[#2d466e]/10 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#2d466e]/30"
+            aria-label={soundMuted ? "Activer le son" : "Désactiver le son"}
+            title={soundMuted ? "Activer le son" : "Désactiver le son"}
+          >
+            {soundMuted ? (
+              <VolumeX className="w-5 h-5 text-[#ef4444]" />
+            ) : (
+              <Volume2 className="w-5 h-5 text-green-600" />
+            )}
+          </button>
         )}
-      </button>
+      </div>
 
       {/* Dropdown Panel */}
       {isOpen && (
