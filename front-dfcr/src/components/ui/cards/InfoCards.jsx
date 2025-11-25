@@ -65,7 +65,7 @@ export default function InfoCards() {
 
     return (
         <div className="flex flex-col gap-4 overflow-auto">
-            <div className="bg-white rounded-2xl shadow-lg p-4 border border-[#73839e]/10">
+            <div className="bg-white rounded-lg shadow-lg p-4 border border-[#73839e]/10">
                 <h2 className="text-lg font-necoBlack font-bold text-[#2d466e] text-center">
                 Statistiques
                 </h2>
@@ -80,7 +80,7 @@ export default function InfoCards() {
                         key={card.id}
                         className={`
               bg-linear-to-br ${card.color}
-              rounded-2xl p-6 shadow-lg
+              rounded-lg p-6 shadow-lg
               transform transition-all duration-300
               hover:shadow-xl text-center
               cursor-pointer
@@ -107,7 +107,7 @@ export default function InfoCards() {
                 ))}
             </div>
 
-            <div className="bg-[#F5ECE3] rounded-2xl p-6 shadow-md text-center">
+            <div className="bg-[#F5ECE3] rounded-lg p-6 shadow-md text-center">
                 <h3 className="text-lg font-bold text-[#2D466E] mb-3">
                     Prochaine réunion
                 </h3>

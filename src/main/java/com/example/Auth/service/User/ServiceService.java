@@ -46,6 +46,13 @@ public class ServiceService {
         return serviceRepository.findById(id);
     }
 
+    public List<String> getAllServiceNames() {
+        log.info("Récupération des noms de tous les services");
+        return serviceRepository.findAll().stream()
+                .map(ServiceDfcr::getIdService)
+                .collect(Collectors.toList());
+    }
+
     public ServiceDfcr updateService(String id, ServiceDto input) {
         Optional<ServiceDfcr> serviceOpt = serviceRepository.findById(id);
         if (serviceOpt.isEmpty()) {

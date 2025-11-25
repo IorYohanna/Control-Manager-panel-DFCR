@@ -114,7 +114,7 @@ const DossierManagement = () => {
           <div className="animate-spin rounded-full h-12 w-12 border-4 border-[#2d466e] border-t-transparent" />
         </div>
       ) : filteredDossiers.length === 0 ? (
-        <div className="bg-white rounded-2xl p-12 text-center shadow-lg">
+        <div className="bg-white rounded-lg p-12 text-center shadow-lg">
           <Folder size={64} className="mx-auto text-[#c4beaf] mb-4" />
           <h3 className="text-xl font-bold text-[#24344d] mb-2">Aucun dossier</h3>
           <p className="text-[#73839e] mb-6">Commencez par créer votre premier dossier</p>

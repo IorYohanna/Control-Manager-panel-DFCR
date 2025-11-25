@@ -13,6 +13,7 @@ export const UpcomingEvents = ({ upcomingEvents = [], todayEvents = [] }) => {
     return isNaN(d.getTime()) ? new Date() : d; 
   };
 
+  // eslint-disable-next-line no-unused-vars
   const formatDate = (dateString) => {
     return parseDate(dateString).toLocaleDateString("fr-FR", { day: "numeric", month: "short" });
   };
@@ -36,7 +37,7 @@ export const UpcomingEvents = ({ upcomingEvents = [], todayEvents = [] }) => {
     <>
       {/* Card Principale */}
       <div className="col-span-1 h-full relative group">
-        <div className="h-full flex flex-col backdrop-blur-xl bg-[#f5ece3]/70 rounded-4xl p-6 lg:p-8 shadow-lg border border-white/50 hover:border-white/60 transition-all duration-500 hover:shadow-xl">
+        <div className="h-full flex flex-col backdrop-blur-xl bg-[#f5ece3]/70 rounded-xl p-6 lg:p-8 shadow-lg border border-white/50 hover:border-white/60 transition-all duration-500 hover:shadow-xl">
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-xl text-[#2d466e] font-bold font-dropline">
@@ -62,7 +63,7 @@ export const UpcomingEvents = ({ upcomingEvents = [], todayEvents = [] }) => {
                 const dateObj = parseDate(event.startTime);
 
                 return (
-                  <div key={event.idEvent || Math.random()} className="group/item relative bg-white/30 hover:bg-white/60 rounded-2xl p-3 transition-all duration-200 border border-white/20">
+                  <div key={event.idEvent || Math.random()} className="group/item relative bg-white/30 hover:bg-white/60 rounded-lg p-3 transition-all duration-200 border border-white/20">
                     <div className="flex justify-between items-start gap-3">
                       
                       {/* Date Box */}
@@ -130,7 +131,7 @@ export const UpcomingEvents = ({ upcomingEvents = [], todayEvents = [] }) => {
               {upcomingEvents.map((event) => {
                  const dateObj = parseDate(event.startTime);
                  return (
-                    <div key={event.idEvent || Math.random()} className="flex gap-4 p-4 border border-gray-100 rounded-2xl hover:bg-gray-50 transition-colors overflow-hidden thin-scrollbar">
+                    <div key={event.idEvent || Math.random()} className="flex gap-4 p-4 border border-gray-100 rounded-lg hover:bg-gray-50 transition-colors overflow-hidden thin-scrollbar">
                         <div className="flex flex-col items-center justify-center text-[#2d466e] font-bold w-12 h-12 bg-gray-50 rounded-xl">
                           <span className="text-xl leading-none">{dateObj.getDate()}</span>
                           <span className="text-[10px] uppercase text-gray-400 leading-none mt-1">

@@ -92,7 +92,7 @@ const FormDocument = ({ onClose }) => {
         </button>
 
         <div className="mb-10 text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-linear-to-br from-[#2d466e] to-[#24344d] rounded-2xl mb-5 shadow-lg">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-linear-to-br from-[#2d466e] to-[#24344d]rounded-lg  mb-5 shadow-lg">
             <FileText className="w-8 h-8 text-[#f5ece3]" />
           </div>
           <h2 className="text-3xl font-bold text-[#24344d] mb-2 font-necoBlack">Nouveau Document</h2>
@@ -220,7 +220,7 @@ const FormDocument = ({ onClose }) => {
               value={formData.corps}
               onChange={handleInputChange("corps")}
               placeholder="Saisissez le contenu ou la description du document..."
-              className="w-full px-5 py-4 font-eirene border border-[#c4beaf] rounded-2xl bg-white text-[#24344d] placeholder-[#73839e] focus:ring-2 focus:ring-[#2d466e] focus:border-transparent resize-none transition-all duration-200 shadow-sm"
+              className="w-full px-5 py-4 font-eirene border border-[#c4beaf] rounded-lg bg-white text-[#24344d] placeholder-[#73839e] focus:ring-2 focus:ring-[#2d466e] focus:border-transparent resize-none transition-all duration-200 shadow-sm"
             />
           </div>
 
@@ -228,7 +228,7 @@ const FormDocument = ({ onClose }) => {
             <label className="text-sm font-semibold text-[#24344d] block font-dropline">Pièce jointe</label>
 
             <div
-              className={`relative border-2 border-dashed rounded-2xl p-8 text-center shadow-sm
+              className={`relative border-2 border-dashed rounded-lg p-8 text-center shadow-sm
                 ${dragActive 
                   ? "border-[#2d466e] bg-[#2d466e]/5 shadow-md" 
                   : "border-[#c4beaf] bg-white"}`}

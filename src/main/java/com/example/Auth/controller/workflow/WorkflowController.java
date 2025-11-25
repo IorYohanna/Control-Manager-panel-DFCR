@@ -9,6 +9,8 @@ import com.example.Auth.repository.User.UserRepository;
 import com.example.Auth.service.workflow.WorkflowService;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,64 +31,101 @@ public class WorkflowController {
         @Autowired
         private ServiceRepository serviceRepository;
 
-        /**
-         * 1. Directeur envoie le document à un service
-         */
+        // Dans votre WorkflowController
+
         @PostMapping("/send-to-service")
-        public ResponseEntity<WorkflowResponse> sendToService(@RequestBody SendToServiceRequest request) {
+        public ResponseEntity<?> sendToService(@RequestBody SendToServiceRequest request) {
                 try {
-                        // Récupérer les entités
                         User directeur = userRepository.findById(request.getDirecteurMatricule())
                                         .orElseThrow(() -> new RuntimeException("Directeur non trouvé"));
 
-                        ServiceDfcr service = serviceRepository.findById(request.getServiceId())
-                                        .orElseThrow(() -> new RuntimeException("Service non trouvé"));
+                        List<String> serviceIds = request.getServiceIdsAsList();
 
-                        // Appeler le service
-                        Workflow workflow = workflowService.directeurEnvoieService(
-                                        request.getReference(),
-                                        directeur,
-                                        service,
-                                        request.getTypeWorkflow(),
-                                        request.getRemarque());
+                        if (serviceIds.isEmpty()) {
+                                return ResponseEntity.badRequest()
+                                                .body(Map.of("message", "Aucun service sélectionné"));
+                        }
 
-                        return ResponseEntity.ok(new WorkflowResponse(
-                                        true,
-                                        "Document envoyé au service avec succès",
-                                        workflow));
+                        List<ServiceDfcr> services = serviceIds.stream()
+                                        .map(id -> serviceRepository.findById(id)
+                                                        .orElseThrow(() -> new RuntimeException(
+                                                                        "Service non trouvé: " + id)))
+                                        .collect(Collectors.toList());
+
+                        if (services.size() == 1) {
+                                workflowService.directeurEnvoieService(
+                                                request.getReference(),
+                                                directeur,
+                                                services.get(0),
+                                                request.getTypeWorkflow(),
+                                                request.getRemarque());
+                                return ResponseEntity.ok(Map.of(
+                                                "message", "Document envoyé au service avec succès",
+                                                "success", true));
+                        } else {
+                                workflowService.directeurEnvoieServices(
+                                                request.getReference(),
+                                                directeur,
+                                                services,
+                                                request.getTypeWorkflow(),
+                                                request.getRemarque());
+                                return ResponseEntity.ok(Map.of(
+                                                "message",
+                                                "Document envoyé à " + services.size() + " services avec succès",
+                                                "success", true,
+                                                "count", services.size()));
+                        }
 
                 } catch (Exception e) {
-                        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                                        .body(new WorkflowResponse(false, e.getMessage()));
+                        return ResponseEntity.badRequest()
+                                        .body(Map.of("message", e.getMessage(), "success", false));
                 }
         }
 
-        /**
-         * 2. Chef de service assigne à un employé
-         */
         @PostMapping("/assign-to-employe")
-        public ResponseEntity<WorkflowResponse> assignToEmploye(@RequestBody AssignRequest request) {
+        public ResponseEntity<?> assignToEmploye(@RequestBody AssignRequest request) {
                 try {
-                        User chefService = userRepository.findById(request.getChefMatricule())
-                                        .orElseThrow(() -> new RuntimeException("Chef de service non trouvé"));
+                        User chef = userRepository.findById(request.getChefMatricule())
+                                        .orElseThrow(() -> new RuntimeException("Chef non trouvé"));
 
-                        User employe = userRepository.findById(request.getEmployeMatricule())
-                                        .orElseThrow(() -> new RuntimeException("Employé non trouvé"));
+                        List<String> employeMatricules = request.getEmployeMatriculesAsList();
 
-                        Workflow workflow = workflowService.chefAssigneEmploye(
-                                        request.getReference(),
-                                        chefService,
-                                        employe,
-                                        request.getRemarque());
+                        if (employeMatricules.isEmpty()) {
+                                return ResponseEntity.badRequest()
+                                                .body(Map.of("message", "Aucun employé sélectionné"));
+                        }
 
-                        return ResponseEntity.ok(new WorkflowResponse(
-                                        true,
-                                        "Document assigné à l'employé avec succès",
-                                        workflow));
+                        List<User> employes = employeMatricules.stream()
+                                        .map(matricule -> userRepository.findById(matricule)
+                                                        .orElseThrow(() -> new RuntimeException(
+                                                                        "Employé non trouvé: " + matricule)))
+                                        .collect(Collectors.toList());
+
+                        if (employes.size() == 1) {
+                                workflowService.chefAssigneEmploye(
+                                                request.getReference(),
+                                                chef,
+                                                employes.get(0),
+                                                request.getRemarque());
+                                return ResponseEntity.ok(Map.of(
+                                                "message", "Document assigné à l'employé avec succès",
+                                                "success", true));
+                        } else {
+                                workflowService.chefAssigneEmployes(
+                                                request.getReference(),
+                                                chef,
+                                                employes,
+                                                request.getRemarque());
+                                return ResponseEntity.ok(Map.of(
+                                                "message",
+                                                "Document assigné à " + employes.size() + " employés avec succès",
+                                                "success", true,
+                                                "count", employes.size()));
+                        }
 
                 } catch (Exception e) {
-                        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                                        .body(new WorkflowResponse(false, e.getMessage()));
+                        return ResponseEntity.badRequest()
+                                        .body(Map.of("message", e.getMessage(), "success", false));
                 }
         }
 

@@ -27,7 +27,7 @@ const ModalDelete = ({ open, formData, close, onDelete }) => {
 
         {/* Content */}
         <div className="px-8 py-6">
-          <div className="bg-white/60 backdrop-blur-md rounded-2xl p-4">
+          <div className="bg-white/60 backdrop-blur-md rounded-lg p-4">
             <p className="text-[#2d466e] text-sm leading-relaxed">
               Voulez-vous vraiment supprimer{' '}
               <strong className="font-bold">{formData.title}</strong> ?

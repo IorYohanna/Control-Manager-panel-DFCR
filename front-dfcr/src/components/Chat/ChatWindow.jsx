@@ -80,7 +80,7 @@ export default function ChatWindow({ currentUser, selectedUser, messages, loadin
             return (
               <div key={idx} className={`flex ${isMe ? "justify-end" : "justify-start"}`}>
                 <div className={`max-w-[85%] md:max-w-[70%] ${isMe ? 'items-end' : 'items-start'} flex flex-col`}>
-                  <div className={`px-4 py-3 rounded-2xl shadow-sm text-sm leading-relaxed ${
+                  <div className={`px-4 py-3 rounded-lg shadow-sm text-sm leading-relaxed ${
                     isMe 
                       ? "bg-[#2d466e] text-white rounded-tr-none" 
                       : "bg-white text-[#2d466e] border border-gray-100 rounded-tl-none"
@@ -103,7 +103,7 @@ export default function ChatWindow({ currentUser, selectedUser, messages, loadin
 
       {/* Zone Input */}
       <div className="p-4 bg-white border-t border-gray-100">
-        <div className="flex items-end gap-2 bg-gray-50 p-2 rounded-2xl border border-gray-200 focus-within:border-[#2d466e]/50 focus-within:ring-2 focus-within:ring-[#2d466e]/10 transition-all">
+        <div className="flex items-end gap-2 bg-gray-50 p-2 rounded-lg border border-gray-200 focus-within:border-[#2d466e]/50 focus-within:ring-2 focus-within:ring-[#2d466e]/10 transition-all">
           <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}

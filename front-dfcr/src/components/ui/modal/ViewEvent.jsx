@@ -37,7 +37,7 @@ const ModalView = ({ open, formData, close, onEditMode,onDeleteMode }) => {
         {/* Content */}
         <div className="px-8 py-6 flex flex-col gap-6">
           {/* Creator Info */}
-          <div className="bg-white/60 backdrop-blur-md rounded-2xl p-4">
+          <div className="bg-white/60 backdrop-blur-md rounded-lg p-4">
             <div className="flex items-center gap-2 mb-1.5">
               <User size={16} className="text-[#73839e]" />
               <span className="text-xs font-semibold text-[#73839e] uppercase tracking-wider">
@@ -50,7 +50,7 @@ const ModalView = ({ open, formData, close, onEditMode,onDeleteMode }) => {
           </div>
 
           {/* Time Info */}
-          <div className="bg-white/60 backdrop-blur-md rounded-2xl p-4">
+          <div className="bg-white/60 backdrop-blur-md rounded-lg p-4">
             <div className="flex items-center gap-2 mb-1.5">
               <Clock size={16} className="text-[#73839e]" />
               <span className="text-xs font-semibold text-[#73839e] uppercase tracking-wider">
@@ -71,7 +71,7 @@ const ModalView = ({ open, formData, close, onEditMode,onDeleteMode }) => {
 
           {/* Description */}
           {description && (
-            <div className="bg-white/60 backdrop-blur-md rounded-2xl p-4">
+            <div className="bg-white/60 backdrop-blur-md rounded-lg p-4">
               <div className="flex items-center gap-2 mb-1.5">
                 <FileText size={16} className="text-[#73839e]" />
                 <span className="text-xs font-semibold text-[#73839e] uppercase tracking-wider">

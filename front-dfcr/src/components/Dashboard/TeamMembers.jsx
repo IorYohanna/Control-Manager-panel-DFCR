@@ -5,6 +5,7 @@ const TeamMembers = ({ users }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   // Fonction utilitaire pour gérer l'affichage de l'avatar
+  // eslint-disable-next-line no-unused-vars
   const renderAvatar = (user) => {
     if (user.photoProfil) {
       return (
@@ -26,7 +27,7 @@ const TeamMembers = ({ users }) => {
     <>
       {/* Card principale - Modifiée pour col-span-1 et h-full */}
       <div className="col-span-1 h-full relative group">
-        <div className="h-full flex flex-col backdrop-blur-xl bg-[#f5ece3]/70 rounded-4xl p-6 lg:p-8 shadow-lg border border-white/50 hover:border-white/60 transition-all duration-500 hover:shadow-xl">
+        <div className="h-full flex flex-col backdrop-blur-xl bg-[#f5ece3]/70 rounded-xl p-6 lg:p-8 shadow-lg border border-white/50 hover:border-white/60 transition-all duration-500 hover:shadow-xl">
           
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
@@ -42,10 +43,10 @@ const TeamMembers = ({ users }) => {
                  </div>
             ) : (
                 users.slice(0, 4).map((user, idx) => (
-                <div key={idx} className="group/item relative hover:bg-white/40 rounded-2xl transition-all duration-200 p-2 -mx-2 cursor-default">
+                <div key={idx} className="group/item relative hover:bg-white/40 rounded-lg transition-all duration-200 p-2 -mx-2 cursor-default">
                     <div className="flex items-center gap-3">
                     {/* Avatar */}
-                    <div className="w-12 h-12 rounded-2xl backdrop-blur-sm bg-white/60 border border-white/60 shadow-sm flex items-center justify-center overflow-hidden shrink-0">
+                    <div className="w-12 h-12 rounded-lg backdrop-blur-sm bg-white/60 border border-white/60 shadow-sm flex items-center justify-center overflow-hidden shrink-0">
                         {user.photoProfil ? (
                             <>
                                 <img
@@ -102,7 +103,7 @@ const TeamMembers = ({ users }) => {
 
             <div className="grid gap-3">
               {users.map((user, idx) => (
-                <div key={idx} className="flex items-center gap-4 p-3 bg-white/5 rounded-2xl border border-white/5 hover:bg-white/10 transition-colors">
+                <div key={idx} className="flex items-center gap-4 p-3 bg-white/5 rounded-lg border border-white/5 hover:bg-white/10 transition-colors">
                    <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center overflow-hidden text-white">
                       {user.photoProfil ? (
                            <img src={`data:image/jpeg;base64,${user.photoProfil}`} className="w-full h-full object-cover" alt=""/>

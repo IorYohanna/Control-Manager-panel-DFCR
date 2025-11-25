@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { FilterBar, Header, ObjectSearch, SearchBar, ViewSwitcher } from './Header';
+import { FilterBar, Header, ObjectSearch, SearchBar, ViewSwitcher } from '../../components/workflow/Header';
 import { DocumentsTable, Pagination } from './Documents';
 import { DocumentModal } from './Modal';
 import { fetchCompleteUserProfile } from '../../api/User/profileinfo';
-import { Button } from './Base';
+import { Button } from '../../components/workflow/Base';
 import { Plus, RefreshCw, Upload } from 'lucide-react';
 import FormDocument from '../Docs/FormDocument';
 import DossierManagement from '../Dossier/Dossier';
@@ -35,7 +35,7 @@ const documentAPI = {
 };
 
 const WorkflowManagement = () => {
-  const [currentView, setCurrentView] = useState('documents'); // 'documents' ou 'dossiers'
+  const [currentView, setCurrentView] = useState('documents'); 
   const [currentUser, setCurrentUser] = useState(null);
   const [documents, setDocuments] = useState([]);
   const [filteredDocuments, setFilteredDocuments] = useState([]);
@@ -199,8 +199,8 @@ const WorkflowManagement = () => {
   const paginatedDocuments = filteredDocuments.slice(startIndex, endIndex);
 
   return (
-    <div className="w-full bg-white m-4 sm:m-6 rounded-2xl overflow-auto hide-scrollbar">
-      <div className="relative bg-linear-to-r from-[#2d466e] to-[#24344d] rounded-t-2xl px-4 sm:px-8 py-4 sm:py-6">
+    <div className="w-full bg-white m-4 sm:m-6 rounded-lg overflow-auto hide-scrollbar">
+      <div className="relative bg-linear-to-r from-[#2d466e] to-[#24344d] px-4 sm:px-8 py-4 sm:py-6">
         <Header currentUser={currentUser} photo={photo}>
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
             <div className="flex-1">

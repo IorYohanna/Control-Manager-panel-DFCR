@@ -14,7 +14,7 @@ const Dashboard = () => {
       
       {/* HEADER HERO - Sticky & Elegant */}
       <div className="sticky top-0 z-40 mx-3 sm:mx-5 mt-3 sm:mt-5 mb-5">
-        <div className="rounded-2xl bg-white/50 shadow-lg border border-white/10 backdrop-blur-sm px-4 sm:px-5 lg:px-6 py-1.5 sm:py-2 lg:py-2.5">
+        <div className="rounded-lg bg-white/50 shadow-lg border border-white/10 backdrop-blur-sm px-4 sm:px-5 lg:px-6 py-1.5 sm:py-2 lg:py-2.5">
           
           {/* Single Row Layout - More compact */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
@@ -29,12 +29,12 @@ const Dashboard = () => {
             
 
             {/* CENTER : NAVIGATION SERVICES - Compact */}
-            <div className="flex items-center gap-1.5 bg-[#2d466e] backdrop-blur-md rounded-4xl px-1.5 py-1.5 border border-white/10">
+            <div className="flex items-center gap-1.5 bg-[#2d466e] backdrop-blur-md rounded-lg px-1.5 py-1.5 border border-white/10">
               {idServices.map((s) => (
                 <button
                   key={s}
                   onClick={() => setActiveService(s)}
-                  className={`px-3 sm:px-4 py-1 sm:py-1.5 rounded-2xl font-semibold text-[10px] sm:text-xs tracking-wide whitespace-nowrap ${
+                  className={`px-3 sm:px-4 py-1 sm:py-1.5 rounded-lg font-semibold text-[10px] sm:text-xs tracking-wide whitespace-nowrap ${
                     activeService === s
                       ? "bg-[#f5ece3] text-[#2d466e] shadow-md"
                       : "text-white/80 hover:text-white hover:bg-[#f5ece3]/10"

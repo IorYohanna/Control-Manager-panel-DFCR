@@ -8,6 +8,7 @@ import { CompletedDocuments } from '../../components/Dashboard/CompletedDocument
 
 const Service = ({ activeService }) => {
   const [serviceData, setServiceData] = useState(null);
+  // eslint-disable-next-line no-unused-vars
   const [events, setEvents] = useState([]);
   const [rawEvents, setRawEvents] = useState([]);
   const [loading, setLoading] = useState(true);

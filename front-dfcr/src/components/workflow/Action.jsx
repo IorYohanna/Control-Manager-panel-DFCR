@@ -1,7 +1,52 @@
-import { FileText } from "lucide-react";
+import { FileText, X } from "lucide-react";
+import { useState, useEffect } from "react";
 import { Input, Select, Textarea } from "./Base";
+import { MultiSelectServices } from "./Multiservices";
+import { MultiSelectEmployes } from "./MultiSelectEmployes";
 
 export const ActionForm = ({ action, formData, setFormData, serviceUsers }) => {
+  const [allServices, setAllServices] = useState([]);
+  const [loadingServices, setLoadingServices] = useState(false);
+
+  useEffect(() => {
+    if (action === 'send-to-service' || action === 'directeur-reject') {
+      fetchAllServices();
+    }
+  }, [action]);
+
+  const fetchAllServices = async () => {
+    setLoadingServices(true);
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('http://localhost:8080/services/names', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        const servicesFormatted = data.map(service => {
+          if (typeof service === 'object' && service.idService && service.serviceName) {
+            return service;
+          }
+          return {
+            idService: service,
+            serviceName: service
+          };
+        });
+        setAllServices(servicesFormatted);
+      } else {
+        console.error('Erreur lors du chargement des services');
+      }
+    } catch (error) {
+      console.error('Erreur lors du chargement des services:', error);
+    } finally {
+      setLoadingServices(false);
+    }
+  };
+
   const updateField = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
@@ -28,46 +73,46 @@ export const ActionForm = ({ action, formData, setFormData, serviceUsers }) => {
 
       <div className="space-y-4">
         {needsServiceSelection && (
-          <Input
-            label="ID du Service"
-            required
-            type="text"
-            value={formData.serviceId || ''}
-            onChange={(e) => updateField('serviceId', e.target.value)}
-            placeholder="Entrez l'ID du service"
-          />
+          loadingServices ? (
+            <div className="text-sm text-gray-500 flex items-center gap-2">
+              <div className="animate-spin rounded-full h-4 w-4 border-2 border-gray-300 border-t-blue-600"></div>
+              Chargement des services...
+            </div>
+          ) : (
+            <MultiSelectServices
+              label="Services"
+              required
+              selectedServices={formData.serviceIds || []}
+              onServicesChange={(services) => updateField('serviceIds', services)}
+              allServices={allServices}
+            />
+          )
         )}
 
         {needsEmployeSelection && (
           serviceUsers.length > 0 ? (
-            <Select
-              label="Employé"
+            <MultiSelectEmployes
+              label="Employés"
               required
-              value={formData.employeMatricule || ''}
-              onChange={(e) => updateField('employeMatricule', e.target.value)}
-            >
-              <option value="">-- Sélectionner un employé --</option>
-              {serviceUsers
-                .filter(u => u.fonction?.toLowerCase().includes('employe') ||
-                  u.fonction?.toLowerCase().includes('employé'))
-                .map(user => (
-                  <option key={user.matricule} value={user.matricule}>
-                    {formatUserDisplay(user)}
-                  </option>
-                ))}
-            </Select>
+              selectedEmployes={formData.employeMatricules || []}
+              onEmployesChange={(employes) => updateField('employeMatricules', employes)}
+              serviceUsers={serviceUsers}
+            />
           ) : (
             <div>
               <Input
-                label="Matricule de l'employé"
+                label="Matricules des employés (séparés par des virgules)"
                 required
                 type="text"
-                value={formData.employeMatricule || ''}
-                onChange={(e) => updateField('employeMatricule', e.target.value)}
-                placeholder="ex: 001"
+                value={(formData.employeMatricules || []).join(', ')}
+                onChange={(e) => {
+                  const matricules = e.target.value.split(',').map(m => m.trim()).filter(m => m);
+                  updateField('employeMatricules', matricules);
+                }}
+                placeholder="ex: 001, 002, 003"
               />
               <p className="text-xs text-gray-500 mt-1">
-                Aucun employé trouvé dans le service. Veuillez saisir le matricule manuellement.
+                Aucun employé trouvé dans le service. Séparez les matricules par des virgules.
               </p>
             </div>
           )

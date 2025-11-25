@@ -54,7 +54,7 @@ const ModalEdit = ({ open, isEdit, formData, close, onEdit, onCreate }) => {
         <form onSubmit={handleSubmit} className="px-8 py-6 overflow-y-auto max-h-[calc(90vh-200px)]">
           <div className="space-y-6">
             {/* Title */}
-            <div className="bg-white/60 backdrop-blur-md rounded-2xl p-6 transition-all duration-75 hover:bg-white/70">
+            <div className="bg-white/60 backdrop-blur-md rounded-lg p-6 transition-all duration-75 hover:bg-white/70">
               <label className="block text-sm font-semibold text-[#73839e] mb-3">
                 Titre de l'événement
               </label>
@@ -71,7 +71,7 @@ const ModalEdit = ({ open, isEdit, formData, close, onEdit, onCreate }) => {
             {/* Dates */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Start Time */}
-              <div className="bg-white/60 backdrop-blur-md rounded-2xl p-6 transition-all duration-75 hover:bg-white/70">
+              <div className="bg-white/60 backdrop-blur-md rounded-lg p-6 transition-all duration-75 hover:bg-white/70">
                 <label className="flex items-center gap-2 text-sm font-semibold text-[#73839e] mb-3">
                   <Clock size={16} />
                   Début
@@ -86,7 +86,7 @@ const ModalEdit = ({ open, isEdit, formData, close, onEdit, onCreate }) => {
               </div>
 
               {/* End Time */}
-              <div className="bg-white/60 backdrop-blur-md rounded-2xl p-6 transition-all duration-75 hover:bg-white/70">
+              <div className="bg-white/60 backdrop-blur-md rounded-lg p-6 transition-all duration-75 hover:bg-white/70">
                 <label className="flex items-center gap-2 text-sm font-semibold text-[#73839e] mb-3">
                   <Clock size={16} />
                   Fin
@@ -102,7 +102,7 @@ const ModalEdit = ({ open, isEdit, formData, close, onEdit, onCreate }) => {
             </div>
 
             {/* Description */}
-            <div className="bg-white/60 backdrop-blur-md rounded-2xl p-6 transition-all duration-75 hover:bg-white/70">
+            <div className="bg-white/60 backdrop-blur-md rounded-lg p-6 transition-all duration-75 hover:bg-white/70">
               <label className="flex items-center gap-2 text-sm font-semibold text-[#73839e] mb-3">
                 <FileText size={16} />
                 Description
@@ -117,7 +117,7 @@ const ModalEdit = ({ open, isEdit, formData, close, onEdit, onCreate }) => {
             </div>
 
             {/* All Day Checkbox */}
-            <div className="bg-white/60 backdrop-blur-md rounded-2xl p-5 transition-all duration-75 hover:bg-white/70">
+            <div className="bg-white/60 backdrop-blur-md rounded-lg p-5 transition-all duration-75 hover:bg-white/70">
               <label className="flex items-center gap-3 cursor-pointer group">
                 <div className="relative">
                   <input

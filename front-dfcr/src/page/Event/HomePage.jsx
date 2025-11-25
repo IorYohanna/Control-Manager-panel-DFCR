@@ -33,10 +33,10 @@ const HomePage = () => {
 
           <div className="lg:col-span-3 xl:col-span-4 flex flex-col gap-4">
 
-            <div className="bg-linear-to-br from-[#f5ece3] to-white/90 rounded-2xl shadow-lg p-4 sm:p-5 border border-[#73839e]/10">
+            <div className="bg-linear-to-br from-[#f5ece3] to-white/90 rounded-lg shadow-lg p-4 sm:p-5 border border-[#73839e]/10">
               <div className="flex flex-col sm:flex-row items-center sm:justify-center gap-3 flex-wrap">
 
-                <div className="p-2 bg-linear-to-br from-[#2d466e] to-[#3d5680] rounded-full">
+                <div className="p-2 bg-linear-to-br from-[#2d466e] to-[#3d5680] rounded-lg">
                   <Sparkles className="w-5 h-5 sm:w-6 sm:h-6 text-[#f5ece3]" />
                 </div>
 

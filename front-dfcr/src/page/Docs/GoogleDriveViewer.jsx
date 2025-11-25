@@ -161,7 +161,7 @@ function GoogleDriveViewer() {
   if (!accessToken) {
     return (
     <div className="w-full min-h-[80vh] flex items-center justify-center p-4 sm:p-6 lg:p-12 overflow-auto bg-linear-to-br from-light-blue to-blue-zodiac hide-scrollbar">
-      <div className="bg-linear-to-r from-gray-100 to-beige-creme/80 rounded-2xl shadow-2xl p-6 sm:p-10 lg:p-12 max-w-sm sm:max-w-md w-full text-center flex flex-col items-center">
+      <div className="bg-linear-to-r from-gray-100 to-beige-creme/80 rounded-lg shadow-2xl p-6 sm:p-10 lg:p-12 max-w-sm sm:max-w-md w-full text-center flex flex-col items-center">
         <div className="mb-6">
           <img src="/img/drive.png" alt="Drive" className='w-16 sm:w-20 h-16 sm:h-20 mx-auto' />
         </div>
@@ -187,7 +187,7 @@ function GoogleDriveViewer() {
   }
 
   return (
-    <div className="w-full max-w-[1920px] m-4 sm:m-6 rounded-2xl flex flex-col bg-gray-100 overflow-auto hide-scrollbar">
+    <div className="w-full max-w-[1920px] m-4 sm:m-6 rounded-lg flex flex-col bg-beige-creme overflow-auto hide-scrollbar">
       <DriveHeader
         currentFolder={currentFolder}
         onSearch={handleSearch}

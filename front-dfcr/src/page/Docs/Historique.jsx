@@ -72,7 +72,7 @@ function Historique({ apiBase = "http://localhost:8080", tokenKey = "token" }) {
 
       <div className="grid gap-4">
         {documents.map((doc) => (
-          <article key={doc.reference} className="p-4 bg-white rounded-2xl shadow-sm border">
+          <article key={doc.reference} className="p-4 bg-white rounded-lg shadow-sm border">
             <header className="flex items-start justify-between gap-4">
               <div>
                 <h3 className="text-lg font-medium">{doc.objet || "(Sans objet)"}</h3>

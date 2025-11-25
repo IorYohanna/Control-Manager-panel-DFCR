@@ -92,7 +92,7 @@ export const EventCalendar = ({ events, handleDateSelect, handleEventClick, side
     };
 
     return (
-        <div className="bg-[#f5ece3] p-3 sm:p-4 md:p-6 rounded-2xl sm:rounded-3xl shadow-lg w-full max-w-[95vw] sm:max-w-[90vw] lg:max-w-6xl xl:max-w-7xl mx-auto">
+        <div className="bg-[#f5ece3] p-3 sm:p-4 md:p-6 rounded-lg hadow-lg w-full max-w-[95vw] sm:max-w-[90vw] lg:max-w-6xl xl:max-w-7xl mx-auto">
             <FullCalendar
                 ref={calendarRef}
                 plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}

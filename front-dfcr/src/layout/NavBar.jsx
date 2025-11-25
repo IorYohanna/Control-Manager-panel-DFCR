@@ -4,7 +4,7 @@ export default function NavBar() {
     return (
         <nav className="relative mx-8 mt-4 ml-56">
             <div
-                className="bg-[#F5ECE3] shadow-[0_4px_15px_rgba(0,0,0,0.08)] px-10 py-2 rounded-2xl"
+                className="bg-[#F5ECE3] shadow-[0_4px_15px_rgba(0,0,0,0.08)] px-10 py-2 rounded-lg"
             >
                 <div className="flex items-center justify-between">
                     <ul className="flex items-center gap-2">

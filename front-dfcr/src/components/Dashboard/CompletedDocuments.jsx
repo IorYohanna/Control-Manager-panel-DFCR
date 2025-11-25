@@ -51,7 +51,7 @@ export const CompletedDocuments = ({ idService }) => {
 
   return (
     <div className="col-span-1 md:col-span-2 h-full flex flex-col relative group">
-      <div className="h-full flex flex-col backdrop-blur-xl bg-[#f5ece3]/70 rounded-4xl p-6 lg:p-8 shadow-lg border border-white/50 hover:border-white/60 transition-all duration-100 hover:shadow-xl">
+      <div className="h-full flex flex-col backdrop-blur-xl bg-[#f5ece3]/70 rounded-xl p-6 lg:p-8 shadow-lg border border-white/50 hover:border-white/60 transition-all duration-100 hover:shadow-xl">
         
         {/* Header & Filtres */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
@@ -83,7 +83,7 @@ export const CompletedDocuments = ({ idService }) => {
 
         {/* Zone de contrôles des filtres (Affichage conditionnel) */}
         {useFilter && (
-          <div className="mb-6 p-3 bg-white/40 rounded-2xl border border-white/40 animate-in fade-in slide-in-from-top-2 duration-100">
+          <div className="mb-6 p-3 bg-white/40 rounded-lg border border-white/40 animate-in fade-in slide-in-from-top-2 duration-100">
             <div className="flex flex-wrap items-center gap-2">
               <Calendar className="text-[#2d466e] w-4 h-4 ml-1" />
               
@@ -130,12 +130,12 @@ export const CompletedDocuments = ({ idService }) => {
           {loading ? (
             <div className="space-y-3 animate-pulse">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="h-20 bg-white/30 rounded-2xl border border-white/20"></div>
+                <div key={i} className="h-20 bg-white/30 rounded-lg border border-white/20"></div>
               ))}
             </div>
           ) : error ? (
             /* ERROR STATE */
-            <div className="flex-1 flex flex-col items-center justify-center text-center p-4 bg-red-50/50 rounded-2xl border border-red-100">
+            <div className="flex-1 flex flex-col items-center justify-center text-center p-4 bg-red-50/50 rounded-lg border border-red-100">
               <p className="text-red-500 font-bold text-sm">{error}</p>
             </div>
           ) : docs.length === 0 ? (
@@ -153,7 +153,7 @@ export const CompletedDocuments = ({ idService }) => {
               {docs.map((d, index) => (
                 <div
                   key={index}
-                  className="group/card relative bg-white/40 hover:bg-white/80 rounded-2xl p-4 border border-white/40 hover:border-white/80 transition-all duration-200 hover:shadow-sm hover:-translate-x-1"
+                  className="group/card relative bg-white/40 hover:bg-white/80 rounded-lg p-4 border border-white/40 hover:border-white/80 transition-all duration-200 hover:shadow-sm hover:-translate-x-1"
                 >
                   <div className="flex justify-between items-start gap-3">
                     

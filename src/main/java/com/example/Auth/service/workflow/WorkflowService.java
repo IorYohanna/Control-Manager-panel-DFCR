@@ -12,6 +12,7 @@ import com.example.Auth.repository.Document.DocumentRepository;
 import com.example.Auth.repository.workflow.WorkflowRepository;
 import com.example.Auth.repository.workflow.WorkflowHistoriqueRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -102,7 +103,6 @@ public class WorkflowService {
 
                 Workflow savedWorkflow = workflowRepository.save(workflow);
 
-                // Créer une entrée d'historique
                 createHistorique(savedWorkflow);
 
                 return savedWorkflow;
@@ -119,7 +119,6 @@ public class WorkflowService {
                                 null, directeur, null,
                                 "Document créé et en attente de traitement");
 
-                // Envoyer notification au directeur
                 if (directeur != null) {
                         publisher.publishEvent(
                                         new NotificationEvent(
@@ -133,81 +132,138 @@ public class WorkflowService {
         }
 
         /**
-         * 2. Directeur envoie au service (pour action/pour suivi)
+         * 2. Directeur envoie à plusieurs services (pour action/pour suivi)
+         */
+        @Transactional
+        public List<Workflow> directeurEnvoieServices(String reference, User directeur,
+                        List<ServiceDfcr> services, String typeWorkflow,
+                        String remarque) {
+                Document document = documentRepository.findById(reference)
+                                .orElseThrow(() -> new RuntimeException("Document non trouvé"));
+
+                Workflow workflowPrincipal = getOrCreateWorkflow(document);
+
+                validateDestinataire(workflowPrincipal, directeur, "envoyer aux services");
+
+                List<Workflow> workflows = new ArrayList<>();
+
+                for (ServiceDfcr service : services) {
+                        User chefService = service.getUsers().stream()
+                                        .filter(user -> user.getFonction() != null &&
+                                                        user.getFonction().toLowerCase().contains("chef"))
+                                        .findFirst()
+                                        .orElse(null);
+
+                        Workflow workflow = new Workflow();
+                        workflow.setDocument(document);
+                        workflow.setTypeWorkflow(typeWorkflow);
+                        workflow.setAction("ENVOYER");
+                        workflow.setStatus("au_service");
+                        workflow.setActeur(directeur);
+                        workflow.setDestinataire(chefService);
+                        workflow.setService(service);
+                        workflow.setRemarque(remarque);
+
+                        Workflow savedWorkflow = workflowRepository.save(workflow);
+                        createHistorique(savedWorkflow);
+                        workflows.add(savedWorkflow);
+
+                        if (chefService != null) {
+                                publisher.publishEvent(
+                                                new NotificationEvent(
+                                                                "ENVOI_SERVICE",
+                                                                directeur,
+                                                                chefService,
+                                                                savedWorkflow));
+                        }
+                }
+
+                document.setStatus("au_service");
+                documentRepository.save(document);
+
+                return workflows;
+        }
+
+        /**
+         * 2bis. Directeur envoie à un seul service (méthode de compatibilité)
          */
         @Transactional
         public Workflow directeurEnvoieService(String reference, User directeur,
                         ServiceDfcr service, String typeWorkflow,
                         String remarque) {
-                Document document = documentRepository.findById(reference)
-                                .orElseThrow(() -> new RuntimeException("Document non trouvé"));
-
-                Workflow workflow = getOrCreateWorkflow(document);
-
-                // VALIDATION: Seul le directeur assigné peut envoyer au service
-                validateDestinataire(workflow, directeur, "envoyer au service");
-
-                // Trouver le chef de service du service assigné
-                User chefService = service.getUsers().stream()
-                                .filter(user -> user.getFonction() != null &&
-                                                user.getFonction().toLowerCase().contains("chef"))
-                                .findFirst()
-                                .orElse(null);
-
-                Workflow savedWorkflow = updateDocumentAndWorkflow(document, "au_service", workflow,
-                                typeWorkflow, "ENVOYER", "au_service",
-                                directeur, chefService, service, remarque);
-
-                // Envoyer notification au chef de service
-                if (chefService != null) {
-                        publisher.publishEvent(
-                                        new NotificationEvent(
-                                                        "ENVOI_SERVICE",
-                                                        directeur,
-                                                        chefService,
-                                                        savedWorkflow));
-                }
-
-                return savedWorkflow;
+                List<ServiceDfcr> services = new ArrayList<>();
+                services.add(service);
+                List<Workflow> workflows = directeurEnvoieServices(reference, directeur, services, typeWorkflow,
+                                remarque);
+                return workflows.get(0);
         }
 
         /**
-         * 3. Chef de service assigne à un employé
+         * 3. Chef de service assigne à plusieurs employés
+         */
+        @Transactional
+        public List<Workflow> chefAssigneEmployes(String reference, User chefService,
+                        List<User> employes, String remarque) {
+                Document document = documentRepository.findById(reference)
+                                .orElseThrow(() -> new RuntimeException("Document non trouvé"));
+
+                Workflow workflowPrincipal = getOrCreateWorkflow(document);
+
+                validateServiceMember(workflowPrincipal, chefService, "assigner à des employés");
+
+                ServiceDfcr service = workflowPrincipal.getService();
+                List<Workflow> workflows = new ArrayList<>();
+
+                for (User employe : employes) {
+                        if (employe.getService() == null ||
+                                        !employe.getService().getIdService().equals(service.getIdService())) {
+                                throw new RuntimeException(
+                                                "L'employé " + employe.getUsername() +
+                                                                " doit appartenir au service "
+                                                                + service.getServiceName());
+                        }
+
+                        // Créer un nouveau workflow pour chaque employé
+                        Workflow workflow = new Workflow();
+                        workflow.setDocument(document);
+                        workflow.setTypeWorkflow("ASSIGNATION");
+                        workflow.setAction("ASSIGNER");
+                        workflow.setStatus("assigne");
+                        workflow.setActeur(chefService);
+                        workflow.setDestinataire(employe);
+                        workflow.setService(service);
+                        workflow.setRemarque(remarque);
+
+                        Workflow savedWorkflow = workflowRepository.save(workflow);
+                        createHistorique(savedWorkflow);
+                        workflows.add(savedWorkflow);
+
+                        // Envoyer notification à l'employé
+                        publisher.publishEvent(
+                                        new NotificationEvent(
+                                                        "ASSIGNATION",
+                                                        chefService,
+                                                        employe,
+                                                        savedWorkflow));
+                }
+
+                // Mettre à jour le statut du document
+                document.setStatus("assigne");
+                documentRepository.save(document);
+
+                return workflows;
+        }
+
+        /**
+         * 3bis. Chef de service assigne à un seul employé (méthode de compatibilité)
          */
         @Transactional
         public Workflow chefAssigneEmploye(String reference, User chefService,
                         User employe, String remarque) {
-                Document document = documentRepository.findById(reference)
-                                .orElseThrow(() -> new RuntimeException("Document non trouvé"));
-
-                Workflow workflow = getOrCreateWorkflow(document);
-
-                // VALIDATION: Le chef doit appartenir au service assigné
-                validateServiceMember(workflow, chefService, "assigner à un employé");
-
-                // Vérifier que l'employé appartient au même service
-                if (employe.getService() == null ||
-                                !employe.getService().getIdService().equals(workflow.getService().getIdService())) {
-                        throw new RuntimeException(
-                                        "L'employé doit appartenir au service "
-                                                        + workflow.getService().getServiceName());
-                }
-
-                ServiceDfcr service = workflow.getService();
-
-                Workflow savedWorkflow = updateDocumentAndWorkflow(document, "assigne", workflow,
-                                "ASSIGNATION", "ASSIGNER", "assigne",
-                                chefService, employe, service, remarque);
-
-                // Envoyer notification à l'employé
-                publisher.publishEvent(
-                                new NotificationEvent(
-                                                "ASSIGNATION",
-                                                chefService,
-                                                employe,
-                                                savedWorkflow));
-
-                return savedWorkflow;
+                List<User> employes = new ArrayList<>();
+                employes.add(employe);
+                List<Workflow> workflows = chefAssigneEmployes(reference, chefService, employes, remarque);
+                return workflows.get(0);
         }
 
         /**
@@ -241,7 +297,6 @@ public class WorkflowService {
 
                 Workflow workflow = getOrCreateWorkflow(document);
 
-                // VALIDATION: Seul l'employé qui traite peut terminer et envoyer
                 if (workflow.getActeur() == null ||
                                 !workflow.getActeur().getMatricule().equals(employe.getMatricule())) {
                         throw new RuntimeException(
@@ -253,7 +308,6 @@ public class WorkflowService {
                                 "SOUMISSION", "SOUMETTRE", "termine",
                                 employe, chefService, service, remarque);
 
-                // Envoyer notification au chef de service
                 publisher.publishEvent(
                                 new NotificationEvent(
                                                 "SOUMISSION",
@@ -275,7 +329,6 @@ public class WorkflowService {
 
                 Workflow workflow = getOrCreateWorkflow(document);
 
-                // VALIDATION: Seul le chef de service assigné peut valider
                 validateDestinataire(workflow, chefService, "valider et envoyer au directeur");
 
                 ServiceDfcr service = workflow.getService();
@@ -283,7 +336,6 @@ public class WorkflowService {
                                 "VALIDATION_CHEF", "VALIDER", "validation_directeur",
                                 chefService, directeur, service, remarque);
 
-                // Envoyer notification au directeur
                 publisher.publishEvent(
                                 new NotificationEvent(
                                                 "VALIDATION_CHEF",
@@ -305,7 +357,6 @@ public class WorkflowService {
 
                 Workflow workflow = getOrCreateWorkflow(document);
 
-                // VALIDATION: Seul le chef de service assigné peut refuser
                 validateDestinataire(workflow, chefService, "refuser le document");
 
                 ServiceDfcr service = workflow.getService();
@@ -313,7 +364,6 @@ public class WorkflowService {
                                 "VALIDATION_CHEF", "REFUSER", "au_service",
                                 chefService, employe, service, remarque);
 
-                // Envoyer notification à l'employé
                 publisher.publishEvent(
                                 new NotificationEvent(
                                                 "REFUS_CHEF",
@@ -335,7 +385,6 @@ public class WorkflowService {
 
                 Workflow workflow = getOrCreateWorkflow(document);
 
-                // VALIDATION: Seul le directeur assigné peut valider comme complet
                 validateDestinataire(workflow, directeur, "valider comme complet");
 
                 workflow.setEstComplet(true);
@@ -345,12 +394,11 @@ public class WorkflowService {
                                 "VALIDATION_DIRECTEUR", "VALIDER", "complet",
                                 directeur, null, service, remarque);
 
-                // Envoyer notification au service (chef et employé concerné)
                 publisher.publishEvent(
                                 new NotificationEvent(
                                                 "VALIDATION_DIRECTEUR",
                                                 directeur,
-                                                null, // À compléter avec les personnes du service
+                                                null,
                                                 savedWorkflow));
 
                 return savedWorkflow;
@@ -367,7 +415,6 @@ public class WorkflowService {
 
                 Workflow workflow = getOrCreateWorkflow(document);
 
-                // VALIDATION: Seul le directeur assigné peut refuser
                 validateDestinataire(workflow, directeur, "refuser comme incomplet");
 
                 workflow.setEstComplet(false);
@@ -376,12 +423,11 @@ public class WorkflowService {
                                 "VALIDATION_DIRECTEUR", "REFUSER", "au_service",
                                 directeur, null, service, remarque);
 
-                // Envoyer notification au service
                 publisher.publishEvent(
                                 new NotificationEvent(
                                                 "REFUS_DIRECTEUR",
                                                 directeur,
-                                                null, // À compléter avec le chef de service
+                                                null,
                                                 savedWorkflow));
 
                 return savedWorkflow;
@@ -408,7 +454,7 @@ public class WorkflowService {
                         dto.setMatriculeActeur(historique.getActeur().getMatricule());
                         dto.setActeurFonction(historique.getActeur().getFonction());
                 }
-
+                dto.setServiceId(historique.getService().getIdService());
                 dto.setRemarque(historique.getRemarque());
                 dto.setEstComplet(historique.getEstComplet());
                 dto.setCreatedAt(historique.getCreatedAt());

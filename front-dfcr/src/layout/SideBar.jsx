@@ -3,7 +3,7 @@ import { useContext, createContext, useState, useEffect } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { fectUserData } from "../api/User/currentUser";
 import { fetchUserPhoto } from "../api/User/profileinfo";
-import UserAvatar from "../page/User/UserAvatar";
+import UserAvatar from "../components/User/UserAvatar";
 
 const SidebarContext = createContext()
 
@@ -61,7 +61,7 @@ export default function Sidebar({ children, expanded, setExpanded, mobileOpen, s
         ${mobileOpen ? "translate-x-0 " : "-translate-x-full md:translate-x-0"}
       `}>
 
-        <nav className="h-full w-fit flex flex-col bg-[#F5ECE3] overflow-auto thin-scrollbar rounded-2xl shadow-[4px_0_15px_rgba(0,0,0,0.05)]">
+        <nav className="h-full w-fit flex flex-col bg-[#F5ECE3] overflow-auto thin-scrollbar rounded-lg shadow-[4px_0_15px_rgba(0,0,0,0.05)]">
 
           <div className="p-4 pb-2 flex justify-between items-center">
             <span className={`uppercase font-necoBlack text-2xl text-[#2D466E] overflow-hidden transition-all ${expanded ? "w-auto" : "w-0"}`}>

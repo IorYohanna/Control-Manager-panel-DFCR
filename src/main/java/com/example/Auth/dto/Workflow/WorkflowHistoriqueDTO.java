@@ -12,6 +12,7 @@ public class WorkflowHistoriqueDTO {
     private String typeWorkflow;
     private String action;
     private String status;
+    private String serviceId;
     private String matriculeActeur;
     private String acteurFonction;
     private String remarque;

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ChevronLeft, ChevronRight, Download, FileText } from "lucide-react";
-import { Button, StatusBadge } from "./Base";
+import { Button, StatusBadge } from "../../components/workflow/Base";
 
 export const DocumentsTable = ({ documents, onSelectDocument, loading }) => {
     const [downloadingRef, setDownloadingRef] = useState(null);

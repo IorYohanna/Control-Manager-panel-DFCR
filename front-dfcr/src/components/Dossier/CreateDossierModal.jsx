@@ -39,7 +39,7 @@ export const CreateDossierModal = ({ onClose, onSuccess }) => {
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-8 animate-fadeIn">
+      <div className="bg-white rounded-lg shadow-2xl w-full max-w-lg p-8 animate-fadeIn">
         <h2 className="text-2xl font-bold text-[#24344d] mb-6">Nouveau Dossier</h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">

@@ -172,7 +172,7 @@ export default function UserSettings() {
                             </div>
 
                             <div className="lg:col-span-2 space-y-8">
-                                <div className="bg-gray-50 rounded-2xl p-6">
+                                <div className="bg-gray-50 rounded-lg p-6">
                                     <div className="flex items-center justify-between mb-4">
                                         <h3 className="text-sm font-semibold text-gray-500 uppercase flex items-center gap-2">
                                             <Briefcase className="w-4 h-4" />
@@ -185,7 +185,7 @@ export default function UserSettings() {
                                 </div>
 
 
-                                <div className="bg-gray-50 rounded-2xl p-6">
+                                <div className="bg-gray-50 rounded-lg p-6">
                                     <h3 className="text-sm font-semibold text-gray-500 uppercase mb-4">
                                         Contact
                                     </h3>
@@ -197,7 +197,7 @@ export default function UserSettings() {
                                 </div>
 
                                 {service && (
-                                    <div className="bg-gray-50 rounded-2xl p-6">
+                                    <div className="bg-gray-50 rounded-lg p-6">
                                         <h3 className="text-sm font-necoBlack font-semibold text-gray-500 uppercase mb-4">
                                             détails service
                                         </h3>

@@ -35,6 +35,11 @@ public class ServiceController {
         }
     }
 
+    @GetMapping("/names")
+    public ResponseEntity<List<String>> getServiceNames() {
+        return ResponseEntity.ok(serviceService.getAllServiceNames());
+    }
+
     @PostMapping
     public ResponseEntity<ServiceDfcr> createService(@RequestBody ServiceDto input) {
         ServiceDfcr created = serviceService.createService(input);

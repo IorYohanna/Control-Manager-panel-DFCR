@@ -166,7 +166,7 @@ export default function DossierDetails() {
   }
 
   return (
-    <div className="w-full m-6 rounded-2xl p-4 md:p-8 bg-[#f5ece3] overflow-auto thin-scrollbar">
+    <div className="w-full m-6 rounded-lg p-4 md:p-8 bg-[#f5ece3] overflow-auto thin-scrollbar">
       <div className="max-w-[1400px] mx-auto">
         <div className="mb-8">
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 mb-6">
@@ -190,7 +190,7 @@ export default function DossierDetails() {
         </div>
 
 
-        <div className="bg-white rounded-xl shadow-sm border border-[#c4beaf]/30 p-4 mb-4">
+        <div>
           <div className="bg-white rounded-xl shadow-sm border border-[#c4beaf]/30 p-4 mb-4 flex flex-col sm:flex-row gap-3 sm:items-center justify-between">
             <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
 

@@ -18,7 +18,7 @@ export function DriveHeader({ currentFolder, onSearch, onLogout, viewMode, setVi
               type="text"
               placeholder="Rechercher dans Drive"
               onChange={onSearch}
-              className="w-full pl-10 sm:pl-12 pr-4 py-2 sm:py-3 bg-[#f1f3f4] hover:bg-white hover:shadow-md focus:bg-white focus:shadow-md rounded-full text-sm text-gray-800 placeholder-gray-600 transition-all outline-none"
+              className="w-full pl-10 sm:pl-12 pr-4 py-2 sm:py-3 bg-beige-creme hover:bg-white hover:shadow-md focus:bg-white focus:shadow-md rounded-full text-sm text-gray-800 placeholder-gray-600 transition-all outline-none"
             />
           </div>
         </div>

@@ -1,7 +1,7 @@
 import { BaggageClaim, Calendar, CheckCircle, Clock, Download, History, Printer, Send, User, Workflow, WorkflowIcon, XCircle, Zap, AlertTriangle } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Button, Select, StatusBadge, TabButton } from "./Base";
-import { ActionForm } from "./Action";
+import { Button, Select, StatusBadge, TabButton } from "../../components/workflow/Base";
+import { ActionForm } from "../../components/workflow/Action";
 
 const safeJsonParse = async (response) => {
   const text = await response.text();
@@ -246,7 +246,7 @@ export const DocumentModal = ({ document, onClose, currentUser, serviceUsers, on
 
   return (
     <div className="fixed inset-0 bg-black/40 backdrop-blur-sm animate-in fade-in duration-75 bg-opacity-50 flex items-center justify-center z-50 p-6">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
+      <div className="bg-white rounded-lg shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
         <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between bg-linear-to-r from-blue-50 to-indigo-50">
           <div>
             <h2 className="text-xl font-bold text-gray-800 font-necoBlack">Document: {document.reference}</h2>
@@ -456,7 +456,7 @@ export const DocumentModal = ({ document, onClose, currentUser, serviceUsers, on
 
                         <div className="text-sm text-gray-600 flex items-center gap-1 mb-2">
                           <User size={12} className="text-blue-600" />
-                          Par: <strong>{item.matriculeActeur || item.acteur?.name || 'N/A'}
+                          Pour : <strong>{item.serviveId || item.serviceId || 'N/A'}
                           </strong>
                           {item.acteur?.matricule && (
                             <span className="text-gray-400">({item.acteur.matricule})</span>
