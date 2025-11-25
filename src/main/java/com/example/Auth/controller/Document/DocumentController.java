@@ -40,10 +40,12 @@ public class DocumentController {
                         doc.getType(),
                         doc.getStatus(),
                         doc.getCreator().getMatricule(),
+                        doc.getCreator().getName(),
                         doc.getCreator().getUsername(),
-                        doc.getCreator().getSurname(),
                         doc.getCreatedAt().toString(),
-                        doc.getUpdatedAt().toString()))
+                        doc.getUpdatedAt().toString(),
+                        doc.getDeadline() != null ? doc.getDeadline().toString() : null
+                ))
                 .toList();
         return ResponseEntity.ok(documents);
     }
@@ -55,10 +57,11 @@ public class DocumentController {
             @RequestParam("corps") String corps,
             @RequestParam("type") String type,
             @RequestParam("status") String status,
-            @RequestParam("pieceJointe") MultipartFile pieceJointe) {
+            @RequestParam("pieceJointe") MultipartFile pieceJointe,
+            @RequestParam("deadline") String deadline) {
         try {
             Document doc = documentService.createDocument(
-                    reference, objet, corps, type, status, pieceJointe);
+                    reference, objet, corps, type, status, pieceJointe, deadline);
 
             DocumentResponseDto responseDto = new DocumentResponseDto(
                     doc.getReference(),
@@ -70,11 +73,13 @@ public class DocumentController {
                     doc.getCreator().getName(),
                     doc.getCreator().getUsername(),
                     doc.getCreatedAt().toString(),
-                    doc.getUpdatedAt().toString());
+                    doc.getUpdatedAt().toString(),
+                    doc.getDeadline() != null ? doc.getDeadline().toString() : null
+            );
 
             return ResponseEntity.ok(responseDto);
         } catch (Exception e) {
-            e.printStackTrace(); // ← Ajoutez ceci pour voir l'erreur exacte
+            e.printStackTrace();
             return ResponseEntity.internalServerError().build();
         }
     }
@@ -92,7 +97,9 @@ public class DocumentController {
                         doc.getCreator().getName(),
                         doc.getCreator().getUsername(),
                         doc.getCreatedAt().toString(),
-                        doc.getUpdatedAt().toString()))
+                        doc.getUpdatedAt().toString(),
+                        doc.getDeadline() != null ? doc.getDeadline().toString() : null
+                        ))
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -112,7 +119,8 @@ public class DocumentController {
                 updatedDocument.getCreator().getName(),
                 updatedDocument.getCreator().getUsername(),
                 updatedDocument.getCreatedAt().toString(),
-                updatedDocument.getUpdatedAt().toString());
+                updatedDocument.getUpdatedAt().toString(),
+                updatedDocument.getDeadline() != null ? updatedDocument.getDeadline().toString() : null);
         return ResponseEntity.ok(responseDto);
     }
 

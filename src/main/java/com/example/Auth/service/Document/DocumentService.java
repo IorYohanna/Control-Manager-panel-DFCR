@@ -20,6 +20,7 @@ import com.example.Auth.utils.LoggerService;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,7 +70,8 @@ public class DocumentService {
             String corps,
             String type,
             String status,
-            MultipartFile pieceJointe) throws IOException {
+            MultipartFile pieceJointe,
+            String deadline) throws IOException {
 
         User creator = userRepository.findByMatricule(currentUserService.getMatricule())
                 .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
@@ -85,6 +87,7 @@ public class DocumentService {
         doc.setStatus(status);
         doc.setPieceJointe(fileUtilsService.convertToBytes(pieceJointe));
         doc.setCreator(creator);
+        doc.setDeadline(LocalDateTime.parse(deadline));
 
         Document savedDoc = documentRepository.save(doc);
 
@@ -121,6 +124,7 @@ public class DocumentService {
             existingDocument.setType(input.getType());
             existingDocument.setStatus(input.getStatus());
             existingDocument.setPieceJointe(input.getPieceJointe());
+            existingDocument.setDeadline(input.getDeadline());
 
             log.success("Mise à jour réussi!!");
             return documentRepository.save(existingDocument);

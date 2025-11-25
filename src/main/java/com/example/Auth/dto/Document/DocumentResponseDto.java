@@ -18,4 +18,5 @@ public class DocumentResponseDto {
     private String creatorEmail;
     private String createdTime;
     private String updatedTime;
+    private String deadline;
 }

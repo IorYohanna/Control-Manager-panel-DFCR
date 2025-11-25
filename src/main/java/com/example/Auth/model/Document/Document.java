@@ -58,6 +58,8 @@ public class Document {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
+    private LocalDateTime deadline;
+
     public Document(String reference, String objet, String corps,
             String type, String status, byte[] pieceJointe) {
         this.reference = reference;

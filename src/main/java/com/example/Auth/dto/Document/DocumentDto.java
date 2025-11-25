@@ -3,6 +3,8 @@ package com.example.Auth.dto.Document;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 public class DocumentDto {
@@ -12,4 +14,5 @@ public class DocumentDto {
     private String type;
     private String status;
     private byte[] pieceJointe;
+    private LocalDateTime deadline;
 }

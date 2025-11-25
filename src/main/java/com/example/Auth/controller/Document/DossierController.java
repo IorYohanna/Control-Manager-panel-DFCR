@@ -13,8 +13,6 @@ import com.example.Auth.model.Document.Dossier;
 import com.example.Auth.service.Document.DossierService;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/dossiers")
@@ -88,7 +86,9 @@ public class DossierController {
                         doc.getCreator().getUsername(),
                         doc.getCreator().getSurname(),
                         doc.getCreatedAt().toString(),
-                        doc.getUpdatedAt().toString()
+                        doc.getUpdatedAt().toString(),
+                        doc.getDeadline() != null ? doc.getDeadline().toString() : null
+
                 ))
                 .toList();
 

@@ -22,7 +22,8 @@ const FormDocument = ({ onClose }) => {
     objet: "",
     corps: "",
     type: "",
-    status: ""
+    status: "",
+    deadline: ""
   });
 
   const [pieceJointe, setPieceJointe] = useState(null);
@@ -221,6 +222,21 @@ const FormDocument = ({ onClose }) => {
               onChange={handleInputChange("corps")}
               placeholder="Saisissez le contenu ou la description du document..."
               className="w-full px-5 py-4 font-eirene border border-[#c4beaf] rounded-lg bg-white text-[#24344d] placeholder-[#73839e] focus:ring-2 focus:ring-[#2d466e] focus:border-transparent resize-none transition-all duration-200 shadow-sm"
+            />
+          </div>
+
+          <div className="sm:col-span-2 space-y-2">
+            <label className="text-sm font-semibold text-[#24344d] block font-dropline">
+              Deadline
+            </label>
+
+            <input
+              type="datetime-local"
+              value={formData.deadline}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, deadline: e.target.value }))
+              }
+              className="w-full px-4 py-3 border border-[#c4beaf] rounded-lg bg-white text-[#24344d]"
             />
           </div>
 
