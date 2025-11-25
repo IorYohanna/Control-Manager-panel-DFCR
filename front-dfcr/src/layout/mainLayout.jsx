@@ -18,7 +18,7 @@ export default function MainLayout() {
       </button>
 
       <Sidebar 
-        expanded={sidebarExpanded} s
+        expanded={sidebarExpanded}
         setExpanded={setSidebarExpanded}
         mobileOpen={mobileOpen}
         setMobileOpen={setMobileOpen}

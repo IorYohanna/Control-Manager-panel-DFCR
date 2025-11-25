@@ -28,9 +28,14 @@ public interface WorkflowHistoriqueRepository extends JpaRepository<WorkflowHist
             SUM(CASE WHEN w.estComplet = true THEN 1 ELSE 0 END) AS completed
         FROM WorkflowHistorique w
         WHERE YEAR(w.createdAt) = :year
+          AND w.service.idService = :idService
         GROUP BY MONTH(w.createdAt)
         ORDER BY MONTH(w.createdAt)
     """)
-    List<Object[]> getMonthlyStats(@Param("year") int year);
+    List<Object[]> getMonthlyStats(
+            @Param("year") int year,
+            @Param("idService") String idService
+    );
 
-    }
+
+}

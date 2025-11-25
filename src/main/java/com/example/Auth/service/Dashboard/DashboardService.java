@@ -45,8 +45,8 @@ public class DashboardService {
         return workflowService.getDocumentsService(idService, status);
     }
 
-    public List<Map<String, Object>> getMonthlyStats(int year) {
-        List<Object[]> rows = workflowHistoriqueRepository.getMonthlyStats(year);
+    public List<Map<String, Object>> getMonthlyStats(int year,String idService) {
+        List<Object[]> rows = workflowHistoriqueRepository.getMonthlyStats(year, idService);
 
         List<Map<String, Object>> result = new ArrayList<>();
 

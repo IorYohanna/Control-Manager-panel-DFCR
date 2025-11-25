@@ -90,7 +90,7 @@ export default function Sidebar({ children, expanded, setExpanded, mobileOpen, s
             </button>
           </div>
 
-          <SidebarContext.Provider value={{ expanded }}>
+          <SidebarContext.Provider value={{ expanded , setMobileOpen}}>
             <ul className="flex-1 px-3">{children}</ul>
           </SidebarContext.Provider>
 
@@ -148,9 +148,15 @@ export default function Sidebar({ children, expanded, setExpanded, mobileOpen, s
 }
 
 export function SidebarItem({ icon, text, active, to = "#" }) {
-  const { expanded } = useContext(SidebarContext)
+  const { expanded, setMobileOpen } = useContext(SidebarContext)
+
+  const handleClick = () => {
+    if (window.innerWidth < 768) {
+      setMobileOpen(false)
+    }
+  }
   return (
-    <Link to={to} className="flex">
+    <Link to={to} className="flex" onClick={handleClick}>
       <li className={`relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group ${active ? "bg-linear-to-r from-[#F5ECE3] to-[#24344D] text-white" : "hover:bg-[#73839E] text-[#2f486d] hover:text-white "}`}>
         {icon}
         <span className={`overflow-hidden font-dropline transition-all truncate ${expanded ? "w-52 ml-3" : "w-0"}`}>

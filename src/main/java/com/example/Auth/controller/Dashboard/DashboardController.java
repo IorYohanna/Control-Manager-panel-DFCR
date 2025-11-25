@@ -88,9 +88,9 @@ public class DashboardController {
         return ResponseEntity.ok(history);
     }
 
-    @GetMapping("/workflow/stats")
-    public ResponseEntity<List<Map<String, Object>>> stats() {
-        return ResponseEntity.ok(dashboardService.getMonthlyStats(2025));
+    @GetMapping("/workflow/stats/{idService}/{year}")
+    public ResponseEntity<List<Map<String, Object>>> stats(@PathVariable String idService, @PathVariable int year) {
+        return ResponseEntity.ok(dashboardService.getMonthlyStats(year, idService));
     }
 
     @GetMapping("/workflow/completed/{idService}")

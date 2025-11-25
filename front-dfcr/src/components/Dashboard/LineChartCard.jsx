@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { LineChart, Line, XAxis, CartesianGrid, Tooltip, YAxis, ResponsiveContainer } from "recharts";
 import { getWorkflowStats } from "../../api/Dashboard/dashboard";
 
-export default function Example() {
+export default function Example({ idService }) {
   const [chartData, setChartData] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -15,7 +15,7 @@ export default function Example() {
     async function loadStats() {
       setLoading(true);
       try {
-        const stats = await getWorkflowStats();
+        const stats = await getWorkflowStats(idService);
         
         const formatted = months.map((month) => {
           const monthData = stats.find(s => s.month === month);

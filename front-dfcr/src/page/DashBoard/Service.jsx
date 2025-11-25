@@ -47,7 +47,7 @@ const Service = ({ activeService }) => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#f5ece3] flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <div className="w-12 h-12 border-4 border-[#2d466e]/30 border-t-[#2d466e] rounded-full animate-spin"></div>
           <p className="text-sm font-eirene text-[#2d466e] animate-pulse">Chargement...</p>
@@ -100,7 +100,7 @@ const Service = ({ activeService }) => {
         {/* Bloc 2 : Graphique (50% largeur sur grand écran) */}
         {/* Note: On le met en col-span-2 pour qu'il soit aussi large que les stats */}
         <div className="col-span-1 md:col-span-2 xl:col-span-2 h-full">
-             <Example />
+             <Example idService={activeService}/>
         </div>
 
         {/* --- LIGNE 2 : Opérationnel --- */}

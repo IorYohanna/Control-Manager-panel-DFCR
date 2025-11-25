@@ -84,7 +84,7 @@ export default function UserSettings() {
     }
 
     return (
-        <div className="w-full bg-linear-to-br p-4 flex items-center justify-center">
+        <div className="w-full bg-linear-to-br p-4 flex items-center justify-center overflow-auto thin-scrollbar">
             <div className="w-full h-full">
                 <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
                     <div className="relative h-30 bg-linear-to-r from-light-blue via-blue-zodiac to-dark-blue" />

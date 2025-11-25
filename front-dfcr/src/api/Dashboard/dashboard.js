@@ -95,17 +95,21 @@ export async function getDashboardStats(idService) {
   }
 }
 
-export async function getWorkflowStats() {
+export async function getWorkflowStats(idService) {
   const token = localStorage.getItem("token");
+  const year = new Date().getFullYear();
 
   try {
-    const response = await fetch(`${API}/dashboard/workflow/stats`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      `${API}/dashboard/workflow/stats/${idService}/${year}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     if (!response.ok) {
       throw new Error(`Erreur HTTP: ${response.status}`);
