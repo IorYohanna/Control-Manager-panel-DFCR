@@ -58,9 +58,6 @@ export default function ChatWindow({ currentUser, selectedUser, messages, loadin
             <p className="text-xs text-[#73839e] mt-1">{selectedUser.fonction}</p>
           </div>
         </div>
-        <button className="p-2 hover:bg-gray-100 rounded-full text-[#73839e]">
-          <MoreVertical className="w-5 h-5" />
-        </button>
       </div>
 
       {/* Zone Messages */}

@@ -313,6 +313,8 @@ export function getNotificationIcon(type) {
       return "📢";
     case "SYSTEM_MAINTENANCE":
       return "🔧";
+    case "NEW_MESSAGE":
+      return "💬";
     default:
       return "🔔";
   }

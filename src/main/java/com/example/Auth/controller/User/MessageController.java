@@ -2,6 +2,7 @@ package com.example.Auth.controller.User;
 
 import com.example.Auth.dto.User.MessageDto;
 import com.example.Auth.model.User.Message;
+import com.example.Auth.service.Notification.NotificationService;
 import com.example.Auth.service.User.MessageService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,10 +20,12 @@ public class MessageController {
 
     private final MessageService messageService;
     private final SimpMessagingTemplate messagingTemplate;
+    private final NotificationService notificationService;
 
-    public MessageController(MessageService messageService, SimpMessagingTemplate messagingTemplate) {
+    public MessageController(MessageService messageService, SimpMessagingTemplate messagingTemplate, NotificationService notificationService) {
         this.messageService = messageService;
         this.messagingTemplate = messagingTemplate;
+        this.notificationService = notificationService;
     }
 
     // WebSocket endpoint pour envoyer un message privé
@@ -43,12 +46,16 @@ public class MessageController {
 
         Message savedMessage = messageService.saveMessage(senderMatricule, receiverMatricule, content);
         MessageDto dto = new MessageDto(savedMessage);
-        System.out.println("📨 DTO being sent: " + dto);  // NEW: Log DTO to check fields like id
+
+        notificationService.sendToMultipleUsers(
+                List.of(savedMessage.getReceiver()),
+                "NEW_MESSAGE",
+                "Nouveau message de " + savedMessage.getSender().getName() + " " + savedMessage.getSender().getSurname()
+
+        );
 
         messagingTemplate.convertAndSendToUser(receiverMatricule, "/queue/messages", dto);
         messagingTemplate.convertAndSendToUser(senderMatricule, "/queue/messages", dto);
-
-        System.out.println("📨 Message sent from " + senderMatricule + " to " + receiverMatricule);
     }
 
     // REST endpoint pour récupérer l'historique entre deux utilisateurs
