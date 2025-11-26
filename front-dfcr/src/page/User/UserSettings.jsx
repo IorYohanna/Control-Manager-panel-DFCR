@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Briefcase, MapPin } from "lucide-react";
 import { Score, Subject, Update, Upload, Warning } from "@mui/icons-material";
 import {
-    deleteUser,
     extractServiceData,
     fetchCompleteUserProfile,
     formatUserFormData,
@@ -134,12 +133,6 @@ export default function UserSettings() {
                                 </p>
 
                                 <div className="flex gap-3 mb-8">
-                                    <button className=" bg-gray-900 text-white py-2.5 px-4 rounded-full font-semibold hover:bg-gray-800 transition-colors">
-                                        Modifier Profile
-                                    </button>
-                                    <button onClick={deleteUser} className=" bg-red-700 text-white py-2.5 px-4 rounded-full font-semibold hover:bg-gray-800 transition-colors">
-                                        Supprimer Profile
-                                    </button>
                                     {selectedFile && (
                                         <button
                                             onClick={handleUpload}

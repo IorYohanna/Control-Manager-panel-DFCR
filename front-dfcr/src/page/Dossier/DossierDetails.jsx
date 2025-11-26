@@ -273,11 +273,11 @@ export default function DossierDetails() {
               <div className="p-3 bg-red-100 rounded-full">
                 <Trash2 size={24} className="text-red-600" />
               </div>
-              <h3 className="text-xl font-bold text-gray-800">Supprimer le dossier</h3>
+              <h3 className="text-xl font-bold text-gray-800 font-necoBlack">Supprimer le dossier</h3>
             </div>
 
-            <p className="text-gray-600 mb-6">
-              Êtes-vous sûr de vouloir supprimer le dossier <strong>"{dossier?.title}"</strong> ?
+            <p className="text-gray-600 mb-6 font-eirene">
+              Êtes-vous sûr de vouloir supprimer le dossier <strong className="font-dropline capitalize">"{dossier?.title}"</strong> ?
               Cette action est irréversible et supprimera également tous les documents associés.
             </p>
 
@@ -292,7 +292,7 @@ export default function DossierDetails() {
               <button
                 onClick={handleDeleteDossier}
                 disabled={deleting}
-                className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors flex items-center gap-2 disabled:opacity-50"
+                className="px-4 py-2 bg-red-600 hover:bg-red-700f font-necoMedium cursor-pointer text-white rounded-lg font-medium transition-colors flex items-center gap-2 disabled:opacity-50"
               >
                 {deleting ? (
                   <>
