@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { Bell, CheckCheck, Volume2, VolumeX } from "lucide-react";
+import { Bell, CheckCheck, Volume2, VolumeX, ChevronDown } from "lucide-react";
 import {
   getCurrentUser,
   getNotifications,
@@ -44,10 +44,16 @@ export default function NotificationWidget() {
   const [currentUser, setCurrentUser] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [audioInitialized, setAudioInitialized] = useState(false);
   const [soundMuted, setSoundMuted] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
   const stompClientRef = useRef(null);
   const dropdownRef = useRef(null);
+  const listRef = useRef(null);
+
+  const PAGE_SIZE = 10;
 
   // Compteur de notifications non lues
   const unreadCount = notifications.filter(n => !n.read).length;
@@ -76,33 +82,81 @@ export default function NotificationWidget() {
 
   // ============ Toggle son ============
   const handleToggleSound = (e) => {
-    e.stopPropagation(); // Empêcher l'ouverture du dropdown
+    e.stopPropagation();
     const newMutedState = toggleSound();
     setSoundMuted(newMutedState);
   };
 
-  // ============ Chargement des notifications ============
+  // ============ Chargement initial des notifications ============
   useEffect(() => {
     if (!currentUser) return;
     
     async function loadNotifications() {
       setLoading(true);
       try {
-        const data = await getNotifications(currentUser);
-        // Trier par date décroissante
-        const sorted = data.sort((a, b) => 
-          new Date(b.createdAt) - new Date(a.createdAt)
-        );
-        setNotifications(sorted);
+        const data = await getNotifications(currentUser, 0, PAGE_SIZE);
+        console.log("notification", data);
+
+        // Vérifier le format de la réponse
+        if (data.content && Array.isArray(data.content)) {
+          // Format paginé Spring Boot
+          setNotifications(data.content);
+          setHasMore(!data.last);
+          setCurrentPage(0);
+        } else if (Array.isArray(data)) {
+          // Format simple array (si le backend n'est pas encore modifié)
+          const sorted = data.sort((a, b) => 
+            new Date(b.createdAt) - new Date(a.createdAt)
+          );
+          setNotifications(sorted.slice(0, PAGE_SIZE));
+          setHasMore(sorted.length > PAGE_SIZE);
+          setCurrentPage(0);
+        }
       } catch (err) {
         console.error("Erreur chargement notifications:", err);
       } finally {
         setLoading(false);
       }
     }
-    
     loadNotifications();
   }, [currentUser]);
+
+  // ============ Charger plus de notifications ============
+  const loadMoreNotifications = async () => {
+    if (loadingMore || !hasMore) return;
+
+    setLoadingMore(true);
+    try {
+      const nextPage = currentPage + 1;
+      const data = await getNotifications(currentUser, nextPage, PAGE_SIZE);
+      
+      if (data.content && Array.isArray(data.content)) {
+        // Format paginé Spring Boot
+        setNotifications(prev => [...prev, ...data.content]);
+        setHasMore(!data.last);
+        setCurrentPage(nextPage);
+      } else if (Array.isArray(data)) {
+        // Format simple array
+        setNotifications(prev => [...prev, ...data]);
+        setHasMore(data.length === PAGE_SIZE);
+        setCurrentPage(nextPage);
+      }
+    } catch (err) {
+      console.error("Erreur chargement notifications supplémentaires:", err);
+    } finally {
+      setLoadingMore(false);
+    }
+  };
+
+  // ============ Détection du scroll pour charger plus ============
+  const handleScroll = (e) => {
+    const { scrollTop, scrollHeight, clientHeight } = e.target;
+    const isNearBottom = scrollHeight - scrollTop - clientHeight < 100;
+
+    if (isNearBottom && hasMore && !loadingMore) {
+      loadMoreNotifications();
+    }
+  };
 
   // ============ WebSocket Connection ============
   useEffect(() => {
@@ -229,7 +283,11 @@ export default function NotificationWidget() {
           </div>
 
           {/* Liste des notifications */}
-          <div className="overflow-y-auto flex-1">
+          <div 
+            ref={listRef}
+            onScroll={handleScroll}
+            className="overflow-y-auto flex-1"
+          >
             {loading ? (
               <div className="p-8 text-center text-[#73839e]">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#2d466e] mx-auto"></div>
@@ -241,13 +299,43 @@ export default function NotificationWidget() {
                 <p className="text-sm font-eirene">Aucune notification</p>
               </div>
             ) : (
-              notifications.map(notification => (
-                <NotificationItem
-                  key={notification.id}
-                  notification={notification}
-                  onMarkAsRead={handleMarkAsRead}
-                />
-              ))
+              <>
+                {notifications.map(notification => (
+                  <NotificationItem
+                    key={notification.id}
+                    notification={notification}
+                    onMarkAsRead={handleMarkAsRead}
+                  />
+                ))}
+                
+                {/* Indicateur de chargement pour les notifications supplémentaires */}
+                {loadingMore && (
+                  <div className="p-4 text-center text-[#73839e]">
+                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[#2d466e] mx-auto"></div>
+                    <p className="mt-2 text-xs font-eirene">Chargement...</p>
+                  </div>
+                )}
+                
+                {/* Bouton pour charger plus */}
+                {!loadingMore && hasMore && (
+                  <div className="p-4 text-center">
+                    <button
+                      onClick={loadMoreNotifications}
+                      className="text-[#2d466e] hover:text-[#1a2d4d] text-sm font-medium font-eirene flex items-center gap-1 mx-auto px-4 py-2 rounded-lg hover:bg-[#2d466e]/10 transition-all duration-200"
+                    >
+                      <ChevronDown className="w-4 h-4" />
+                      Charger plus
+                    </button>
+                  </div>
+                )}
+                
+                {/* Message de fin */}
+                {!hasMore && notifications.length > 0 && (
+                  <div className="p-4 text-center text-[#73839e]">
+                    <p className="text-xs font-eirene">Toutes les notifications chargées</p>
+                  </div>
+                )}
+              </>
             )}
           </div>
 
