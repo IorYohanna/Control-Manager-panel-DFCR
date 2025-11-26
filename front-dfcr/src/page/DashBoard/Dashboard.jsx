@@ -109,9 +109,9 @@ const Dashboard = () => {
       </div>
 
       {/* GRID LAYOUT - Service + Documents récents */}
-      < div className=" flex flex-col cmx-3 sm:mx-5 mb-5 ">
+      < div className=" flex flex-col mb-5 ">
         <Service activeService={activeService} />
-        <div className="overflow-y-auto">
+        <div className="mx-8 overflow-y-auto">
           <RecentDocumentsWeekly
             documents={documents}
             downloadingRef={downloadingRef}
