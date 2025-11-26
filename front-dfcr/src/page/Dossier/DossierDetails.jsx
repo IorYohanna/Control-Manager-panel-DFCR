@@ -171,7 +171,7 @@ export default function DossierDetails() {
         <div className="mb-8">
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 mb-6">
             <ChevronLeft className="bg-blue-zodiac text-white rounded-4xl" onClick={returnHome} />
-            <Folder size={26} className="text-[#2d466e]" />
+            <Folder size={26} className="text-[#2d466e] ml-4" />
             <h1 className="text-xl sm:text-2xl font-necoBlack uppercase font-bold text-[#24344d]">
               {dossier?.title}
             </h1>
