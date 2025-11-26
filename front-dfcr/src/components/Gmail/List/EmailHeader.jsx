@@ -10,7 +10,7 @@ export default function EmailHeader({
   displayLimit
 }) {
   return (
-    <header className="bg-[#f5ece3] border-b border-[#73839e]/30 px-4 py-3 flex flex-col md:flex-row items-center justify-between rounded-tl-2xl rounded-tr-2xl shadow-sm w-full gap-3 md:gap-0">
+    <header className="bg-[#f5ece3] border-b border-[#73839e]/30 px-4 py-3 flex flex-col md:flex-row items-center justify-between rounded-tl-lg rounded-tr-lg shadow-sm w-full gap-3 md:gap-0">
       
       {/* Logo + titre */}
       <div className="flex items-center gap-3 md:gap-5 flex-1">

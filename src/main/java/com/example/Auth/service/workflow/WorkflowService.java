@@ -462,8 +462,8 @@ public class WorkflowService {
                 return dto;
         }
 
-        public List<Workflow> getDocumentsEnAttente(String matricule) {
-                return workflowRepository.findByDestinataire_MatriculeAndStatus(matricule, "en_attente");
+        public List<Workflow> getDocumentsEnAttente() {
+                return workflowRepository.findByStatus("en_attente");
         }
 
         public List<Workflow> getDocumentsAFaire(String matricule) {

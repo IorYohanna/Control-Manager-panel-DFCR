@@ -35,6 +35,8 @@ public interface WorkflowRepository extends JpaRepository<Workflow, Long> {
     Long countByDestinataire_MatriculeAndStatus(String matricule, String status);
 
     // ----- * ----- //
+    List<Workflow> findByStatus(String status);
+
     List<Workflow> findByService_IdServiceAndStatus(String idService, String status);
 
     List<Workflow> findByService_IdService(String idService);

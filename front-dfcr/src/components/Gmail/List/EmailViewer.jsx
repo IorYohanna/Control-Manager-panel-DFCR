@@ -8,7 +8,7 @@ export default function EmailViewer ({
   close,
 }) {
   return (
-    <div className="w-full flex-1 bg-white rounded-tr-2xl rounded-br-2xl p-6 overflow-y-auto shadow-lg border-l border-[#73839e]/20">
+    <div className="w-full flex-1 bg-white rounded-tr-lg rounded-br-lg p-6 overflow-y-auto shadow-lg border-l border-[#73839e]/20">
 
         <div className="flex justify-between items-start mb-6">
             <h2 className="text-2xl font-bold text-[#2d466e]">{email.subject}</h2>

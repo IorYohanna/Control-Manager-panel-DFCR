@@ -5,7 +5,7 @@ const EmailLogin = ({handleLogin}) => {
 
     return (
         <div className='w-full min-h-screen bg-linear-to-r from-[#6b7ea0] to-[#f5ece3] flex items-center justify-center p-4'>
-            <div className="bg-white rounded-3xl shadow-2xl p-10 max-w-md w-full relative overflow-hidden">
+            <div className="bg-white rounded-lg shadow-2xl p-10 max-w-md w-full relative overflow-hidden">
                 
                 {/* 🎨 Dégradé léger en arrière-plan */}
                 <div className="absolute top-0 left-0 w-full h-3/5 bg-linear-to-b from-[#2d466e]/30 to-transparent rounded-b-3xl"></div>

@@ -154,7 +154,7 @@ export default function GmailPage() {
         displayLimit={displayLimit}
       />
 
-      <div className="flex flex-1 overflow-hidden bg-[#f5ece3] rounded-bl-2xl rounded-br-2xl">
+      <div className="flex flex-1 overflow-hidden bg-[#f5ece3] rounded-bl-lg rounded-br-lg">
 
         {/* LISTE DES EMAILS */}
         <div className={`transition-all duration-300

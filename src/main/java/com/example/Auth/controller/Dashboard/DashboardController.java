@@ -39,8 +39,10 @@ public class DashboardController {
         WorkflowStatisticsDto stats = new WorkflowStatisticsDto();
 
         List<Workflow> workflows = dashboardService.getWorkflowService(idService.toUpperCase(), null);
+        List<Workflow> workflowEnAttente = workflowService.getDocumentsEnAttente();
+
         stats.setTotalWorkflows(workflows.size());
-        stats.setEnAttente((int) workflows.stream().filter(w -> "en_attente".equals(w.getStatus())).count());
+        stats.setEnAttente((int) workflowEnAttente.size());
         stats.setAuService((int) workflows.stream().filter(w -> "au_service".equals(w.getStatus())).count());
         stats.setAssigne((int) workflows.stream().filter(w -> "assigne".equals(w.getStatus())).count());
         stats.setEnTraitement((int) workflows.stream().filter(w -> "en_traitement".equals(w.getStatus())).count());
