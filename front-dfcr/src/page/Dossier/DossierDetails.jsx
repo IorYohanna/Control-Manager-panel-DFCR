@@ -158,12 +158,9 @@ export default function DossierDetails() {
         const updatedDossier = await response.json();
         setDossier(updatedDossier);
         setIsEditingTitle(false);
-      } else {
-        alert('Erreur lors de la mise à jour du titre');
-      }
+      }   
     } catch (err) {
       console.error("Erreur mise à jour titre:", err);
-      alert('Erreur lors de la mise à jour du titre');
     } finally {
       setUpdatingTitle(false);
     }
