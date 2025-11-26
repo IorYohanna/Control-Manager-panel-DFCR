@@ -7,6 +7,10 @@ import com.example.Auth.repository.Notification.NotificationRepository;
 import com.example.Auth.repository.User.UserRepository;
 import com.example.Auth.service.Notification.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,11 +29,20 @@ public class NotificationController {
     @Autowired
     private UserRepository userRepository;
 
-    // ========== RÉCUPÉRATION DES NOTIFICATIONS ==========
-
     @GetMapping("/{userId}")
-    public List<Notification> getUserNotifications(@PathVariable String userId) {
-        return notificationRepository.findByUserIdOrderByCreatedAtDesc(userId);
+    public Page<Notification> getUserNotifications(
+            @PathVariable String userId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        // Créer un Pageable avec tri par date décroissante
+        Pageable pageable = PageRequest.of(
+            page, 
+            size, 
+            Sort.by(Sort.Direction.DESC, "createdAt")
+        );
+        
+        return notificationRepository.findByUserId(userId, pageable);
     }
 
     @PatchMapping("/{notificationId}/read")
@@ -46,8 +59,6 @@ public class NotificationController {
         notifications.forEach(n -> n.setRead(true));
         notificationRepository.saveAll(notifications);
     }
-
-    // ========== ENVOI DE NOTIFICATIONS ==========
 
     @PostMapping("/send")
     public ResponseEntity<String> sendNotification(@RequestBody NotificationRequest request) {

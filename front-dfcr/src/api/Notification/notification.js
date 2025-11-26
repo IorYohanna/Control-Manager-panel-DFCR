@@ -45,20 +45,26 @@ export async function getCurrentUser() {
 }
 
 /**
- * Récupère toutes les notifications d'un utilisateur
+ * Récupère les notifications d'un utilisateur avec pagination
+ * @param {string} userId - L'ID de l'utilisateur
+ * @param {number} page - Le numéro de page (commence à 0)
+ * @param {number} size - Le nombre d'éléments par page (par défaut 10)
  */
-export async function getNotifications(userId) {
+export async function getNotifications(userId, page = 0, size = 10) {
   const token = localStorage.getItem("token");
   if (!token) {
     throw new Error("Token non trouvé");
   }
 
-  const res = await fetch(`${API_BASE}/notifications/${userId}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-  });
+  const res = await fetch(
+    `${API_BASE}/notifications/${userId}?page=${page}&size=${size}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    }
+  );
 
   if (!res.ok) {
     throw new Error(`Failed to fetch notifications: ${res.status}`);
