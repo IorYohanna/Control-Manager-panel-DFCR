@@ -50,7 +50,7 @@ export const MultiSelectEmployes = ({ label, required, selectedEmployes, onEmplo
           type="button"
           onClick={addEmploye}
           disabled={!currentEmploye}
-          className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition"
+          className="px-4 py-2 bg-blue-zodiac text-white rounded-md hover:bg-light-blue disabled:bg-gray-300 disabled:cursor-not-allowed transition"
         >
           Ajouter
         </button>

@@ -13,7 +13,6 @@ import {
   isSoundMuted
 } from "../../api/Notification/notification";
 
-// ============ Notification Item Component ============
 function NotificationItem({ notification, onMarkAsRead }) {
   return (
     <div
@@ -40,7 +39,6 @@ function NotificationItem({ notification, onMarkAsRead }) {
   );
 }
 
-// ============ Main Notification Component ============
 export default function NotificationWidget() {
   const [notifications, setNotifications] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);

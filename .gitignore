@@ -40,3 +40,7 @@ src/main/resources/static/credentials.json
 # Dossier où sont stockés les tokens OAuth
 tokens/
 src/main/resources/static/credentials.json
+src/main/resources/application.properties
+src/main/resources/application.properties
+src/main/resources/application.properties
+src/main/resources/application.properties

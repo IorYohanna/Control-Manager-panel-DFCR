@@ -39,6 +39,7 @@ public class SecurityConfiguration {
                                 .requestMatchers("/services/**").permitAll()
                                 .requestMatchers("/dossiers/**").permitAll()
                                 .requestMatchers("/workflow/**").permitAll()
+                                .requestMatchers("/admin/**").permitAll()
                                 .requestMatchers("/current-user/**").authenticated()
                                 .requestMatchers("/api/auth/gmail/**").permitAll()
                                 .requestMatchers("/api/gmail/**").permitAll()
@@ -51,8 +52,7 @@ public class SecurityConfiguration {
                                 .requestMatchers("/notifications/**").authenticated()
                                 .anyRequest().authenticated())
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-                )
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 

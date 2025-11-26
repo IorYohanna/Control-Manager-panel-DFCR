@@ -29,22 +29,22 @@ public class User implements UserDetails {
 
     @Id
     private String matricule;
-    
+
     @Column(name = "nom_utilisateur")
     private String username;
-    
+
     @Column(name = "prenom_utilisateur", nullable = true)
     private String surname;
-    
+
     @Column(unique = true, nullable = false)
     private String email;
-    
+
     @Column(name = "password", nullable = false)
     private String password;
-    
+
     @Column(nullable = false)
     private String fonction;
-    
+
     private Integer contact;
 
     @Column(name = "photo_profil", columnDefinition = "bytea", nullable = true)
@@ -55,19 +55,34 @@ public class User implements UserDetails {
     private ServiceDfcr service;
 
     private Integer score;
-    
+
     private String evaluation;
-    
+
     @Column(name = "date_evaluation")
     private Date dateEvaluation;
 
     private boolean enabled;
-    
+
     @Column(name = "verification_code")
     private String verificationCode;
-    
+
     @Column(name = "verification_expired")
     private LocalDateTime verificationExpireAt;
+
+    @Column(name = "approved_by_admin")
+    private Boolean approvedByAdmin = false;
+
+    public Boolean getApprovedByAdmin() {
+        return approvedByAdmin;
+    }
+
+    public void setApprovedByAdmin(Boolean approvedByAdmin) {
+        this.approvedByAdmin = approvedByAdmin;
+    }
+
+    public boolean isApprovedByAdmin() {
+        return approvedByAdmin != null && approvedByAdmin;
+    }
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
@@ -83,7 +98,7 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL)
     private List<Event> events;
 
-    @OneToMany(mappedBy="creator", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL)
     private List<Document> documents;
 
     public User(String matricule, String surname, String username, String password, String email, String fonction,
@@ -98,9 +113,9 @@ public class User implements UserDetails {
         this.service = service;
     }
 
-    public User(String score, String evaluation){
+    public User(String score, String evaluation) {
         this.score = Integer.valueOf(score);
-        this.evaluation = evaluation ;
+        this.evaluation = evaluation;
     }
 
     public User() {
