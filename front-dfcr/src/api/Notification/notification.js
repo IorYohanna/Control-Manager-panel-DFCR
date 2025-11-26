@@ -240,10 +240,12 @@ export function createNotificationWebSocket(currentUser, onNotification) {
 
             // Notification navigateur
             if (Notification.permission === "granted") {
-              new Notification("Nouvelle notification", {
-                body: notification.message,
-                icon: "/notification-icon.png",
-              });
+              new Notification(
+                "Une nouvelle notification venant de l'application DFCR",
+                {
+                  icon: "/notification-icon.png",
+                }
+              );
             }
           } catch (e) {
             console.error("❌ Erreur parsing notification:", e);
