@@ -1,4 +1,4 @@
-import { BaggageClaim, Calendar, CheckCircle, Clock, Download, History, Printer, Send, User, Workflow, WorkflowIcon, XCircle, Zap, AlertTriangle } from "lucide-react";
+import { BaggageClaim, Calendar, CheckCircle, Clock, Download, History, Printer, Send, User, Workflow, WorkflowIcon, XCircle, Zap, AlertTriangle, Upload } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button, Select, StatusBadge, TabButton } from "../../components/workflow/Base";
 import { ActionForm } from "../../components/workflow/Action";
@@ -58,6 +58,7 @@ export const DocumentModal = ({ document, onClose, currentUser, serviceUsers, on
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
   const [history, setHistory] = useState([]);
+  const [uploadingFile, setUploadingFile] = useState(false);
 
   useEffect(() => {
     if (activeTab === 'history' && document) {
@@ -135,6 +136,45 @@ export const DocumentModal = ({ document, onClose, currentUser, serviceUsers, on
     } catch (error) {
       console.error("Erreur lors de l'impression :", error);
       alert(error.message);
+    }
+  };
+
+  const handleFileUpload = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    setUploadingFile(true);
+    setMessage(null);
+
+    try {
+      const formData = new FormData();
+      formData.append('pieceJointe', file);
+
+      const token = localStorage.getItem('token');
+      const response = await fetch(`http://localhost:8080/documents/${document.reference}/piece-jointe`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      if (response.ok) {
+        setMessage({ type: 'success', text: 'Pièce jointe mise à jour avec succès' });
+        setTimeout(() => {
+          onActionComplete();
+          setMessage(null);
+        }, 2000);
+      } else {
+        const errorText = await response.text();
+        throw new Error(errorText || 'Erreur lors de la mise à jour');
+      }
+    } catch (error) {
+      console.error("Erreur lors du téléversement :", error);
+      setMessage({ type: 'error', text: error.message || 'Erreur lors du téléversement du fichier' });
+    } finally {
+      setUploadingFile(false);
+      event.target.value = '';
     }
   };
 
@@ -216,7 +256,7 @@ export const DocumentModal = ({ document, onClose, currentUser, serviceUsers, on
 
         if (isAuthError) {
           setTimeout(() => {
-            onActionComplete(); 
+            onActionComplete();
           }, 3000);
         }
       }
@@ -318,12 +358,55 @@ export const DocumentModal = ({ document, onClose, currentUser, serviceUsers, on
               <div className="flex justify-end gap-4">
                 <button
                   onClick={() => handlePrint(document.reference)}
-                  className="px-4 py-2 bg-transparent text-gray-500 flex gap-2 items-center font-necoMedium rounded border border-blue-zodiac hover:bg-blue-zodiac hover:text-white hover:border-transparent transition"
+                  className="px-4 py-2 bg-blue-zodiac hover:text-gray-500 flex gap-2 items-center font-necoMedium rounded border hover:bg-transparent text-white hover:border-blue-zodiac transition"
                 >
                   <Printer size={16} />
                   Imprimer
                 </button>
+                <label className="px-4 py-2 bg-beige-creme text-blue-zodiac flex gap-2 items-center font-necoMedium rounded border border-beige-creme cursor-pointer">
+                  {uploadingFile ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-2 border-gray-300 border-t-gray-600"></div>
+                      Téléversement...
+                    </>
+                  ) : (
+                    <>
+                      <Upload size={16} />
+                      Modifier fichier
+                    </>
+                  )}
+                  <input
+                    type="file"
+                    onChange={handleFileUpload}
+                    disabled={uploadingFile}
+                    className="hidden"
+                    accept=".pdf,.doc,.docx,.xls,.xlsx,.txt,.jpg,.jpeg,.png,.gif"
+                  />
+                </label>
               </div>
+
+              {message && activeTab === 'details' && (
+                <div className={`p-4 rounded-lg text-sm mt-4 ${message.type === 'success'
+                  ? 'bg-green-50 text-green-800 border border-green-200'
+                  : 'bg-red-50 text-red-800 border border-red-200'
+                  }`}>
+                  <div className="flex items-start gap-3">
+                    <div className="shrink-0 mt-0.5">
+                      {message.type === 'success' ? (
+                        <CheckCircle size={18} />
+                      ) : (
+                        <XCircle size={18} />
+                      )}
+                    </div>
+                    <div className="flex-1">
+                      <div className="font-semibold mb-1">
+                        {message.type === 'success' ? 'Succès' : 'Erreur'}
+                      </div>
+                      <div>{message.text}</div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
@@ -367,10 +450,10 @@ export const DocumentModal = ({ document, onClose, currentUser, serviceUsers, on
 
                   {message && (
                     <div className={`p-4 rounded-lg text-sm ${message.type === 'success'
-                        ? 'bg-green-50 text-green-800 border border-green-200'
-                        : message.isAuthError
-                          ? 'bg-orange-50 text-orange-900 border border-orange-200'
-                          : 'bg-red-50 text-red-800 border border-red-200'
+                      ? 'bg-green-50 text-green-800 border border-green-200'
+                      : message.isAuthError
+                        ? 'bg-orange-50 text-orange-900 border border-orange-200'
+                        : 'bg-red-50 text-red-800 border border-red-200'
                       }`}>
                       <div className="flex items-start gap-3">
                         <div className="shrink-0 mt-0.5">

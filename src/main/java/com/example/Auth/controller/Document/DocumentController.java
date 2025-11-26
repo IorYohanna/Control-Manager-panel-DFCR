@@ -44,8 +44,7 @@ public class DocumentController {
                         doc.getCreator().getUsername(),
                         doc.getCreatedAt().toString(),
                         doc.getUpdatedAt().toString(),
-                        doc.getDeadline() != null ? doc.getDeadline().toString() : null
-                ))
+                        doc.getDeadline() != null ? doc.getDeadline().toString() : null))
                 .toList();
         return ResponseEntity.ok(documents);
     }
@@ -74,13 +73,24 @@ public class DocumentController {
                     doc.getCreator().getUsername(),
                     doc.getCreatedAt().toString(),
                     doc.getUpdatedAt().toString(),
-                    doc.getDeadline() != null ? doc.getDeadline().toString() : null
-            );
+                    doc.getDeadline() != null ? doc.getDeadline().toString() : null);
 
             return ResponseEntity.ok(responseDto);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @PutMapping("/{reference}/piece-jointe")
+    public ResponseEntity<Document> updatePieceJointe(
+            @PathVariable String reference,
+            @RequestParam("pieceJointe") MultipartFile pieceJointe) {
+        try {
+            Document updatedDoc = documentService.updatePieceJointe(reference, pieceJointe);
+            return ResponseEntity.ok(updatedDoc);
+        } catch (IOException e) {
+            return ResponseEntity.badRequest().build();
         }
     }
 
@@ -98,8 +108,7 @@ public class DocumentController {
                         doc.getCreator().getUsername(),
                         doc.getCreatedAt().toString(),
                         doc.getUpdatedAt().toString(),
-                        doc.getDeadline() != null ? doc.getDeadline().toString() : null
-                        ))
+                        doc.getDeadline() != null ? doc.getDeadline().toString() : null))
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }

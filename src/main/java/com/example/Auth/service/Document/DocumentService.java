@@ -257,4 +257,50 @@ public class DocumentService {
         return documentRepository.findAllByOrderByCreatedAtDesc();
     }
 
+    public Document updatePieceJointe(String reference, MultipartFile pieceJointe) throws IOException {
+        Optional<Document> existingDocumentOpt = documentRepository.findById(reference);
+
+        log.info("Mise à jour de la pièce jointe du document: " + reference);
+
+        if (existingDocumentOpt.isPresent()) {
+            Document existingDocument = existingDocumentOpt.get();
+
+            if (pieceJointe == null || pieceJointe.isEmpty()) {
+                log.error("Fichier vide ou null", null);
+                throw new RuntimeException("Le fichier ne peut pas être vide");
+            }
+
+            existingDocument.setPieceJointe(fileUtilsService.convertToBytes(pieceJointe));
+
+            String contentType = pieceJointe.getContentType();
+            if (contentType != null) {
+                String fileExtension = getFileExtension(contentType);
+                if (fileExtension != null && !fileExtension.isEmpty()) {
+                    existingDocument.setType(fileExtension);
+                }
+            }
+
+            Document updatedDocument = documentRepository.save(existingDocument);
+            log.success("Pièce jointe mise à jour avec succès pour le document: " + reference);
+            return updatedDocument;
+        }
+
+        log.error("Document non trouvé: " + reference, null);
+        throw new RuntimeException("Document non trouvé avec la référence: " + reference);
+    }
+
+    private String getFileExtension(String contentType) {
+        return switch (contentType.toLowerCase()) {
+            case "application/pdf" -> "pdf";
+            case "image/jpeg" -> "jpg";
+            case "image/png" -> "png";
+            case "image/gif" -> "gif";
+            case "text/plain" -> "txt";
+            case "application/msword" -> "doc";
+            case "application/vnd.openxmlformats-officedocument.wordprocessingml.document" -> "docx";
+            case "application/vnd.ms-excel" -> "xls";
+            case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" -> "xlsx";
+            default -> null;
+        };
+    }
 }
