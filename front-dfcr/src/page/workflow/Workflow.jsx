@@ -4,7 +4,7 @@ import { DocumentsTable, Pagination } from '../../components/workflow/Documents'
 import { DocumentModal } from './Modal';
 import { fetchCompleteUserProfile } from '../../api/User/profileinfo';
 import { Button } from '../../components/workflow/Base';
-import { Plus, RefreshCw, Upload } from 'lucide-react';
+import { Plus, RefreshCw } from 'lucide-react';
 import FormDocument from '../Docs/FormDocument';
 import DossierManagement from '../Dossier/Dossier';
 
@@ -35,7 +35,7 @@ const documentAPI = {
 };
 
 const WorkflowManagement = () => {
-  const [currentView, setCurrentView] = useState('documents'); 
+  const [currentView, setCurrentView] = useState('documents');
   const [currentUser, setCurrentUser] = useState(null);
   const [documents, setDocuments] = useState([]);
   const [filteredDocuments, setFilteredDocuments] = useState([]);
@@ -102,6 +102,14 @@ const WorkflowManagement = () => {
           creatorName: doc.creatorName || doc.creator?.username || '',
           creatorUsername: doc.creatorUsername || doc.creator?.name || ''
         })) : [];
+
+        cleanDocuments.sort((a, b) => {
+          return a.reference.localeCompare(b.reference, undefined, {
+            numeric: true,
+            sensitivity: 'base'
+          });
+        });
+
         setDocuments(cleanDocuments);
       }
     } catch (err) {
@@ -165,7 +173,6 @@ const WorkflowManagement = () => {
     if (currentView === 'documents') {
       filterDocuments();
     }
-    // Pour les dossiers, la recherche est gérée dans DossierManagement
   };
 
   const handleRefresh = () => {
@@ -191,6 +198,11 @@ const WorkflowManagement = () => {
     if (currentView === 'documents') {
       loadDocuments();
     }
+  };
+
+  const handleFormClose = () => {
+    setShowForm(false);
+    loadDocuments();
   };
 
   const totalPages = Math.ceil(filteredDocuments.length / ITEMS_PER_PAGE);
@@ -273,7 +285,7 @@ const WorkflowManagement = () => {
             )}
           </div>
 
-          {showForm && <FormDocument onClose={() => setShowForm(false)} />}
+          {showForm && <FormDocument onClose={handleFormClose} />}
           {showModal && selectedDocument && (
             <DocumentModal
               document={selectedDocument}

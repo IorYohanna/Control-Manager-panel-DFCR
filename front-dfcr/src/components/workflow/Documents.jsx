@@ -173,7 +173,7 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }) => {
                         key={page}
                         onClick={() => onPageChange(page)}
                         className={`w-8 h-8 rounded-lg font-medium transition-colors text-sm ${currentPage === page
-                            ? 'bg-blue-600 text-white shadow-md'
+                            ? 'bg-blue-zodiac text-white shadow-md'
                             : 'text-gray-600 hover:bg-gray-100'
                             }`}
                     >

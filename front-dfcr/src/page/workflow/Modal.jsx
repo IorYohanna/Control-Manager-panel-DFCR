@@ -272,7 +272,7 @@ export const DocumentModal = ({ document, onClose, currentUser, serviceUsers, on
           </TabButton>
         </div>
 
-        <div className="p-6 overflow-y-auto" style={{ maxHeight: 'calc(90vh - 180px)' }}>
+        <div className="p-6 overflow-y-auto thin-scrollbar" style={{ maxHeight: 'calc(90vh - 180px)' }}>
           {activeTab === 'details' && (
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">

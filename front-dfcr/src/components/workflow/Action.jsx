@@ -65,7 +65,7 @@ export const ActionForm = ({ action, formData, setFormData, serviceUsers }) => {
   };
 
   return (
-    <div className="space-y-4 p-5 bg-linear-to-br from-gray-50 to-blue-50 rounded-lg border border-gray-200">
+    <div className="space-y-4 p-5 bg-linear-to-br from-gray-50 to-blue-50 rounded-lg border border-gray-200 thin-scrollbar">
       <h3 className="font-semibold text-gray-700 text-sm flex items-center gap-2">
         <FileText size={16} className="text-blue-zodiac" />
         Paramètres de l'action

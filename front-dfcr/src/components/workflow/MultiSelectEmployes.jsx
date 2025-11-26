@@ -28,7 +28,7 @@ export const MultiSelectEmployes = ({ label, required, selectedEmployes, onEmplo
       
       <div className="flex gap-2 mb-2">
         <select
-          className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-zodiac"
           value={currentEmploye}
           onChange={(e) => setCurrentEmploye(e.target.value)}
         >
@@ -50,7 +50,7 @@ export const MultiSelectEmployes = ({ label, required, selectedEmployes, onEmplo
           type="button"
           onClick={addEmploye}
           disabled={!currentEmploye}
-          className="px-4 py-2 bg-blue-zodiac text-white rounded-md hover:bg-light-blue disabled:bg-gray-300 disabled:cursor-not-allowed transition"
+          className="px-4 py-2 bg-blue-zodiac text-white font-eirene rounded-md hover:bg-light-blue disabled:bg-gray-300 disabled:cursor-not-allowed transition"
         >
           Ajouter
         </button>

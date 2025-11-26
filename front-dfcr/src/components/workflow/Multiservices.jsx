@@ -23,7 +23,7 @@ export const MultiSelectServices = ({ label, required, selectedServices, onServi
       
       <div className="flex gap-2 mb-2">
         <select
-          className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-zodiac"
           value={currentService}
           onChange={(e) => setCurrentService(e.target.value)}
         >
@@ -42,7 +42,7 @@ export const MultiSelectServices = ({ label, required, selectedServices, onServi
           type="button"
           onClick={addService}
           disabled={!currentService}
-          className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition"
+          className="px-4 py-2 bg-blue-zodiac text-white font-eirene rounded-lg hover:bg-light-blue disabled:bg-gray-300 disabled:cursor-not-allowed transition"
         >
           Ajouter
         </button>
