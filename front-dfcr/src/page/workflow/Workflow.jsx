@@ -262,7 +262,7 @@ const WorkflowManagement = () => {
               size="lg"
               icon={Plus}
               onClick={() => setShowForm(true)}
-              className="bg-linear-to-r from-[#2d466e] to-[#24344d] hover:from-[#24344d] hover:to-[#2d466e] text-[#f5ece3] shadow-lg px-6 py-3 rounded-xl font-semibold"
+              className="bg-linear-to-r font-necoMedium from-[#2d466e] to-[#24344d] hover:from-[#24344d] hover:to-[#2d466e] text-[#f5ece3] shadow-lg px-6 py-3 rounded-xl"
             >
               Importer
             </Button>
