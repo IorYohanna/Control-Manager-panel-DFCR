@@ -27,6 +27,9 @@ export default function DossierDetails() {
   const [userStats, setUserStats] = useState(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [isEditingTitle, setIsEditingTitle] = useState(false);
+  const [editedTitle, setEditedTitle] = useState("");
+  const [updatingTitle, setUpdatingTitle] = useState(false);
 
   const navigate = useNavigate();
 
@@ -132,14 +135,47 @@ export default function DossierDetails() {
     }
   };
 
-  // eslint-disable-next-line no-unused-vars
-  const getDocumentTypeCount = () => {
-    const typeCount = {};
-    documents.forEach(doc => {
-      const type = doc.type || 'Document';
-      typeCount[type] = (typeCount[type] || 0) + 1;
-    });
-    return typeCount;
+  const handleTitleDoubleClick = () => {
+    setIsEditingTitle(true);
+    setEditedTitle(dossier?.title || "");
+  };
+
+  const handleTitleUpdate = async () => {
+    if (!editedTitle.trim() || editedTitle === dossier?.title) {
+      setIsEditingTitle(false);
+      return;
+    }
+
+    setUpdatingTitle(true);
+    try {
+      const response = await fetch(`${API_BASE_URL}/dossiers/${id}`, {
+        method: "PUT",
+        headers: getAuthHeader(),
+        body: JSON.stringify({ title: editedTitle.trim() }),
+      });
+
+      if (response.ok) {
+        const updatedDossier = await response.json();
+        setDossier(updatedDossier);
+        setIsEditingTitle(false);
+      } else {
+        alert('Erreur lors de la mise à jour du titre');
+      }
+    } catch (err) {
+      console.error("Erreur mise à jour titre:", err);
+      alert('Erreur lors de la mise à jour du titre');
+    } finally {
+      setUpdatingTitle(false);
+    }
+  };
+
+  const handleTitleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleTitleUpdate();
+    } else if (e.key === 'Escape') {
+      setIsEditingTitle(false);
+      setEditedTitle(dossier?.title || "");
+    }
   };
 
   const getRecentDocumentsCount = () => {
@@ -200,9 +236,33 @@ export default function DossierDetails() {
               size={28}
             />
             <Folder size={26} className="text-[#2d466e] ml-4" />
-            <h1 className="text-xl sm:text-2xl font-necoBlack uppercase font-bold text-[#24344d]">
-              {dossier?.title}
-            </h1>
+
+            {isEditingTitle ? (
+              <div className="flex items-center gap-2 flex-1">
+                <input
+                  type="text"
+                  value={editedTitle}
+                  onChange={(e) => setEditedTitle(e.target.value)}
+                  onKeyDown={handleTitleKeyDown}
+                  onBlur={handleTitleUpdate}
+                  disabled={updatingTitle}
+                  autoFocus
+                  className="text-xl sm:text-2xl font-necoBlack uppercase font-bold text-[#24344d] bg-white border-2 border-[#2d466e] rounded-lg px-3 py-1 focus:outline-none focus:ring-2 focus:ring-[#2d466e] disabled:opacity-50"
+                />
+                {updatingTitle && (
+                  <div className="animate-spin h-5 w-5 border-2 border-[#2d466e] border-t-transparent rounded-full"></div>
+                )}
+              </div>
+            ) : (
+              <h1
+                className="text-xl sm:text-2xl font-necoBlack uppercase font-bold text-[#24344d] cursor-pointer hover:text-[#2d466e] transition-colors px-2 py-1 rounded hover:bg-white/50"
+                onDoubleClick={handleTitleDoubleClick}
+                title="Double-cliquer pour modifier"
+              >
+                {dossier?.title}
+              </h1>
+            )}
+
             <div className="mt-2 sm:mt-0 sm:ml-auto flex items-center gap-3">
               {dossier?.createdAt && (
                 <p className="text-sm bg-[#2d466e] text-white px-3 py-1 rounded-full">
@@ -273,11 +333,11 @@ export default function DossierDetails() {
               <div className="p-3 bg-red-100 rounded-full">
                 <Trash2 size={24} className="text-red-600" />
               </div>
-              <h3 className="text-xl font-bold text-gray-800 font-necoBlack">Supprimer le dossier</h3>
+              <h3 className="text-xl font-bold font-necoBlack text-gray-800">Supprimer le dossier</h3>
             </div>
 
             <p className="text-gray-600 mb-6 font-eirene">
-              Êtes-vous sûr de vouloir supprimer le dossier <strong className="font-dropline capitalize">"{dossier?.title}"</strong> ?
+              Êtes-vous sûr de vouloir supprimer le dossier <strong className="font-dropline capitalize" >"{dossier?.title}"</strong> ?
               Cette action est irréversible et supprimera également tous les documents associés.
             </p>
 
@@ -292,7 +352,7 @@ export default function DossierDetails() {
               <button
                 onClick={handleDeleteDossier}
                 disabled={deleting}
-                className="px-4 py-2 bg-red-600 hover:bg-red-700f font-necoMedium cursor-pointer text-white rounded-lg font-medium transition-colors flex items-center gap-2 disabled:opacity-50"
+                className="px-4 py-2 font-necoMedium cursor-pointer bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors flex items-center gap-2 disabled:opacity-50"
               >
                 {deleting ? (
                   <>
