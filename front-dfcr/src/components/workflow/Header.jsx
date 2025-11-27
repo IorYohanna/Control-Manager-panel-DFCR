@@ -138,7 +138,7 @@ export const ObjectSearch = ({ objetSearch, setObjetSearch, onSearch, currentVie
           value={objetSearch}
           onChange={(e) => setObjetSearch(e.target.value)}
           onKeyPress={(e) => e.key === 'Enter' && onSearch()}
-          className="w-full bg-white truncate font-necoMedium backdrop-blur-sm text-[#f5ece3] font-medium px-5 py-3 border-2 border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#f5ece3] focus:border-transparent transition-all placeholder-[#c4beaf]"
+          className="w-full bg-white truncate font-necoMedium backdrop-blur-sm text-light-blue font-medium px-5 py-3 border-2 border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#f5ece3] focus:border-transparent transition-all placeholder-[#c4beaf]"
         />
         <div className="absolute inset-y-0 right-0 flex items-center pr-4">
           <Search size={24} className="text-gray-400" />

@@ -47,9 +47,6 @@ public class Document {
     @OneToMany(mappedBy = "document", cascade = CascadeType.ALL)
     private List<Concerner> dossiers;
 
-    @OneToMany(mappedBy = "document", cascade = CascadeType.ALL)
-    private List<Commentaire> commentaires;
-
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;

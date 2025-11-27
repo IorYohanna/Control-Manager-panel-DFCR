@@ -100,7 +100,8 @@ const WorkflowManagement = () => {
           updateTime: doc.updateTime || new Date().toLocaleString(),
           creatorMatricule: doc.creatorMatricule || doc.creator?.matricule || '',
           creatorName: doc.creatorName || doc.creator?.username || '',
-          creatorUsername: doc.creatorUsername || doc.creator?.name || ''
+          creatorUsername: doc.creatorUsername || doc.creator?.name || '',
+          deadline: doc.deadline || new Date().toLocaleString()
         })) : [];
 
         cleanDocuments.sort((a, b) => {

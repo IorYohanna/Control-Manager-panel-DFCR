@@ -3,7 +3,7 @@ import { Download, FileText, Loader2, Search, X } from "lucide-react";
 // eslint-disable-next-line no-unused-vars
 export function DossierStatsCards({ icon: Icon, value, label, color, bgColor }) {
     return (
-        <div className="bg-white rounded-xl p-5 shadow-sm border border-[#c4beaf]/30 hover:shadow-md transition-shadow">
+        <div className="bg-white rounded-lg p-5 shadow-sm border border-[#c4beaf]/30 hover:shadow-md transition-shadow">
             <div className="flex items-center justify-between mb-3">
                 <div
                     className="p-3 rounded-xl"
@@ -45,7 +45,7 @@ export function SearchBar({ searchQuery, setSearchQuery }) {
 // eslint-disable-next-line no-unused-vars
 export function DocumentTable({ documents, searchQuery, downloadingRef, onDownload, loading }) {
     return (
-        <div className="bg-white rounded-xl shadow-sm border border-[#c4beaf]/30 overflow-y-auto hide-scrollbar max-h-[400px]">
+        <div className="bg-white rounded-lg shadow-sm border border-[#c4beaf]/30 overflow-y-auto hide-scrollbar max-h-[400px]">
             <table className="min-w-[600px] sm:min-w-full w-full">
                 <thead className="bg-[#f5ece3]/40 border-b border-[#c4beaf]/30">
                     <tr>

@@ -285,7 +285,7 @@ export default function DossierDetails() {
 
 
         <div>
-          <div className="bg-white rounded-xl shadow-sm border border-[#c4beaf]/30 p-4 mb-4 flex flex-col sm:flex-row gap-3 sm:items-center justify-between">
+          <div className="bg-white rounded-lg shadow-sm border border-[#c4beaf]/30 p-4 mb-4 flex flex-col sm:flex-row gap-3 sm:items-center justify-between">
             <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
 
             <button

@@ -14,7 +14,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.example.Auth.model.Document.Commentaire;
 import com.example.Auth.model.Document.Event;
 
 import lombok.Getter;
@@ -91,9 +90,6 @@ public class User implements UserDetails {
     @LastModifiedDate
     @Column(nullable = false)
     private LocalDateTime updatedAt;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Commentaire> commentaires;
 
     @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL)
     private List<Event> events;
