@@ -213,7 +213,7 @@ const WorkflowManagement = () => {
 
   return (
     <div className="w-full bg-white m-4 sm:m-6 rounded-lg overflow-auto hide-scrollbar">
-      <div className="relative bg-linear-to-r from-[#2d466e] to-[#24344d] px-4 sm:px-8 py-4 sm:py-6">
+      <div className="relative bg-linear-to-r from-[#2d466e] to-[#24344d] px-4 sm:px-8 py-4">
         <Header currentUser={currentUser} photo={photo}>
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
             <div className="flex-1">
@@ -234,7 +234,7 @@ const WorkflowManagement = () => {
 
       {currentView === 'documents' && (
         <>
-          <div className="px-4 sm:px-8 py-4 sm:py-6 bg-beige-creme/50 border-b flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="px-4 sm:px-8 py-4 bg-beige-creme/50 border-b flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <FilterBar
               activeFilter={activeFilter}
               setActiveFilter={setActiveFilter}

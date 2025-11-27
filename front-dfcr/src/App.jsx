@@ -22,6 +22,7 @@ import AdminNotificationSender from "./page/Notification/AdminNotificationSender
 import GmailCallback from "./page/Gmail/GmailCallback";
 import PublicRoute from "./components/Auth/PublicRoute";
 import ProtectedRoute from "./components/Auth/ProtectedRoute";
+import DirectorRoute from "./layout/DirectorRoute";
 
 function App() {
   const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
@@ -49,7 +50,6 @@ function App() {
     <GoogleOAuthProvider clientId={clientId}>
       <Router>
         <Routes>
-          {/* Routes publiques */}
           <Route path="/" element={
             <PublicRoute>
               <Login />
@@ -68,7 +68,6 @@ function App() {
             </PublicRoute>
           } />
 
-          {/* Routes protégées */}
           <Route path="/document" element={
             <ProtectedRoute>
               <FormDocument />
@@ -96,16 +95,21 @@ function App() {
             <Route path="user-settings" element={<UserSettings />} />
             <Route path="online-drive" element={<GoogleDriveViewer />} />
             <Route path="email" element={<EmailPage />} />
-            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="/home/dashboard" element={
+              <ProtectedRoute>
+                <DirectorRoute>
+                  <Dashboard />
+                </DirectorRoute>
+              </ProtectedRoute>
+            } />
             <Route path="workflow" element={<WorkflowManagement />} />
             <Route path="chat" element={<Chat />} />
             <Route path="dossier" element={<DossierManagement />} />
             <Route path="dossiers/:id" element={<DossierDetails />} />
           </Route>
 
-          {/* callback OAuth accessible publiquement */}
           <Route path="/gmail-callback" element={<GmailCallback />} />
-        </Routes>   
+        </Routes>
       </Router>
     </GoogleOAuthProvider>
   );

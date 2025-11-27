@@ -49,104 +49,47 @@ export const StatusWorkflow = ({ idService }) => {
 
   return (
     <div className="col-span-1 md:col-span-2 lg:col-span-2 bg-[#2d466e] rounded-xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 border-2 border-[#2d466e]/10 flex flex-col justify-between">
-      
-      {/* En-tête */}
+
       <div className="flex items-center justify-between mb-6">
         <h3 className="text-xl font-eirene text-white flex items-center gap-2 opacity-90">
-          <FileText className="w-5 h-5 opacity-70"/> Statut des Workflows
+          <FileText className="w-5 h-5 opacity-70" /> Statut des Suivis des Documents
         </h3>
       </div>
 
-      {/* Section Total (Simplifiée et centrée verticalement) */}
       <div className="flex items-end mb-8 px-2">
         <h2 className="text-[56px] font-bold leading-none text-white tracking-tight">
           {docsStats.total}
         </h2>
         <div className="ml-4 mb-2">
-             <p className="text-sm font-eirene text-[#becce4] leading-tight">
-                Documents <br/> gérés au total
-            </p>
+          <p className="text-sm font-eirene text-[#becce4] leading-tight">
+            Documents <br /> gérés au total
+          </p>
         </div>
-        {/* Petite barre décorative pour combler le vide à droite */}
         <div className="ml-auto h-1 w-24 bg-white/10 rounded-full mb-4"></div>
       </div>
 
-      {/* Cartes de détails (Grid pour proportions parfaites) */}
       <div className="grid grid-cols-3 gap-4 sm:gap-5">
-        
-        {/* Carte 1 : En Attente */}
         <div className="flex flex-col items-center bg-linear-to-br from-[#f5ece3] to-white p-3 rounded-lg shadow-sm hover:-translate-y-1 transition-transform duration-300 cursor-default group">
           <Clock className="w-6 h-6 mt-1 mb-1 group-hover:scale-110 transition-transform" />
           <h1 className="text-3xl font-necomedium text-[#2d466e]">{docsStats.pending}</h1>
           <p className="text-[11px] font-eirene text-gray-500 font-medium uppercase tracking-wide">En Attente</p>
         </div>
 
-        {/* Carte 2 : Au Service */}
         <div className="flex flex-col items-center bg-linear-to-br from-[#f5ece3] to-white p-3 rounded-lg shadow-sm hover:-translate-y-1 transition-transform duration-300 cursor-default group">
           <CheckCircle className="w-6 h-6 mt-1 mb-1 group-hover:scale-110 transition-transform" />
           <h1 className="text-3xl font-necomedium text-[#2d466e]">{docsStats.auService}</h1>
           <p className="text-[11px] font-eirene text-gray-500 font-medium uppercase tracking-wide">Au Service</p>
         </div>
 
-        {/* Carte 3 : En Traitement */}
         <div className="flex flex-col items-center bg-linear-to-br from-[#f5ece3] to-white p-3 rounded-lg shadow-sm hover:-translate-y-1 transition-transform duration-300 cursor-default group">
           <XCircle className="w-6 h-6 mt-1 mb-1 group-hover:scale-110 transition-transform" />
           <h1 className="text-3xl font-necomedium text-[#2d466e]">{docsStats.enTraitement}</h1>
           <p className="text-[11px] font-eirene text-gray-500 font-medium uppercase tracking-wide">Traitement</p>
         </div>
-        
+
       </div>
     </div>
   );
 };
 
-{/* <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
-        <div className="bg-linear-to-br from-amber-50 to-amber-100/50 rounded-lg p-6 border-2 border-amber-200/50 hover:border-amber-300 transition-all">
-          <div className="flex items-center justify-between">
-            <Clock className="w-6 h-6 text-amber-600" />
-            <span className="text-3xl font-bold text-amber-700">{docsStats.pending}</span>
-          </div>
-          <p className="text-sm text-amber-800 mt-3 font-semibold">En Attente</p>
-        </div>
-
-        <div className="bg-linear-to-br from-green-50 to-green-100/50 rounded-lg p-6 border-2 border-green-200/50 hover:border-green-300 transition-all">
-          <div className="flex items-center justify-between">
-            <CheckCircle className="w-6 h-6 text-green-600" />
-            <span className="text-3xl font-bold text-green-700">{docsStats.auService}</span>
-          </div>
-          <p className="text-sm text-green-800 mt-3 font-semibold">Au Service</p>
-        </div>
-
-        <div className="bg-linear-to-br from-blue-50 to-blue-100/50 rounded-lg p-6 border-2 border-blue-200/50 hover:border-blue-300 transition-all">
-          <div className="flex items-center justify-between">
-            <AlertCircle className="w-6 h-6 text-blue-600" />
-            <span className="text-3xl font-bold text-blue-700">{docsStats.assigne}</span>
-          </div>
-          <p className="text-sm text-blue-800 mt-3 font-semibold">Assignés</p>
-        </div>
-
-        <div className="bg-linear-to-br from-purple-50 to-purple-100/50 rounded-lg p-6 border-2 border-purple-200/50 hover:border-purple-300 transition-all">
-          <div className="flex items-center justify-between">
-            <XCircle className="w-6 h-6 text-purple-600" />
-            <span className="text-3xl font-bold text-purple-700">{docsStats.enTraitement}</span>
-          </div>
-          <p className="text-sm text-purple-800 mt-3 font-semibold">En Traitement</p>
-        </div>
-
-        <div className="bg-linear-to-br from-pink-50 to-pink-100/50 rounded-lg p-6 border-2 border-pink-200/50 hover:border-pink-300 transition-all">
-          <div className="flex items-center justify-between">
-            <CheckCircle className="w-6 h-6 text-pink-600" />
-            <span className="text-3xl font-bold text-pink-700">{docsStats.termine}</span>
-          </div>
-          <p className="text-sm text-pink-800 mt-3 font-semibold">Terminés</p>
-        </div>
-
-        <div className="bg-linear-to-br from-yellow-50 to-yellow-100/50 rounded-lg p-6 border-2 border-yellow-200/50 hover:border-yellow-300 transition-all">
-          <div className="flex items-center justify-between">
-            <Award className="w-6 h-6 text-yellow-600" />
-            <span className="text-3xl font-bold text-yellow-700">{docsStats.complet}</span>
-          </div>
-          <p className="text-sm text-yellow-800 mt-3 font-semibold">Complet</p>
-        </div>
-      </div> */}
 

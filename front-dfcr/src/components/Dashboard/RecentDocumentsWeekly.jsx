@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FileText, Calendar, SearchX, CheckCircle2 } from 'lucide-react';
+import { FileText, Calendar, SearchX, CheckCircle2, File } from 'lucide-react';
 
 export function RecentDocumentsWeekly({ documents, loading }) {
     const [groupedDocuments, setGroupedDocuments] = useState([]);
@@ -90,7 +90,7 @@ export function RecentDocumentsWeekly({ documents, loading }) {
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                     <div>
                         <h3 className="text-xl text-[#2d466e] font-bold font-dropline flex items-center gap-2">
-                            <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+                            <File className="w-5 h-5 text-emerald-600" />
                             Documents récents
                         </h3>
                         <p className="text-xs text-[#73839e] font-eirene mt-1">

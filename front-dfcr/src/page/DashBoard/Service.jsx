@@ -57,18 +57,16 @@ const Service = ({ activeService }) => {
   }
 
 
-  
+
   if (!serviceData) return null;
   const now = new Date();
 
-  // CORRECTION ICI : On définit "Maintenant" comme le début de la journée (Minuit)
   const todayMidnight = new Date();
   todayMidnight.setHours(0, 0, 0, 0);
 
-  // Filtrage : On garde tout ce qui commence après ou pendant aujourd'hui
   const upcomingRawEvents = rawEvents
     .filter(ev => {
-      if (!ev.startTime) return false; // Sécurité si pas de date
+      if (!ev.startTime) return false;
       const eventDate = new Date(ev.startTime);
       return eventDate >= todayMidnight;
     })
@@ -87,37 +85,25 @@ const Service = ({ activeService }) => {
   return (
     <div className="p-6 lg:p-8 min-h-screen">
 
-      {/* Grille Principale */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-        
-        {/* --- LIGNE 1 : Indicateurs Clés (Hauteur uniforme) --- */}
-        
-        {/* Bloc 1 : Statuts (50% largeur sur grand écran) */}
         <div className="col-span-1 md:col-span-2 xl:col-span-2 h-full">
-             <StatusWorkflow idService={activeService}/>
+          <StatusWorkflow idService={activeService} />
         </div>
-        
-        {/* Bloc 2 : Graphique (50% largeur sur grand écran) */}
-        {/* Note: On le met en col-span-2 pour qu'il soit aussi large que les stats */}
+
         <div className="col-span-1 md:col-span-2 xl:col-span-2 h-full">
-             <Example idService={activeService}/>
+          <Example idService={activeService} />
         </div>
 
-        {/* --- LIGNE 2 : Opérationnel --- */}
-
-        {/* Bloc 3 : Events (1 colonne) */}
         <div className="col-span-1 md:col-span-1 xl:col-span-1">
-            <UpcomingEvents upcomingEvents={upcomingRawEvents} todayEvents={todayRawEvents}/>
-        </div>
-        
-        {/* Bloc 4 : Équipe (1 colonne) */}
-        <div className="col-span-1 md:col-span-1 xl:col-span-1">
-             <TeamMembers users={serviceData.users} />
+          <UpcomingEvents upcomingEvents={upcomingRawEvents} todayEvents={todayRawEvents} />
         </div>
 
-        {/* Bloc 5 : Documents Récents (2 colonnes restantes) */}
+        <div className="col-span-1 md:col-span-1 xl:col-span-1">
+          <TeamMembers users={serviceData.users} />
+        </div>
+
         <div className="col-span-1 md:col-span-2 xl:col-span-2">
-             <CompletedDocuments idService={activeService}/>
+          <CompletedDocuments idService={activeService} />
         </div>
 
       </div>

@@ -1,4 +1,3 @@
-// le nombre de user par service
 const API_BASE_URL = 'http://localhost:8080';
 
 const getAuthHeader = () => ({
