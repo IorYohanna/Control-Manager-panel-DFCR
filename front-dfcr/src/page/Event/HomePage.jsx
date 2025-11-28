@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Calendar from './Calendar';
 import InfoCards from '../../components/ui/cards/InfoCards';
 import { Sparkles } from 'lucide-react';
+import NotificationWidget from '../../components/Notification/NotificationWidget';
 
 const HomePage = () => {
   const citations = [
@@ -48,6 +49,9 @@ const HomePage = () => {
                   “{citationActuelle}”
                 </p>
 
+                <div className='flex items-end ml-auto'>
+                  <NotificationWidget />
+                </div>
               </div>
             </div>
 

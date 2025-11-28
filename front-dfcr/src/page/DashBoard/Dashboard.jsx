@@ -92,9 +92,7 @@ const Dashboard = () => {
                 </p>
               </div>
             </div>
-            <div>
-              <NotificationWidget />
-            </div>
+
           </div>
 
         </div>
